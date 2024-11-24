@@ -16,8 +16,8 @@
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.Controller">
    <children>
       <Line endX="2.0" endY="-187.0" layoutX="333.0" layoutY="186.0" startX="2.0" startY="321.5" />
-      <Button fx:id="addButton" layoutX="73.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleAddTask" prefHeight="25.0" prefWidth="63.0" text="ADD" />
-      <Button fx:id="removeButton" layoutX="185.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleRemoveTask" text="REMOVE" />
+      <Button fx:id="addButton" layoutX="13.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleAddTask" prefHeight="25.0" prefWidth="63.0" text="ADD" />
+      <Button fx:id="removeButton" layoutX="250.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleRemoveTask" text="REMOVE" />
       <Label layoutX="12.0" layoutY="43.0" text="Task Name:">
          <font>
             <Font name="Arial Bold" size="14.0" />
@@ -66,5 +66,6 @@
             <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
         </columns>
       </TableView>
+      <Button fx:id="editButton" layoutX="131.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleEditButton" prefHeight="25.0" prefWidth="63.0" text="EDIT" />
    </children>
 </AnchorPane>

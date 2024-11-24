@@ -2,10 +2,17 @@ package org.openjfx.miniprojet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class Controller {
@@ -94,11 +101,40 @@ public class Controller {
         }
     }
 
-    private void clearFields() {
+    @FXML
+    public void handleEditButton(ActionEvent event) throws IOException {
+        TaskImpl task = taskTableView.getSelectionModel().getSelectedItem();
+        if (task != null){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditPage.fxml"));
+            Parent root = loader.load();
+
+            EditPageController controller = loader.getController();
+            controller.setTask(task, taskList);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }else{
+            // Show error alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("Please select a task to edit");
+            alert.showAndWait();
+        }
+    }
+
+    public void clearFields() {
         taskNameField.clear();
         taskDescriptionField.clear();
         taskDueDate.setValue(null);
         taskStatusComboBox.setValue(null); // Set the value to null
         System.out.println(taskStatusComboBox.getPromptText());
+    }
+
+    public void updatedTaskList(ObservableList<TaskImpl> taskList){
+        this.taskList = taskList;
+        taskTableView.setItems(taskList);
+        taskTableView.refresh();
     }
 }

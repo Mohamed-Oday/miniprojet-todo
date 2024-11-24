@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.Controller">
+   <children>
+      <Line endX="2.0" endY="-187.0" layoutX="333.0" layoutY="186.0" startX="2.0" startY="321.5" />
+      <Button fx:id="addButton" layoutX="73.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleAddTask" prefHeight="25.0" prefWidth="63.0" text="ADD" />
+      <Button fx:id="removeButton" layoutX="185.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleRemoveTask" text="REMOVE" />
+      <Label layoutX="12.0" layoutY="43.0" text="Task Name:">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="taskNameField" layoutX="12.0" layoutY="72.0" prefHeight="25.0" prefWidth="300.0" />
+      <Label layoutX="12.0" layoutY="112.0" prefHeight="16.0" prefWidth="120.0" text="Task Description:">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="taskDescriptionField" alignment="TOP_LEFT" layoutX="12.0" layoutY="140.0" prefHeight="87.0" prefWidth="300.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></TextField>
+      <Label layoutX="12.0" layoutY="244.0" text="Task Due Date:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="taskDueDate" layoutX="13.0" layoutY="277.0" prefHeight="25.0" prefWidth="300.0" />
+      <Label layoutX="13.0" layoutY="325.0" text="Status:">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Label>
+       <ComboBox fx:id="taskStatusComboBox" layoutX="14.0" layoutY="354.0" prefHeight="25.0" prefWidth="300.0" promptText="Select Status">
+           <items>
+               <FXCollections fx:factory="observableArrayList">
+                   <String fx:value="In Progress" />
+                   <String fx:value="Completed" />
+                   <String fx:value="Abandoned" />
+               </FXCollections>
+           </items>
+       </ComboBox>
+      <Label layoutX="356.0" layoutY="43.0" text="Tasks:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="taskTableView" layoutX="356.0" layoutY="72.0" prefHeight="391.0" prefWidth="426.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+          <TableColumn fx:id="descriptionColumn" prefWidth="186.0" text="Description" />
+            <TableColumn fx:id="dueDateColumn" prefWidth="89.0" text="Due Date" />
+            <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

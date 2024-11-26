@@ -1,6 +1,5 @@
 package org.openjfx.miniprojet;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,12 +143,6 @@ public class TaskImpl implements Task{
      */
     @Override
     public String toString() {
-        return "TaskImpl{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", dueDate=" + dueDate +
-                ", status=" + status +
-                ", comments=" + comments +
-                '}';
+        return getName();
     }
 }

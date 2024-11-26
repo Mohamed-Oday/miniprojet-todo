@@ -9,29 +9,60 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class Controller {
+public class Controller{
 
     @FXML
     private JFXListView<TaskImpl> taskListView;
 
+    @FXML
+    private Label imageLabel;
+
+    @FXML
+    private Label userNameLabel;
+
+    @FXML
+    private Label todayLabel;  // Ensure this is @FXML
+
     private ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
+
+    private String userID;
+
+    public void setUserName(String userName) {
+        this.userID = userName;
+        userNameLabel.setText(userName);
+        imageLabel.setText(userName.substring(0, 2).toUpperCase());
+    }
 
     @FXML
     public void initialize() {
         taskListView.setItems(tasks);
+
+        // Get current date and format it
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd");
+        String formattedDate = currentDate.format(formatter);
+
+        // Set the formatted date on the todayLabel
+        if (todayLabel != null) {
+            todayLabel.setText(formattedDate);
+        } else {
+            System.out.println("todayLabel is null!");
+        }
     }
 
     @FXML
-    public void handleAddButton(ActionEvent event) throws IOException{
+    public void handleAddButton(ActionEvent event) throws IOException {
         // Loading the addTask fxml
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("addTask.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("addTask.fxml"));
         Parent root = loader.load();
 
         // Getting the addTask Controller
@@ -56,59 +87,40 @@ public class Controller {
         addTaskStage.showAndWait();
     }
 
-    public void addTask(TaskImpl task){
+    public void addTask(TaskImpl task) {
         tasks.add(task);
-        taskListView.getItems().add(task);
+        taskListView.setItems(tasks);
     }
 
     @FXML
-    public void handleImportantButton(ActionEvent event) throws IOException{
-        // Loading the important fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("important.fxml"));
-        Parent root = loader.load();
-
-        // Creating new stage for the important page
-        Stage importantStage = new Stage();
-        importantStage.setScene(new Scene(root));
-
-        // Show the important page
-        importantStage.show();
-
-        // Closing the current stage
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+    public void handleImportantButton(ActionEvent event) throws IOException {
+        setMainStage("important.fxml", event);
     }
 
     @FXML
-    public void handleDisplayTasksButton(ActionEvent event) throws IOException{
-        // Loading the important fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTasks.fxml"));
-        Parent root = loader.load();
-
-        // Creating new stage for the important page
-        Stage importantStage = new Stage();
-        importantStage.setScene(new Scene(root));
-
-        // Show the important page
-        importantStage.show();
-
-        // Closing the current stage
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+    public void handleDisplayTasksButton(ActionEvent event) throws IOException {
+        setMainStage("displayTasks.fxml", event);
     }
 
     @FXML
-    public void handleMyDayButton(ActionEvent event) throws IOException{
+    public void handleMyDayButton(ActionEvent event) throws IOException {
+        setMainStage("Main.fxml", event);
+    }
+
+    public void setMainStage(String path, ActionEvent event) throws IOException {
         // Loading the important fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root = loader.load();
 
         // Creating new stage for the important page
-        Stage importantStage = new Stage();
-        importantStage.setScene(new Scene(root));
+        Stage nextStage = new Stage();
+        nextStage.setScene(new Scene(root));
+
+        Controller controller = loader.getController();
+        controller.setUserName(userID);
 
         // Show the important page
-        importantStage.show();
+        nextStage.show();
 
         // Closing the current stage
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

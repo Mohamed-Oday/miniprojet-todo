@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -79,6 +78,9 @@ public class loginPopUPController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
             Parent root = loader.load();
 
+            Controller controller = loader.getController();
+            controller.setUserName(userName.getText());
+
             // Creating the scene for our app
             Scene scene = new Scene(root);
             entryStage.setScene(scene);
@@ -110,6 +112,6 @@ public class loginPopUPController {
         } catch (SQLException e){
             e.printStackTrace();
         }
-    return false;
+        return false;
     }
 }

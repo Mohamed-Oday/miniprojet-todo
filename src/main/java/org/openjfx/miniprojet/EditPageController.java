@@ -68,7 +68,7 @@ public class EditPageController {
      * @param event the action event
      * @throws IOException if an I/O error occurs
      */
-    @FXML
+/*@FXML
     public void handleSaveButton(ActionEvent event) throws IOException {
         task.editTask(
                 taskNameField.getText(),
@@ -78,7 +78,7 @@ public class EditPageController {
         );
         taskList.set(taskList.indexOf(task), task);
         goBack(event);
-    }
+    }*/
 
     /**
      * Handles the cancel button action.
@@ -87,10 +87,10 @@ public class EditPageController {
      * @param event the action event
      * @throws IOException if an I/O error occurs
      */
-    @FXML
+    /*@FXML
     public void handleCancelButton(ActionEvent event) throws IOException {
         goBack(event);
-    }
+    }*/
 
     /**
      * Navigates back to the main page.
@@ -99,7 +99,7 @@ public class EditPageController {
      * @param event the action event
      * @throws IOException if an I/O error occurs
      */
-    public void goBack(ActionEvent event) throws IOException {
+    /*public void goBack(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -109,5 +109,5 @@ public class EditPageController {
 
         stage.setScene(new Scene(root));
         stage.show();
-    }
+    }*/
 }

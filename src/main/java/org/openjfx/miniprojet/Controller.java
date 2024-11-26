@@ -1,5 +1,6 @@
 package org.openjfx.miniprojet;
 
+import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,133 +9,109 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.util.List;
 
 public class Controller {
-    @FXML
-    private TextField taskNameField;
 
     @FXML
-    private TextField taskDescriptionField;
+    private JFXListView<TaskImpl> taskListView;
 
-    @FXML
-    private DatePicker taskDueDate;
-
-    @FXML
-    private ComboBox<String> taskStatusComboBox;
-
-    @FXML
-    private TableView<TaskImpl> taskTableView;
-
-    @FXML
-    private TableColumn<TaskImpl, String> nameColumn;
-
-    @FXML
-    private TableColumn<TaskImpl, String> descriptionColumn;
-
-    @FXML
-    private TableColumn<TaskImpl, LocalDate> dueDateColumn;
-
-    @FXML
-    private TableColumn<TaskImpl, String> statusColumn;
-
-    private ObservableList<TaskImpl> taskList;
+    private ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Initialize task list
-        taskList = FXCollections.observableArrayList();
-        taskTableView.setItems(taskList);
-
-        // Initialize columns
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        // Initialize ComboBox
-        taskStatusComboBox.setItems(FXCollections.observableArrayList("In Progress", "Completed", "Abandoned"));
+        taskListView.setItems(tasks);
     }
 
     @FXML
-    public void handleAddTask() {
-        String name = taskNameField.getText();
-        String description = taskDescriptionField.getText();
-        LocalDate dueDate = taskDueDate.getValue();
-        String status = taskStatusComboBox.getValue();
+    public void handleAddButton(ActionEvent event) throws IOException{
+        // Loading the addTask fxml
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("addTask.fxml"));
+        Parent root = loader.load();
 
-        if (name != null && !name.isEmpty() && dueDate != null && status != null) {
-            // Remove spaces from status
-            status = status.replaceAll("\\s", "");
+        // Getting the addTask Controller
+        addTaskController addTaskController = loader.getController();
 
-            // Add new task to the list
-            TaskImpl task = new TaskImpl(name, description, dueDate, Status.valueOf(status));
-            taskList.add(task);
-            clearFields();
-        } else {
-            // Show error alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("Please fill all the fields");
-            alert.showAndWait();
-        }
+        // Getting main stage
+        Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Creating new stage for the addTask page
+        Stage addTaskStage = new Stage();
+        addTaskStage.setTitle("Add Task");
+        addTaskStage.setScene(new Scene(root));
+        addTaskStage.initStyle(StageStyle.UTILITY);
+        addTaskStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Setting the main stage and addTask stage
+        addTaskController.setMainStage(mainStage);
+        addTaskController.setAddTaskStage(addTaskStage);
+        addTaskController.setMainController(this);
+
+        // Display the addTask page
+        addTaskStage.showAndWait();
+    }
+
+    public void addTask(TaskImpl task){
+        tasks.add(task);
+        taskListView.getItems().add(task);
     }
 
     @FXML
-    public void handleRemoveTask(){
-        TaskImpl task = taskTableView.getSelectionModel().getSelectedItem();
-        if (task != null){
-            taskList.remove(task);
-        }else{
-            // Show error alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("Please select a task to remove");
-            alert.showAndWait();
-        }
+    public void handleImportantButton(ActionEvent event) throws IOException{
+        // Loading the important fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("important.fxml"));
+        Parent root = loader.load();
+
+        // Creating new stage for the important page
+        Stage importantStage = new Stage();
+        importantStage.setScene(new Scene(root));
+
+        // Show the important page
+        importantStage.show();
+
+        // Closing the current stage
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 
     @FXML
-    public void handleEditButton(ActionEvent event) throws IOException {
-        TaskImpl task = taskTableView.getSelectionModel().getSelectedItem();
-        if (task != null){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditPage.fxml"));
-            Parent root = loader.load();
+    public void handleDisplayTasksButton(ActionEvent event) throws IOException{
+        // Loading the important fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTasks.fxml"));
+        Parent root = loader.load();
 
-            EditPageController controller = loader.getController();
-            controller.setTask(task, taskList);
+        // Creating new stage for the important page
+        Stage importantStage = new Stage();
+        importantStage.setScene(new Scene(root));
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        }else{
-            // Show error alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("Please select a task to edit");
-            alert.showAndWait();
-        }
+        // Show the important page
+        importantStage.show();
+
+        // Closing the current stage
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 
-    public void clearFields() {
-        taskNameField.clear();
-        taskDescriptionField.clear();
-        taskDueDate.setValue(null);
-        taskStatusComboBox.setValue(null); // Set the value to null
-        System.out.println(taskStatusComboBox.getPromptText());
-    }
+    @FXML
+    public void handleMyDayButton(ActionEvent event) throws IOException{
+        // Loading the important fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        Parent root = loader.load();
 
-    public void updatedTaskList(ObservableList<TaskImpl> taskList){
-        this.taskList = taskList;
-        taskTableView.setItems(taskList);
-        taskTableView.refresh();
+        // Creating new stage for the important page
+        Stage importantStage = new Stage();
+        importantStage.setScene(new Scene(root));
+
+        // Show the important page
+        importantStage.show();
+
+        // Closing the current stage
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 }

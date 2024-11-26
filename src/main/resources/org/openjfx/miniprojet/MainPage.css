@@ -1,0 +1,42 @@
+.root{
+    -fx-background-color: #C4E1F6;
+}
+
+#sideBar{
+    -fx-background-color: "#FFBD73";
+}
+
+#profileButton{
+    -fx-background-color: "#FFBD73";
+    -fx-text-fill: "white";
+    -fx-graphic: url("user.png");
+    -fx-graphic-text-gap: 10;
+    -fx-cursor: hand;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: "#FF9D3D";
+}
+
+#taskButton{
+    -fx-background-color: "#FFBD73";
+    -fx-text-fill: "white";
+    -fx-graphic: url("clipboard.png");
+    -fx-graphic-margin-left: 200;
+    -fx-cursor: hand;
+}
+
+#categoriesButton{
+    -fx-background-color: "#FFBD73";
+    -fx-text-fill: "white";
+    -fx-graphic: url("app.png");
+    -fx-graphic-text-gap: 10;
+    -fx-cursor: hand;
+}
+
+#signButton{
+    -fx-background-color: "#FFBD73";
+    -fx-text-fill: "white";
+    -fx-cursor: hand;
+}
+#profileButton:hover, #taskButton:hover, #categoriesButton:hover, #signButton:hover{
+    -fx-background-color: "#FF9D3D";
+}

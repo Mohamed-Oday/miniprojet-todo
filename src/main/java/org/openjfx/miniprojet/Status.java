@@ -1,5 +1,7 @@
 package org.openjfx.miniprojet;
 
-public enum Status {
+import java.io.Serializable;
+
+public enum Status{
     Completed, InProgress, Abandoned
 }

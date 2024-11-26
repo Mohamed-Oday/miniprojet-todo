@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="650.0" prefWidth="480.0" styleClass="login-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.loginPopUPController">
+   <children>
+      <VBox alignment="CENTER_LEFT" layoutX="190.0" layoutY="225.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="468.0" text="Log in" textFill="#32353b">
+               <font>
+                  <Font name="Segoe UI" size="36.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="380.0">
+               <children>
+                  <Label prefHeight="20.0" prefWidth="146.0" text="Need a ToDo account?" textFill="#32353b">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="createLabel" onMouseClicked="#handleCreateAccount" prefHeight="18.0" prefWidth="117.0" styleClass="sign-label" stylesheets="@styles/style.css" text="Create an account" textFill="#007c89" underline="true">
+                     <font>
+                        <Font name="Segoe UI" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </HBox>
+            <Label prefHeight="17.0" prefWidth="489.0" text="Username:" textFill="#32353b">
+               <font>
+                  <Font name="Segoe UI Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="userName" prefHeight="33.0" prefWidth="318.0" VBox.vgrow="NEVER">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TextField>
+            <Label prefHeight="17.0" prefWidth="489.0" text="Password:" textFill="#32353b">
+               <font>
+                  <Font name="Segoe UI Bold" size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </Label>
+            <PasswordField fx:id="password" prefHeight="33.0">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </PasswordField>
+            <HBox prefHeight="0.0" prefWidth="330.0">
+               <children>
+                  <JFXCheckBox checkedColor="#007c89" text="Keep me logged in" textFill="#32353b" unCheckedColor="#7f7f7f">
+                     <font>
+                        <Font name="Segoe UI Bold" size="15.0" />
+                     </font>
+                  </JFXCheckBox>
+                  <Label textFill="#32353b">
+                     <font>
+                        <Font name="Segoe UI Bold" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </HBox>
+            <JFXButton fx:id="logInButton" onAction="#handleSignInButton" prefHeight="44.0" prefWidth="126.0" styleClass="login-button" stylesheets="@styles/style.css" text="Log in" textFill="WHITE">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font name="Segoe UI Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+         <padding>
+            <Insets right="50.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

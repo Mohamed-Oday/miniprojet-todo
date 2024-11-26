@@ -1,0 +1,145 @@
+.entry-background{
+    -fx-background-color: "#e6e6e6";
+}
+
+.login-button{
+    -fx-background-color: "#436af2";
+}
+
+.login-button:hover{
+    -fx-background-color: "#3a5fde";
+}
+
+.login-background{
+    -fx-background-color: "#FFFFFF";
+}
+
+.login-button{
+    -fx-background-color: "#007c89";
+    -fx-background-radius: 30;
+}
+
+.left-sideBar{
+    -fx-background-color: "#212121";
+}
+
+.logo-background{
+    -fx-background-color: "#00a300";
+    -fx-background-radius: 99999;
+}
+
+.sideBar-button{
+    -fx-background-color: "#1f1f1f";
+}
+
+.sideBar-button:hover{
+    -fx-background-color: "#303030";
+}
+
+.myDay{
+    -fx-graphic: url("../assets/sun.png");
+    -fx-graphic-text-gap: 10;
+}
+
+.important{
+    -fx-graphic: url("../assets/star.png");
+    -fx-graphic-text-gap: 10;
+}
+
+.tasks{
+    -fx-graphic: url("../assets/home.png");
+    -fx-graphic-text-gap: 10;
+}
+
+.myDay-selected{
+    -fx-background-color: "#303030";
+    -fx-background-radius: 3;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-color: "#76b9ed";
+    -fx-border-radius: 3;
+}
+
+.myDay-background{
+    -fx-background-color: linear-gradient(to bottom, #25555a, #ad9790);
+}
+
+.important-tasks-background{
+    -fx-background-color: "#1c1c1c";
+}
+
+.addButton{
+    -fx-background-color: "#3b3b3b";
+    -fx-background-radius: 99999;
+}
+
+.addButton:hover{
+    -fx-background-color: "#4b423a";
+}
+
+.list-transparent{
+    -fx-background-color: transparent;
+}
+
+.list-cell {
+    -fx-alignment: center-left;
+    -fx-background-color: "#37393a";
+    -fx-text-fill: "#FFFFFF";
+    -fx-padding: 15px; /* Inner padding */
+    -fx-background-insets: 0 0 3 0; /* Simulates a margin at the bottom */
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+}
+
+.list-cell:hover{
+    -fx-background-color: "#303030";
+}
+
+.addTask-background{
+    -fx-background-color: "89A8B2";
+}
+
+.addTask-addButton{
+    -fx-background-color: "#00B8D4";
+    -fx-background-radius: 10;
+}
+
+.addTask-button:hover{
+    -fx-background-color: "#00A3B8";
+}
+
+.addTask-cancelButton{
+    -fx-background-color: "#3b3b3b";
+    -fx-background-radius: 10;
+}
+
+.addTask-cancelButton:hover{
+    -fx-background-color: "#4b423a";
+}
+
+.addTask-textField{
+    -fx-background-color: "#FFFFFF";
+    -fx-background-radius: 10;
+    -fx-border: none;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2e2e2e;
+}
+
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2e2e2e;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: "#0c828e";
+}
+
+.create-account-button{
+    -fx-background-color: transparent;
+}
+
+.sign-label{
+    -fx-cursor: hand;
+}
+
+

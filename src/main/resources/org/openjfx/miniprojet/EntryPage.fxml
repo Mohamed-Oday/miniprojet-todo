@@ -50,7 +50,7 @@
                </VBox.margin>
             </Label>
             <Pane prefHeight="169.0" prefWidth="1200.0" VBox.vgrow="ALWAYS" />
-            <Label text="Made by Students: Oday, Seif, Nassim" textFill="#7f7f7f">
+            <Label text="Made by Sellami Mohamed Oday" textFill="#7f7f7f">
                <font>
                   <Font name="Segoe UI Bold" size="17.0" />
                </font>

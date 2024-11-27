@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -32,7 +33,7 @@ public class Controller{
     @FXML
     private Label todayLabel;  // Ensure this is @FXML
 
-    private ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
+    private final ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
 
     private String userID;
 
@@ -40,17 +41,23 @@ public class Controller{
         this.userID = userName;
         userNameLabel.setText(userName);
         imageLabel.setText(userName.substring(0, 2).toUpperCase());
+        loadTasks();
     }
 
     @FXML
     public void initialize() {
         taskListView.setItems(tasks);
 
+        taskListView.setOnMouseClicked(event -> {
+            TaskImpl selectedTask = taskListView.getSelectionModel().getSelectedItem();
+            if (selectedTask != null){
+                System.out.println(selectedTask.getName());
+            }
+        });
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd");
         String formattedDate = currentDate.format(formatter);
-
         // Set the formatted date on the todayLabel
         if (todayLabel != null) {
             todayLabel.setText(formattedDate);
@@ -58,6 +65,33 @@ public class Controller{
             System.out.println("todayLabel is null!");
         }
     }
+
+    private void loadTasks(){
+        String selectQuery = "SELECT task_name, task_description, task_dueDate FROM tasks WHERE user_id = ?";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
+
+            preparedStatement.setString(1, userID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                tasks.clear();
+                while (resultSet.next()){
+                    String taskName = resultSet.getString("task_name");
+                    String description = resultSet.getString("task_description");
+                    LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                    TaskImpl task = new TaskImpl(taskName, description, dueDate, Status.InProgress);
+                    tasks.add(task);
+                }
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void handleAddButton(ActionEvent event) throws IOException {
@@ -82,15 +116,19 @@ public class Controller{
         addTaskController.setMainStage(mainStage);
         addTaskController.setAddTaskStage(addTaskStage);
         addTaskController.setMainController(this);
+        addTaskController.setUserID(userID);
 
         // Display the addTask page
         addTaskStage.showAndWait();
+
+        loadTasks();
     }
 
     public void addTask(TaskImpl task) {
         tasks.add(task);
         taskListView.setItems(tasks);
     }
+
 
     @FXML
     public void handleImportantButton(ActionEvent event) throws IOException {

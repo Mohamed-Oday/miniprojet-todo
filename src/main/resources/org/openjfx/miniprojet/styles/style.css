@@ -78,6 +78,7 @@
 
 .list-transparent{
     -fx-background-color: transparent;
+    -fx-border-width: 0;
 }
 
 .list-cell {
@@ -124,13 +125,13 @@
     -fx-text-fill: #2e2e2e;
 }
 
-.date-picker {
+.addTask-date-picker {
     -fx-background-color: transparent;
     -fx-font-size: 14px;
     -fx-text-fill: #2e2e2e;
 }
 
-.date-picker .arrow-button {
+.addTask-date-picker .arrow-button {
     -fx-background-color: "#0c828e";
 }
 
@@ -141,5 +142,51 @@
 .sign-label{
     -fx-cursor: hand;
 }
+
+.editTask-background{
+    -fx-background-color: "#272727";
+}
+
+.editTask-button-background{
+    -fx-background-color: "#323232";
+    -fx-background-radius: 10;
+}
+
+.editTask-button-background:hover{
+    -fx-background-color: "#3b3b3b";
+}
+
+.editTask-textField{
+    -fx-background-color: "#323232";
+    -fx-background-radius: 10;
+    -fx-border: none;
+    -fx-font-size: 14px;
+    -fx-text-fill: #c7c7c7;
+}
+
+.editTask-textField:hover{
+    -fx-background-color: "#3b3b3b";
+}
+
+.editTask-datePicker{
+    -fx-background-color: "#323232";
+    -fx-background-radius: 10;
+    -fx-border: none;
+    -fx-font-size: 14px;
+    -fx-text-fill: #c7c7c7;
+}
+
+.editTask-datePicker .combo-box{
+    -fx-background-color: "#323232";
+    -fx-background-radius: 10;
+    -fx-border: none;
+    -fx-font-size: 14px;
+    -fx-text-fill: #c7c7c7;
+}
+
+.editTask-datePicker:hover{
+    -fx-background-color: "#3b3b3b";
+}
+
 
 

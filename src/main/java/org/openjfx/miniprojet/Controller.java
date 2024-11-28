@@ -1,9 +1,7 @@
 package org.openjfx.miniprojet;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
-import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,15 +33,6 @@ public class Controller{
     private ComboBox<Status> TaskStatusField;
 
     @FXML
-    private JFXButton cancelButton;
-
-    @FXML
-    private JFXButton deleteButton;
-
-    @FXML
-    private JFXButton saveButton;
-
-    @FXML
     private TextField taskDescriptionField;
 
     @FXML
@@ -70,9 +59,6 @@ public class Controller{
 
     @FXML
     private AnchorPane editForm;
-
-    @FXML
-    private BorderPane borderPane;
 
     private TaskImpl selectedTask;
 
@@ -272,12 +258,6 @@ public class Controller{
 
         loadTasks();
     }
-
-    public void addTask(TaskImpl task) {
-        tasks.add(task);
-        taskListView.setItems(tasks);
-    }
-
 
     @FXML
     public void handleImportantButton(ActionEvent event) throws IOException {

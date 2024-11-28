@@ -158,6 +158,27 @@ public class Controller{
         taskListView.refresh();
     }
 
+    @FXML
+    public void handleSignOutButton(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("EntryPage.fxml"));
+        Parent root = loader.load();
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement statement = connection.prepareStatement("DELETE FROM saveduser")){
+            statement.executeUpdate("DELETE FROM saveduser");
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("ToDo App");
+        stage.show();
+
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+    }
+
     public void deleteTask(TaskImpl task){
         String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
 

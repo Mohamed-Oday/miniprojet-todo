@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -17,7 +16,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<?import org.openjfx.miniprojet.Status?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" styleClass="myDay-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.Controller">
    <AnchorPane fx:id="mainPane" prefHeight="910.0" prefWidth="1200.0">
       <children>
@@ -99,7 +97,7 @@
                   </JFXButton>
                   <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
                   <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <JFXButton prefHeight="60.0" prefWidth="287.0" styleClass="sign-out-button" stylesheets="@styles/style.css" text="Sign out" textFill="#c7c7c7">
+                  <JFXButton onAction="#handleSignOutButton" prefHeight="60.0" prefWidth="287.0" styleClass="sign-out-button" stylesheets="@styles/style.css" text="Sign out" textFill="#c7c7c7">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>

@@ -60,7 +60,7 @@ public class addTaskController {
     }
 
     private void insertTask(String name, String description, LocalDate dueDate) {
-        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate) VALUES (?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
@@ -68,6 +68,7 @@ public class addTaskController {
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, description);
             preparedStatement.setDate(4, java.sql.Date.valueOf(dueDate));
+            preparedStatement.setString(5, Status.Started.toString());
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0){

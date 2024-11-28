@@ -85,8 +85,8 @@
     -fx-alignment: center-left;
     -fx-background-color: "#37393a";
     -fx-text-fill: "#FFFFFF";
-    -fx-padding: 15px; /* Inner padding */
-    -fx-background-insets: 0 0 3 0; /* Simulates a margin at the bottom */
+    -fx-padding: 15px;
+    -fx-background-insets: 0 0 3 0;
     -fx-font-size: 14px;
     -fx-background-radius: 8;
 }
@@ -186,6 +186,56 @@
 
 .editTask-datePicker:hover{
     -fx-background-color: "#3b3b3b";
+}
+
+/* General styling for all ChoiceBoxes */
+.combo-box-base {
+    -fx-background-color: "#323232";
+    -fx-prompt-text-fill: #888888;
+    -fx-text-fill: #000000;
+    -fx-padding: 0px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.combo-box-base .arrow-button {
+    -fx-background-color: "#323232";
+    -fx-background-radius: 5px;
+}
+
+.combo-box-base .arrow-button:hover {
+    -fx-background-color: "#3b3b3b";
+}
+
+.combo-box-base .arrow-button .arrow {
+    -fx-background-color: "#FFFFFF";
+}
+
+.combo-box-base .list-cell {
+    -fx-background-color: "#323232";
+    -fx-text-fill: "#FFFFFF";
+}
+
+.combo-box-base:focused {
+    -fx-border-width: 0px;
+}
+
+.combo-box-base .list-view {
+    -fx-background-color: "#323232";
+    -fx-border-width: 0px;
+}
+
+.combo-box-base .list-view .list-cell:hover {
+    -fx-background-color: "#3b3b3b";
+}
+
+.sign-out-button{
+    -fx-background-color: "#3b3b3b";
+    -fx-background-radius: 20;
+}
+
+.sign-out-button:hover{
+    -fx-background-color: "#4b423a";
 }
 
 

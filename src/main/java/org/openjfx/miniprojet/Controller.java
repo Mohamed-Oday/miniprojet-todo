@@ -1,6 +1,10 @@
 package org.openjfx.miniprojet;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,10 +13,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.sql.*;
@@ -20,6 +27,30 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Controller{
+
+    @FXML
+    private DatePicker TaskDueDateField;
+
+    @FXML
+    private ComboBox<Status> TaskStatusField;
+
+    @FXML
+    private JFXButton cancelButton;
+
+    @FXML
+    private JFXButton deleteButton;
+
+    @FXML
+    private JFXButton saveButton;
+
+    @FXML
+    private TextField taskDescriptionField;
+
+    @FXML
+    private TextField taskNameField;
+
+    @FXML
+    private AnchorPane mainPane;
 
     @FXML
     private JFXListView<TaskImpl> taskListView;
@@ -37,6 +68,14 @@ public class Controller{
 
     private String userID;
 
+    @FXML
+    private AnchorPane editForm;
+
+    @FXML
+    private BorderPane borderPane;
+
+    private TaskImpl selectedTask;
+
     public void setUserName(String userName) {
         this.userID = userName;
         userNameLabel.setText(userName);
@@ -46,12 +85,14 @@ public class Controller{
 
     @FXML
     public void initialize() {
+        ObservableList<Status> statusList = FXCollections.observableArrayList(Status.values());
+        TaskStatusField.setItems(statusList);
         taskListView.setItems(tasks);
-
         taskListView.setOnMouseClicked(event -> {
             TaskImpl selectedTask = taskListView.getSelectionModel().getSelectedItem();
             if (selectedTask != null){
-                System.out.println(selectedTask.getName());
+                this.selectedTask = selectedTask;
+                handleEditTask(selectedTask);
             }
         });
         // Get current date and format it
@@ -66,8 +107,92 @@ public class Controller{
         }
     }
 
+    public void handleEditTask(TaskImpl task){
+        TaskStatusField.setValue(task.getStatus());
+        TranslateTransition slider = new TranslateTransition();
+        slider.setNode(editForm);
+        slider.setToX(0);
+        slider.setDuration(Duration.seconds(0));
+
+        slider.setOnFinished((ActionEvent e) -> {
+            editForm.setVisible(true);
+            mainPane.setPrefWidth(850);
+            taskNameField.setText(task.getName());
+            taskDescriptionField.setText(task.getDescription());
+            TaskDueDateField.setValue(task.getDueDate());
+            TaskStatusField.setValue(task.getStatus());
+            TaskStatusField.setPromptText(task.getStatus().toString());
+        });
+        slider.play();
+    }
+
+    @FXML
+    public void handleSaveButton(){
+        String taskName = taskNameField.getText();
+        String taskDescription = taskDescriptionField.getText();
+        LocalDate taskDueDate = TaskDueDateField.getValue();
+        Status taskStatus = TaskStatusField.getValue();
+
+        selectedTask.editTask(taskName, taskDescription, taskDueDate, taskStatus);
+        updateTask(selectedTask);
+
+        editForm.setVisible(false);
+        mainPane.setPrefWidth(1200);
+        taskListView.refresh();
+        System.out.println("Task Updated: " + selectedTask.getStatus());
+    }
+
+    @FXML
+    public void handleCancelButton(){
+        editForm.setVisible(false);
+        mainPane.setPrefWidth(1200);
+        taskListView.refresh();
+    }
+
+    @FXML
+    public void handleDeleteButton(){
+        deleteTask(selectedTask);
+        tasks.remove(selectedTask);
+        editForm.setVisible(false);
+        mainPane.setPrefWidth(1200);
+        taskListView.refresh();
+    }
+
+    public void deleteTask(TaskImpl task){
+        String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+
+            preparedStatement.setInt(1, task.getId());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTask(TaskImpl task) {
+        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ? WHERE task_id = ?";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+
+            preparedStatement.setString(1, task.getName());
+            preparedStatement.setString(2, task.getDescription());
+            preparedStatement.setDate(3, Date.valueOf(task.getDueDate()));
+            preparedStatement.setString(4, task.getStatus().toString());
+            preparedStatement.setInt(5, task.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadTasks(){
-        String selectQuery = "SELECT task_name, task_description, task_dueDate FROM tasks WHERE user_id = ?";
+        String selectQuery = "SELECT task_id ,task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
@@ -77,10 +202,13 @@ public class Controller{
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 tasks.clear();
                 while (resultSet.next()){
+                    int taskID = resultSet.getInt("task_id");
                     String taskName = resultSet.getString("task_name");
                     String description = resultSet.getString("task_description");
                     LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                    TaskImpl task = new TaskImpl(taskName, description, dueDate, Status.InProgress);
+                    Status status = Status.valueOf(resultSet.getString("task_status"));
+                    TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                    task.setId(taskID);
                     tasks.add(task);
                 }
             } catch (SQLException e){

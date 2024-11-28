@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class TaskImpl implements Task{
 
+    private int id;
     private String name;
     private String description;
     private LocalDate dueDate;
@@ -121,10 +122,11 @@ public class TaskImpl implements Task{
      * @param status the new status of the task
      */
     public void editTask(String name, String description, LocalDate dueDate, Status status) {
-        this.name = name;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.status = status;
+        setId(id);
+        setName(name);
+        setDescription(description);
+        setDueDate(dueDate);
+        changeStatus(status);
     }
 
     /**
@@ -134,6 +136,14 @@ public class TaskImpl implements Task{
      */
     public void changeStatus(Status status) {
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

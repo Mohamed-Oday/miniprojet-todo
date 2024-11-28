@@ -1,10 +1,13 @@
 package org.openjfx.miniprojet;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.sql.*;
 
 public class loginPopUPController {
+
     @FXML
     private PasswordField password;
 

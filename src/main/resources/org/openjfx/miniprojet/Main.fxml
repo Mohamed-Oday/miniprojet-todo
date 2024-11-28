@@ -3,144 +3,213 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0"
-            prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.openjfx.miniprojet.Controller">
-   <BorderPane layoutX="500.0" layoutY="355.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <left>
-         <VBox prefHeight="200.0" prefWidth="280.0" styleClass="left-sideBar" stylesheets="@styles/style.css"
-               BorderPane.alignment="CENTER">
-            <padding>
-               <Insets left="5.0" right="5.0"/>
-            </padding>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="5.0"/>
-               </VBox.margin>
-               <Label fx:id="imageLabel" alignment="BASELINE_CENTER" prefHeight="60.0" prefWidth="60.0"
-                      styleClass="logo-background" stylesheets="@styles/style.css" text="Image" textFill="WHITE">
-                  <font>
-                     <Font name="Segoe UI Bold Italic" size="18.0"/>
-                  </font>
+<?import org.openjfx.miniprojet.Status?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" styleClass="myDay-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.Controller">
+   <AnchorPane fx:id="mainPane" prefHeight="910.0" prefWidth="1200.0">
+      <children>
+         <BorderPane fx:id="borderPane" prefHeight="910.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <left>
+               <VBox prefHeight="200.0" prefWidth="280.0" styleClass="left-sideBar" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
                   <padding>
-                     <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                     <Insets left="5.0" right="5.0" />
                   </padding>
-                  <HBox.margin>
-                     <Insets/>
-                  </HBox.margin>
-               </Label>
-               <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                  <HBox.margin>
-                     <Insets left="15.0"/>
-                  </HBox.margin>
-                  <Label fx:id="userNameLabel" text="Name" textFill="WHITE">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="5.0" />
+                     </VBox.margin>
+                     <Label fx:id="imageLabel" alignment="BASELINE_CENTER" prefHeight="60.0" prefWidth="60.0" styleClass="logo-background" stylesheets="@styles/style.css" text="Image" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI Bold Italic" size="18.0" />
+                        </font>
+                        <padding>
+                           <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                        </padding>
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin>
+                     </Label>
+                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                        <HBox.margin>
+                           <Insets left="15.0" />
+                        </HBox.margin>
+                        <Label fx:id="userNameLabel" text="Name" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label text="Welcome Back!" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="2.0" />
+                           </VBox.margin>
+                        </Label>
+                     </VBox>
+                  </HBox>
+                  <JFXButton alignment="BASELINE_LEFT" prefHeight="36.0" prefWidth="270.0" stylesheets="@styles/style.css" text="My Day" textFill="WHITE">
                      <font>
-                        <Font name="Segoe UI Bold" size="13.0"/>
-                     </font>
-                  </Label>
-                  <Label text="Welcome Back!" textFill="WHITE">
-                     <font>
-                        <Font name="Segoe UI" size="12.0"/>
+                        <Font name="Segoe UI" size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="2.0"/>
+                        <Insets bottom="8.0" />
                      </VBox.margin>
-                  </Label>
-               </VBox>
-            </HBox>
-            <JFXButton alignment="BASELINE_LEFT" prefHeight="36.0" prefWidth="270.0" stylesheets="@styles/style.css"
-                       text="My Day" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI" size="13.0"/>
-               </font>
-               <VBox.margin>
-                  <Insets bottom="8.0"/>
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="myDay"/>
-                  <String fx:value="myDay-selected"/>
-               </styleClass>
-            </JFXButton>
-            <JFXButton alignment="BASELINE_LEFT" onAction="#handleImportantButton" prefHeight="36.0"
-                       prefWidth="332.0" stylesheets="@styles/style.css" text="Important" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI" size="13.0"/>
-               </font>
-               <VBox.margin>
-                  <Insets bottom="8.0"/>
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="important"/>
-                  <String fx:value="sideBar-button"/>
-               </styleClass>
-            </JFXButton>
-            <JFXButton alignment="BASELINE_LEFT" onAction="#handleDisplayTasksButton" prefHeight="36.0"
-                       prefWidth="372.0" stylesheets="@styles/style.css" text="Display Tasks" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI" size="13.0"/>
-               </font>
-               <VBox.margin>
-                  <Insets bottom="8.0"/>
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="tasks"/>
-                  <String fx:value="sideBar-button"/>
-               </styleClass>
-            </JFXButton>
-            <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0"/>
-         </VBox>
-      </left>
-      <center>
-         <VBox prefHeight="910.0" prefWidth="613.0" styleClass="myDay-background" stylesheets="@styles/style.css"
-               BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-               <Insets/>
-            </BorderPane.margin>
-            <VBox prefHeight="974.0" prefWidth="920.0">
-               <VBox.margin>
-                  <Insets bottom="48.0" left="48.0" right="48.0" top="48.0"/>
-               </VBox.margin>
-               <Label text="My Day" textFill="WHITE">
-                  <font>
-                     <Font name="Segoe UI Bold" size="32.0"/>
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="5.0"/>
-                  </VBox.margin>
-               </Label>
-               <Label fx:id="todayLabel" textFill="WHITE">
-                  <font>
-                     <Font size="16.0"/>
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="20.0"/>
-                  </VBox.margin>
-               </Label>
-               <VBox prefHeight="666.0" prefWidth="824.0">
-                  <JFXListView fx:id="taskListView" prefHeight="680.0" prefWidth="824.0"
-                               styleClass="list-transparent" stylesheets="@styles/style.css"/>
-               </VBox>
-               <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="824.0">
-                  <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton"
-                             prefHeight="62.0" prefWidth="62.0" styleClass="addButton"
-                             stylesheets="@styles/style.css" text="+" textFill="WHITE">
-                     <font>
-                        <Font name="Segue UI Bold" size="30.0"/>
-                     </font>
+                     <styleClass>
+                        <String fx:value="myDay" />
+                        <String fx:value="myDay-selected" />
+                     </styleClass>
                   </JFXButton>
+                  <JFXButton alignment="BASELINE_LEFT" onAction="#handleImportantButton" prefHeight="36.0" prefWidth="332.0" stylesheets="@styles/style.css" text="Important" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="important" />
+                        <String fx:value="sideBar-button" />
+                     </styleClass>
+                  </JFXButton>
+                  <JFXButton alignment="BASELINE_LEFT" onAction="#handleDisplayTasksButton" prefHeight="36.0" prefWidth="372.0" stylesheets="@styles/style.css" text="Display Tasks" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="tasks" />
+                        <String fx:value="sideBar-button" />
+                     </styleClass>
+                  </JFXButton>
+                  <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <JFXButton prefHeight="60.0" prefWidth="287.0" styleClass="sign-out-button" stylesheets="@styles/style.css" text="Sign out" textFill="#c7c7c7">
+                     <font>
+                        <Font name="Segoe UI" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </JFXButton>
+               </VBox>
+            </left>
+            <center>
+               <VBox prefHeight="910.0" prefWidth="1022.0" styleClass="myDay-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                     <Insets />
+                  </BorderPane.margin>
+                  <VBox prefHeight="974.0" prefWidth="920.0">
+                     <VBox.margin>
+                        <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
+                     </VBox.margin>
+                     <Label text="My Day" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI Bold" size="32.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="5.0" />
+                        </VBox.margin>
+                     </Label>
+                     <Label fx:id="todayLabel" textFill="WHITE">
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin>
+                     </Label>
+                     <VBox prefHeight="666.0" prefWidth="824.0">
+                        <JFXListView fx:id="taskListView" prefHeight="660.0" prefWidth="388.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
+                     </VBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="824.0">
+                        <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@styles/style.css" text="+" textFill="WHITE">
+                           <font>
+                              <Font name="Segue UI Bold" size="30.0" />
+                           </font>
+                        </JFXButton>
+                     </HBox>
+                  </VBox>
+               </VBox>
+            </center>
+         </BorderPane>
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="editForm" layoutX="1200.0" layoutY="100.0" prefHeight="910.0" prefWidth="260.0" styleClass="myDay-background" stylesheets="@styles/style.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+         <VBox prefHeight="910.0" prefWidth="350.0" styleClass="editTask-background" stylesheets="@styles/style.css">
+            <children>
+               <HBox alignment="CENTER" prefHeight="57.0" prefWidth="358.0">
+                  <children>
+                     <JFXButton fx:id="saveButton" onAction="#handleSaveButton" prefWidth="70.0" styleClass="editTask-button-background" stylesheets="@styles/style.css" text="Save" textFill="#c7c7c7">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                     </JFXButton>
+                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     <JFXButton fx:id="cancelButton" onAction="#handleCancelButton" prefWidth="70.0" styleClass="editTask-button-background" stylesheets="@styles/style.css" text="Cancel" textFill="#c7c7c7">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin>
+                     </JFXButton>
+                  </children>
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
                </HBox>
-            </VBox>
+               <TextField fx:id="taskNameField" prefHeight="55.0" prefWidth="332.0" styleClass="editTask-textField" stylesheets="@styles/style.css">
+                  <VBox.margin>
+                     <Insets bottom="20.0" />
+                  </VBox.margin>
+               </TextField>
+               <TextField fx:id="taskDescriptionField" alignment="TOP_LEFT" prefHeight="115.0" prefWidth="332.0" styleClass="editTask-textField">
+                  <VBox.margin>
+                     <Insets bottom="20.0" />
+                  </VBox.margin>
+               </TextField>
+               <DatePicker fx:id="TaskDueDateField" prefHeight="38.0" prefWidth="332.0" styleClass="editTask-datePicker" stylesheets="@styles/style.css">
+                  <VBox.margin>
+                     <Insets bottom="20.0" />
+                  </VBox.margin>
+               </DatePicker>
+               <ComboBox fx:id="TaskStatusField" prefHeight="41.0" prefWidth="324.0" stylesheets="@styles/style.css">
+                     <VBox.margin>
+                         <Insets bottom="20.0" />
+                    </VBox.margin>
+                </ComboBox>
+
+               <Pane prefHeight="429.0" prefWidth="332.0" VBox.vgrow="ALWAYS" />
+               <JFXButton fx:id="deleteButton" onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="332.0" styleClass="editTask-button-background" stylesheets="@styles/style.css" text="Delete Task" textFill="#c7c7c7">
+                  <font>
+                     <Font name="Segoe UI" size="16.0" />
+                  </font>
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+               </JFXButton>
+            </children>
+            <padding>
+               <Insets left="13.0" right="13.0" />
+            </padding>
          </VBox>
-      </center>
-   </BorderPane>
+      </children>
+   </AnchorPane>
 </AnchorPane>

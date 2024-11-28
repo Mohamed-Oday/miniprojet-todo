@@ -71,7 +71,7 @@
             </PasswordField>
             <HBox prefHeight="0.0" prefWidth="330.0">
                <children>
-                  <JFXCheckBox checkedColor="#007c89" text="Keep me logged in" textFill="#32353b" unCheckedColor="#7f7f7f">
+                  <JFXCheckBox fx:id="stayLoggedIn" checkedColor="#007c89" text="Keep me logged in" textFill="#32353b" unCheckedColor="#7f7f7f">
                      <font>
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>

@@ -1,13 +1,13 @@
 package org.openjfx.miniprojet;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.sql.*;
 
 public class loginPopUPController {
+
+    @FXML
+    private JFXCheckBox stayLoggedIn;
 
     @FXML
     private PasswordField password;
@@ -77,6 +80,25 @@ public class loginPopUPController {
 
         if (isValidLogin(username, pass)){
             System.out.println("Login Successful");
+
+            if (stayLoggedIn.isSelected()){
+                String insertQuery = "INSERT INTO saveduser (username) VALUES (?)";
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+                     PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
+
+                    preparedStatement.setString(1, username);
+                    int rows = preparedStatement.executeUpdate();
+
+                    if (rows > 0){
+                        System.out.println("User saved successfully.");
+                    }else{
+                        System.out.println("User not saved.");
+                    }
+
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
 
             // Loading Main fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));

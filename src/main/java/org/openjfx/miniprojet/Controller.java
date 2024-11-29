@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -23,7 +24,16 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Controller{
+public class Controller {
+
+    @FXML
+    private BorderPane borderPane;
+
+    @FXML
+    private AnchorPane displayTasksPane;
+
+    @FXML
+    private AnchorPane importantPane;
 
     @FXML
     private Label notificationMessage;
@@ -49,16 +59,37 @@ public class Controller{
     private TextField taskNameField;
 
     @FXML
+    private AnchorPane myDayPane;
+
+    @FXML
     private AnchorPane mainPane;
 
     @FXML
     private JFXListView<TaskImpl> taskListView;
 
     @FXML
+    private JFXListView<TaskImpl> taskListView1;
+
+    @FXML
+    private JFXListView<TaskImpl> taskListView2;
+
+    @FXML
     private Label imageLabel;
 
     @FXML
     private Label userNameLabel;
+
+    @FXML
+    private Label imageLabel1;
+
+    @FXML
+    private Label userNameLabel1;
+
+    @FXML
+    private Label imageLabel2;
+
+    @FXML
+    private Label userNameLabel2;
 
     @FXML
     private Label todayLabel;  // Ensure this is @FXML
@@ -80,21 +111,25 @@ public class Controller{
         this.userID = userName;
         userNameLabel.setText(userName);
         imageLabel.setText(userName.substring(0, 2).toUpperCase());
+
+        userNameLabel1.setText(userName);
+        imageLabel1.setText(userName.substring(0, 2).toUpperCase());
+
+        userNameLabel2.setText(userName);
+        imageLabel2.setText(userName.substring(0, 2).toUpperCase());
         loadTasks();
     }
 
     @FXML
     public void initialize() {
+        mainPane = myDayPane;
         ObservableList<Status> statusList = FXCollections.observableArrayList(Status.values());
         TaskStatusField.setItems(statusList);
-        taskListView.setItems(tasks);
-        taskListView.setOnMouseClicked(event -> {
-            TaskImpl selectedTask = taskListView.getSelectionModel().getSelectedItem();
-            if (selectedTask != null){
-                this.selectedTask = selectedTask;
-                handleEditTask(selectedTask);
-            }
-        });
+
+        setupTaskListView(taskListView);
+        setupTaskListView(taskListView1);
+        setupTaskListView(taskListView2);
+
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd");
@@ -107,7 +142,18 @@ public class Controller{
         }
     }
 
-    public void handleEditTask(TaskImpl task){
+    private void setupTaskListView(JFXListView<TaskImpl> listView) {
+        listView.setItems(tasks);
+        listView.setOnMouseClicked(event -> {
+            TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
+            if (selectedTask != null) {
+                this.selectedTask = selectedTask;
+                handleEditTask(selectedTask);
+            }
+        });
+    }
+
+    public void handleEditTask(TaskImpl task) {
         TaskStatusField.setValue(task.getStatus());
         TranslateTransition slider = new TranslateTransition();
         slider.setNode(editForm);
@@ -115,8 +161,8 @@ public class Controller{
         slider.setDuration(Duration.seconds(0));
 
         slider.setOnFinished((ActionEvent e) -> {
+            resizeMainPaneForEdit();
             editForm.setVisible(true);
-            mainPane.setPrefWidth(850);
             taskNameField.setText(task.getName());
             taskDescriptionField.setText(task.getDescription());
             TaskDueDateField.setValue(task.getDueDate());
@@ -126,8 +172,18 @@ public class Controller{
         slider.play();
     }
 
+    private void resizeMainPaneForEdit() {
+        if (mainPane != null) {
+            mainPane.setPrefWidth(850);
+            mainPane.applyCss();
+            mainPane.layout();
+            System.out.println("Size after reset: " + mainPane.getPrefWidth() + ", Actual Width: " + mainPane.getWidth());
+            System.out.println("id: " + mainPane.getId());
+        }
+    }
+
     @FXML
-    public void handleSaveButton(){
+    public void handleSaveButton() {
         String taskName = taskNameField.getText();
         String taskDescription = taskDescriptionField.getText();
         LocalDate taskDueDate = TaskDueDateField.getValue();
@@ -137,37 +193,49 @@ public class Controller{
         updateTask(selectedTask);
 
         editForm.setVisible(false);
-        mainPane.setPrefWidth(1200);
+        resetMainPaneSize();
         taskListView.refresh();
+        taskListView1.refresh();
+        taskListView2.refresh();
         showNotification("Task updated successfully.", "Task", "has been updated", taskName);
         System.out.println("Task Updated: " + selectedTask.getStatus());
     }
 
     @FXML
-    public void handleCancelButton(){
+    public void handleCancelButton() {
         editForm.setVisible(false);
-        mainPane.setPrefWidth(1200);
+        resetMainPaneSize();
         taskListView.refresh();
     }
 
     @FXML
-    public void handleDeleteButton(){
+    public void handleDeleteButton() {
         deleteTask(selectedTask);
         tasks.remove(selectedTask);
         editForm.setVisible(false);
-        mainPane.setPrefWidth(1200);
+        resetMainPaneSize();
         taskListView.refresh();
+        taskListView1.refresh();
+        taskListView2.refresh();
+    }
+
+    private void resetMainPaneSize() {
+        if (mainPane != null) {
+            mainPane.setPrefWidth(1200);
+            mainPane.applyCss();
+            mainPane.layout();
+        }
     }
 
     @FXML
-    public void handleSignOutButton(ActionEvent event) throws IOException{
+    public void handleSignOutButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("EntryPage.fxml"));
         Parent root = loader.load();
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM saveduser")){
+             PreparedStatement statement = connection.prepareStatement("DELETE FROM saveduser")) {
             statement.executeUpdate("DELETE FROM saveduser");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -180,7 +248,7 @@ public class Controller{
         currentStage.close();
     }
 
-    public void deleteTask(TaskImpl task){
+    public void deleteTask(TaskImpl task) {
         String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
         setLatestTaskName(task.getName());
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
@@ -214,17 +282,17 @@ public class Controller{
         }
     }
 
-    private void loadTasks(){
+    private void loadTasks() {
         String selectQuery = "SELECT task_id ,task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
+             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
 
             preparedStatement.setString(1, userID);
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()){
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 tasks.clear();
-                while (resultSet.next()){
+                while (resultSet.next()) {
                     int taskID = resultSet.getInt("task_id");
                     String taskName = resultSet.getString("task_name");
                     String description = resultSet.getString("task_description");
@@ -234,15 +302,14 @@ public class Controller{
                     task.setId(taskID);
                     tasks.add(task);
                 }
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     public void handleAddButton(ActionEvent event) throws IOException {
@@ -304,41 +371,38 @@ public class Controller{
         }
     }
 
-
-
-
-    @FXML
-    public void handleImportantButton(ActionEvent event) throws IOException {
-        setMainStage("important.fxml", event);
+    public void handleMyDayButton(){
+        resetMainPaneSize();
+        if (editForm.isVisible()){
+            handleCancelButton();
+        }
+        myDayPane.setVisible(true);
+        displayTasksPane.setVisible(false);
+        importantPane.setVisible(false);
+        mainPane = myDayPane; // Ensure mainPane points to myDayPane
     }
 
     @FXML
-    public void handleDisplayTasksButton(ActionEvent event) throws IOException {
-        setMainStage("displayTasks.fxml", event);
+    public void handleImportantButton(){
+        resetMainPaneSize();
+        if (editForm.isVisible()){
+            handleCancelButton();
+        }
+        myDayPane.setVisible(false);
+        displayTasksPane.setVisible(false);
+        importantPane.setVisible(true);
+        mainPane = importantPane; // Ensure mainPane points to importantPane
     }
 
     @FXML
-    public void handleMyDayButton(ActionEvent event) throws IOException {
-        setMainStage("Main.fxml", event);
-    }
-
-    public void setMainStage(String path, ActionEvent event) throws IOException {
-        // Loading the important fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-        Parent root = loader.load();
-
-        // Creating new stage for the important page
-        Stage nextStage = new Stage();
-        nextStage.setScene(new Scene(root));
-
-        Controller controller = loader.getController();
-        controller.setUserName(userID);
-
-        // Show the important page
-        nextStage.show();
-
-        // Closing the current stage
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+    public void handleDisplayTasksButton(){
+        resetMainPaneSize();
+        if (editForm.isVisible()){
+            handleCancelButton();
+        }
+        myDayPane.setVisible(false);
+        displayTasksPane.setVisible(true);
+        importantPane.setVisible(false);
+        mainPane = displayTasksPane; // Ensure mainPane points to displayTasksPane
     }
 }

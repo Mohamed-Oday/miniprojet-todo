@@ -26,6 +26,14 @@ import java.time.format.DateTimeFormatter;
 
 public class Controller {
 
+    private String loadTasksQuery;
+
+    @FXML
+    private Label categoryTitle;
+
+    @FXML
+    private JFXListView<TaskImpl> categoryTasks;
+
     @FXML
     private BorderPane borderPane;
 
@@ -74,6 +82,18 @@ public class Controller {
     private JFXListView<TaskImpl> taskListView2;
 
     @FXML
+    private JFXListView<String> categoryListView;
+
+    @FXML
+    private JFXListView<String> categoryListView1;
+
+    @FXML
+    private JFXListView<String> categoryListView2;
+
+    @FXML
+    private JFXListView<String> categoryListView21;
+
+    @FXML
     private Label imageLabel;
 
     @FXML
@@ -87,19 +107,28 @@ public class Controller {
 
     @FXML
     private Label imageLabel2;
+    @FXML
+    private Label imageLabel21;
 
     @FXML
     private Label userNameLabel2;
 
     @FXML
-    private Label todayLabel;  // Ensure this is @FXML
+    private Label userNameLabel21;
+
+    @FXML
+    private Label todayLabel;
 
     private final ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
+    private final ObservableList<String> categories = FXCollections.observableArrayList();
 
     private String userID;
 
     @FXML
     private AnchorPane editForm;
+
+    @FXML
+    private AnchorPane categoryTasksPane;
 
     private TaskImpl selectedTask;
 
@@ -109,15 +138,22 @@ public class Controller {
 
     public void setUserName(String userName) {
         this.userID = userName;
-        userNameLabel.setText(userName);
-        imageLabel.setText(userName.substring(0, 2).toUpperCase());
-
-        userNameLabel1.setText(userName);
-        imageLabel1.setText(userName.substring(0, 2).toUpperCase());
-
-        userNameLabel2.setText(userName);
-        imageLabel2.setText(userName.substring(0, 2).toUpperCase());
+        setupUser(userNameLabel, userNameLabel1, userNameLabel2, userNameLabel21);
+        setupUserImage(imageLabel, imageLabel1, imageLabel2, imageLabel21);
         loadTasks();
+        loadCategories();
+    }
+
+    private void setupUser(Label... usernameLabels){
+        for (Label usernameLabel : usernameLabels) {
+            usernameLabel.setText(userID);
+        }
+    }
+
+    private void setupUserImage(Label... userImage){
+        for (Label imageLabel : userImage) {
+            imageLabel.setText(userID.substring(0, 2).toUpperCase());
+        }
     }
 
     @FXML
@@ -126,9 +162,8 @@ public class Controller {
         ObservableList<Status> statusList = FXCollections.observableArrayList(Status.values());
         TaskStatusField.setItems(statusList);
 
-        setupTaskListView(taskListView);
-        setupTaskListView(taskListView1);
-        setupTaskListView(taskListView2);
+        setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
 
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
@@ -142,15 +177,27 @@ public class Controller {
         }
     }
 
-    private void setupTaskListView(JFXListView<TaskImpl> listView) {
-        listView.setItems(tasks);
-        listView.setOnMouseClicked(event -> {
-            TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
-            if (selectedTask != null) {
-                this.selectedTask = selectedTask;
-                handleEditTask(selectedTask);
-            }
-        });
+    private void setupTaskListViews(JFXListView<TaskImpl>... listViews) {
+        for (JFXListView<TaskImpl> listView : listViews) {
+            listView.setItems(tasks);
+            listView.setOnMouseClicked(event -> {
+                TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
+                if (selectedTask != null) {
+                    handleEditTask(selectedTask);
+                }
+            });
+        }
+    }
+
+    private void setupCategoryListViews(JFXListView<String>... listViews) {
+        for (JFXListView<String> listView : listViews) {
+            listView.setItems(categories);
+            listView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    loadTasksForCategory(newSelection);
+                }
+            });
+        }
     }
 
     public void handleEditTask(TaskImpl task) {
@@ -177,8 +224,6 @@ public class Controller {
             mainPane.setPrefWidth(850);
             mainPane.applyCss();
             mainPane.layout();
-            System.out.println("Size after reset: " + mainPane.getPrefWidth() + ", Actual Width: " + mainPane.getWidth());
-            System.out.println("id: " + mainPane.getId());
         }
     }
 
@@ -197,8 +242,8 @@ public class Controller {
         taskListView.refresh();
         taskListView1.refresh();
         taskListView2.refresh();
+        categoryTasks.refresh();
         showNotification("Task updated successfully.", "Task", "has been updated", taskName);
-        System.out.println("Task Updated: " + selectedTask.getStatus());
     }
 
     @FXML
@@ -206,6 +251,7 @@ public class Controller {
         editForm.setVisible(false);
         resetMainPaneSize();
         taskListView.refresh();
+
     }
 
     @FXML
@@ -217,6 +263,7 @@ public class Controller {
         taskListView.refresh();
         taskListView1.refresh();
         taskListView2.refresh();
+        categoryTasks.refresh();
     }
 
     private void resetMainPaneSize() {
@@ -283,10 +330,18 @@ public class Controller {
     }
 
     private void loadTasks() {
-        String selectQuery = "SELECT task_id ,task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
+        this.loadTasksQuery = "SELECT task_id, task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
+
+        // Filter for current day tasks if `myDayPane` is visible
+        if (myDayPane.isVisible()) {
+            this.loadTasksQuery += " AND task_startDate = CURDATE()";
+        } else if (importantPane.isVisible()) {
+            // Filter for important tasks if `importantPane` is visible
+            this.loadTasksQuery += " AND is_important = 1";
+        }
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {
 
             preparedStatement.setString(1, userID);
 
@@ -306,6 +361,47 @@ public class Controller {
                 e.printStackTrace();
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadTasksForCategory(String categoryName) {
+        categoryTasksPane.setVisible(true);
+        myDayPane.setVisible(false);
+        displayTasksPane.setVisible(false);
+        importantPane.setVisible(false);
+        categoryTitle.setText(categoryName);
+        mainPane = categoryTasksPane;
+        loadTasksByCategory(categoryName);
+        categoryTasks.setItems(tasks);
+        categoryTitle.setText(categoryName);
+    }
+
+    private void loadTasksByCategory(String categoryName) {
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status "
+                + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
+                + "WHERE tasks.user_id = ? AND categories.category_name = ?";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {
+
+            preparedStatement.setString(1, userID);
+            preparedStatement.setString(2, categoryName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                tasks.clear();
+                while (resultSet.next()) {
+                    int taskID = resultSet.getInt("task_id");
+                    String taskName = resultSet.getString("task_name");
+                    String description = resultSet.getString("task_description");
+                    LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                    Status status = Status.valueOf(resultSet.getString("task_status"));
+                    TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                    task.setId(taskID);
+                    tasks.add(task);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -342,6 +438,60 @@ public class Controller {
         loadTasks();
     }
 
+    @FXML
+    public void handleAddCategory(ActionEvent event) throws IOException {
+        // Loading the addCategory fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("addCategory.fxml"));
+        try {
+            Parent root = loader.load();
+
+            // Getting the addCategory Controller
+            AddCategoryController addCategoryController = loader.getController();
+
+            // Getting main stage
+            Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Creating new stage for the addCategory page
+            Stage addCategoryStage = new Stage();
+            addCategoryStage.setTitle("Add Category");
+            addCategoryStage.setScene(new Scene(root));
+            addCategoryStage.initStyle(StageStyle.UTILITY);
+            addCategoryStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Setting the main stage and addCategory stage
+            addCategoryController.setMainStage(mainStage);
+            addCategoryController.setAddCategoryStage(addCategoryStage);
+            addCategoryController.setMainController(this);
+            addCategoryController.setUserID(userID);
+
+            // Display the addCategory page
+            addCategoryStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadCategories() {
+        categories.clear();
+        String loadCategoriesQuery = "SELECT category_name FROM categories WHERE user_id = ?";
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement preparedStatement = connection.prepareStatement(loadCategoriesQuery)) {
+
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String categoryName = resultSet.getString("category_name");
+                categories.add(categoryName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        categoryListView.setItems(categories);
+        categoryListView1.setItems(categories);
+        categoryListView2.setItems(categories);
+        categoryListView21.setItems(categories);
+    }
+
     public void showNotification(String message, String part1, String part2, String taskName) {
         if (taskName != null && !taskName.isEmpty()) {
             notificationMessage.setText(message);
@@ -371,38 +521,54 @@ public class Controller {
         }
     }
 
-    public void handleMyDayButton(){
+    @FXML
+    public void handleMyDayButton() {
         resetMainPaneSize();
-        if (editForm.isVisible()){
+        if (editForm.isVisible()) {
             handleCancelButton();
         }
         myDayPane.setVisible(true);
         displayTasksPane.setVisible(false);
         importantPane.setVisible(false);
+        categoryTasksPane.setVisible(false);
         mainPane = myDayPane; // Ensure mainPane points to myDayPane
+        loadTasks();
+        loadCategories();
+        taskListView.refresh();
+        categoryListView.refresh();
     }
 
     @FXML
-    public void handleImportantButton(){
+    public void handleImportantButton() {
         resetMainPaneSize();
-        if (editForm.isVisible()){
+        if (editForm.isVisible()) {
             handleCancelButton();
         }
         myDayPane.setVisible(false);
         displayTasksPane.setVisible(false);
         importantPane.setVisible(true);
+        categoryTasksPane.setVisible(false);
         mainPane = importantPane; // Ensure mainPane points to importantPane
+        loadTasks();
+        loadCategories();
+        taskListView.refresh();
+        categoryListView.refresh();
     }
 
     @FXML
-    public void handleDisplayTasksButton(){
+    public void handleDisplayTasksButton() {
         resetMainPaneSize();
-        if (editForm.isVisible()){
+        if (editForm.isVisible()) {
             handleCancelButton();
         }
         myDayPane.setVisible(false);
         displayTasksPane.setVisible(true);
         importantPane.setVisible(false);
+        categoryTasksPane.setVisible(false);
         mainPane = displayTasksPane; // Ensure mainPane points to displayTasksPane
+        loadTasks();
+        loadCategories();
+        taskListView.refresh();
+        categoryListView.refresh();
     }
 }

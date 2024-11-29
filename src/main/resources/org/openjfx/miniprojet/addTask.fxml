@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -13,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.addTaskController">
+<AnchorPane prefHeight="584.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.addTaskController">
    <children>
-      <VBox layoutX="190.0" layoutY="225.0" prefHeight="500.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="190.0" layoutY="225.0" prefHeight="516.0" prefWidth="383.0" styleClass="editTask-background" stylesheets="@styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane prefHeight="25.0" prefWidth="283.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
@@ -80,7 +82,22 @@
                      </VBox.margin>
                   </DatePicker>
                </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
             </VBox>
+            <ComboBox fx:id="categoryComboBox" prefHeight="50.0" prefWidth="338.0" styleClass="add-task-category-combo-box" stylesheets="@styles/style.css">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin></ComboBox>
+            <JFXCheckBox fx:id="importantCheck" checkedColor="#00afca" prefHeight="19.0" prefWidth="291.0" text="Important" textFill="WHITE" unCheckedColor="#3b3b3b">
+               <font>
+                  <Font name="Segoe UI Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </JFXCheckBox>
             <HBox alignment="CENTER" prefHeight="18.0" prefWidth="380.0">
                <children>
                   <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleAddButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-addButton" stylesheets="@styles/style.css" text="Add" textFill="WHITE">
@@ -97,6 +114,9 @@
                      </font>
                   </JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
             </HBox>
          </children>
          <padding>

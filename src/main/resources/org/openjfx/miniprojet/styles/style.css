@@ -243,4 +243,20 @@
     -fx-background-radius: 0 0 0 10;
 }
 
+.category-label{
+    -fx-graphic: url("../assets/application.png");
+    -fx-graphic-text-gap: 10;
+}
+
+.add-category-button{
+    -fx-background-color: transparent;
+    -fx-background-radius: 99999;
+}
+
+.add-category-button:hover{
+    -fx-background-color: "#4b423a";
+}
+
+
+
 

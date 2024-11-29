@@ -27,8 +27,10 @@ import com.google.gson.reflect.TypeToken;
 public class TaskListImpl extends TaskList{
 
     private List<TaskImpl> tasks;
+    private List<String> categories;
     public TaskListImpl() {
         this.tasks = new ArrayList<TaskImpl>();
+        this.categories = new ArrayList<String>();
     }
 
     /**

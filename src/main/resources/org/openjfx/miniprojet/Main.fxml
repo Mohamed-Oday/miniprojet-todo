@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.Controller">
-   <AnchorPane fx:id="myDayPane" prefHeight="910.0" prefWidth="1200.0" styleClass="myDay-background" stylesheets="@styles/style.css">
+   <AnchorPane fx:id="myDayPane" styleClass="myDay-background" stylesheets="@styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <BorderPane prefHeight="910.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox prefHeight="200.0" prefWidth="280.0" styleClass="left-sideBar" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
@@ -118,7 +118,7 @@
                      <Insets left="5.0" right="5.0" />
                   </padding>
                </HBox>
-               <JFXListView fx:id="categoryListView" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css">
+               <JFXListView fx:id="categoryListView" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets bottom="10.0" />
                   </VBox.margin>
@@ -134,7 +134,7 @@
             </VBox>
          </left>
          <center>
-            <VBox prefHeight="910.0" prefWidth="1022.0" styleClass="myDay-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
+            <VBox fx:id="mainVbox" prefHeight="939.0" prefWidth="1001.0" styleClass="myDay-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
@@ -158,13 +158,13 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Label>
-                  <VBox prefHeight="666.0" prefWidth="824.0">
-                     <JFXListView fx:id="taskListView" prefHeight="660.0" prefWidth="388.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
+                  <VBox prefHeight="617.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                     <JFXListView fx:id="taskListView" prefHeight="684.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="824.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                      <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@styles/style.css" text="+" textFill="WHITE">
                         <font>
-                           <Font name="Segue UI Bold" size="30.0" />
+                           <Font name="Segoe UI Bold" size="30.0" />
                         </font>
                      </JFXButton>
                   </HBox>
@@ -173,7 +173,7 @@
          </center>
       </BorderPane>
    </AnchorPane>
-   <AnchorPane fx:id="importantPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" visible="false">
+   <AnchorPane fx:id="importantPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <BorderPane fx:id="importantBorderPane" layoutX="500.0" layoutY="355.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
@@ -279,7 +279,7 @@
                            <Insets bottom="10.0" />
                         </VBox.margin>
                      </HBox>
-                     <JFXListView fx:id="categoryListView1" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css">
+                     <JFXListView fx:id="categoryListView1" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS">
                         <VBox.margin>
                            <Insets bottom="10.0" />
                         </VBox.margin></JFXListView>
@@ -295,7 +295,7 @@
                </VBox>
             </left>
             <center>
-               <VBox prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
+               <VBox fx:id="mainVbox1" prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
                   <BorderPane.margin>
                      <Insets />
                   </BorderPane.margin>
@@ -325,15 +325,20 @@
                                  </Label>
                               </children>
                            </HBox>
-                           <VBox prefHeight="736.0" prefWidth="824.0">
+                           <Label fx:id="todayLabel1" textFill="WHITE">
+                              <font>
+                                 <Font size="16.0" />
+                              </font>
+                           </Label>
+                           <VBox prefHeight="657.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
                               <VBox.margin>
                                  <Insets />
                               </VBox.margin>
                               <children>
-                                 <JFXListView fx:id="taskListView1" prefHeight="731.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
+                                 <JFXListView fx:id="taskListView1" prefHeight="643.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
                               </children>
                            </VBox>
-                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                           <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                               <children>
                                  <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@styles/style.css" text="+" textFill="#f5b6c2">
                                     <font>
@@ -350,7 +355,7 @@
          </BorderPane>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="displayTasksPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" visible="false">
+   <AnchorPane fx:id="displayTasksPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <BorderPane layoutX="500.0" layoutY="355.0" prefHeight="910.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
@@ -456,7 +461,7 @@
                            <Insets bottom="10.0" />
                         </VBox.margin>
                      </HBox>
-                     <JFXListView fx:id="categoryListView2" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css">
+                     <JFXListView fx:id="categoryListView2" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS">
                         <VBox.margin>
                            <Insets bottom="10.0" />
                         </VBox.margin></JFXListView>
@@ -472,7 +477,7 @@
                </VBox>
             </left>
             <center>
-               <VBox prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
+               <VBox fx:id="mainVbox2" prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
                   <BorderPane.margin>
                      <Insets />
                   </BorderPane.margin>
@@ -502,12 +507,12 @@
                                  </Label>
                               </children>
                            </HBox>
-                           <VBox prefHeight="696.0" prefWidth="824.0">
+                           <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
                               <children>
-                                 <JFXListView fx:id="taskListView2" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
+                                 <JFXListView fx:id="taskListView2" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS" />
                               </children>
                            </VBox>
-                           <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="824.0">
+                           <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                               <children>
                                  <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@styles/style.css" text="+" textFill="#788cde">
                                     <font>
@@ -524,7 +529,7 @@
          </BorderPane>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="categoryTasksPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" visible="false">
+   <AnchorPane fx:id="categoryTasksPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <BorderPane layoutX="500.0" layoutY="355.0" prefHeight="910.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
@@ -629,7 +634,7 @@
                            <Insets bottom="10.0" />
                         </VBox.margin>
                      </HBox>
-                     <JFXListView fx:id="categoryListView21" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css">
+                     <JFXListView fx:id="categoryListView21" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS">
                         <VBox.margin>
                            <Insets bottom="10.0" />
                         </VBox.margin>
@@ -646,7 +651,7 @@
                </VBox>
             </left>
             <center>
-               <VBox prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
+               <VBox fx:id="mainVbox3" prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@styles/style.css" BorderPane.alignment="CENTER">
                   <BorderPane.margin>
                      <Insets />
                   </BorderPane.margin>
@@ -668,12 +673,12 @@
                                  </Label>
                               </children>
                            </HBox>
-                           <VBox prefHeight="696.0" prefWidth="824.0">
+                           <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
                               <children>
-                                 <JFXListView fx:id="categoryTasks" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" />
+                                 <JFXListView fx:id="categoryTasks" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@styles/style.css" VBox.vgrow="ALWAYS" />
                               </children>
                            </VBox>
-                           <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="824.0">
+                           <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                               <children>
                                  <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@styles/style.css" text="+" textFill="#788cde">
                                     <font>
@@ -690,8 +695,8 @@
          </BorderPane>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="editForm" prefHeight="910.0" prefWidth="260.0" styleClass="myDay-background" stylesheets="@styles/style.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox prefHeight="910.0" prefWidth="350.0" styleClass="editTask-background" stylesheets="@styles/style.css">
+   <AnchorPane fx:id="editForm" styleClass="editTask-background" stylesheets="@styles/style.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="910.0" prefWidth="350.0" styleClass="editTask-background" stylesheets="@styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <HBox alignment="CENTER" prefHeight="57.0" prefWidth="358.0">
             <JFXButton onAction="#handleSaveButton" prefWidth="70.0" styleClass="editTask-button-background" stylesheets="@styles/style.css" text="Save" textFill="#c7c7c7">
                <font>
@@ -732,7 +737,7 @@
             </VBox.margin>
          </ComboBox>
 
-         <Pane prefHeight="429.0" prefWidth="332.0" VBox.vgrow="ALWAYS" />
+         <Pane prefHeight="429.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
          <JFXButton onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="332.0" styleClass="editTask-button-background" stylesheets="@styles/style.css" text="Delete Task" textFill="#c7c7c7">
             <font>
                <Font name="Segoe UI" size="16.0" />
@@ -746,19 +751,25 @@
          </padding>
       </VBox>
    </AnchorPane>
-   <AnchorPane fx:id="notificationForm" prefHeight="115.0" prefWidth="350.0" visible="false" AnchorPane.leftAnchor="850.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <AnchorPane fx:id="notificationForm" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-         <VBox alignment="CENTER" prefHeight="115.0" prefWidth="350.0" styleClass="notification-background" stylesheets="@styles/style.css">
+         <VBox alignment="CENTER" styleClass="notification-background" stylesheets="@styles/style.css">
             <children>
                <Label fx:id="notificationMessage" alignment="CENTER" prefHeight="46.0" prefWidth="350.0" text="The task has been successfully added" textFill="#c7c7c7">
                   <font>
                      <Font name="Segoe UI Bold" size="18.0" />
                   </font>
+                  <VBox.margin>
+                     <Insets top="20.0" />
+                  </VBox.margin>
                </Label>
                <Label fx:id="notificationTaskName" text="Task %s has been added" textFill="#c7c7c7">
                   <font>
                      <Font size="14.0" />
                   </font>
+                  <VBox.margin>
+                     <Insets bottom="20.0" />
+                  </VBox.margin>
                </Label>
             </children>
          </VBox>

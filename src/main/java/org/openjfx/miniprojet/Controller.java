@@ -8,12 +8,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -130,6 +133,18 @@ public class Controller {
     @FXML
     private AnchorPane categoryTasksPane;
 
+    @FXML
+    private VBox mainVbox;
+
+    @FXML
+    private VBox mainVbox1;
+
+    @FXML
+    private VBox mainVbox2;
+
+    @FXML
+    private VBox mainVbox3;
+
     private TaskImpl selectedTask;
 
     public void setLatestTaskName(String latestTaskName) {
@@ -167,7 +182,6 @@ public class Controller {
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
 
-
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM dd");
@@ -200,12 +214,16 @@ public class Controller {
         String selectedCategory;
         if (myDayPane.isVisible()){
             selectedCategory = categoryListView.getSelectionModel().getSelectedItem();
+            System.out.println("Selected category: " + selectedCategory);
         }else if (importantPane.isVisible()){
             selectedCategory = categoryListView1.getSelectionModel().getSelectedItem();
+            System.out.println("Selected category: " + selectedCategory);
         }else if (displayTasksPane.isVisible()){
             selectedCategory = categoryListView2.getSelectionModel().getSelectedItem();
+            System.out.println("Selected category: " + selectedCategory);
         }else {
             selectedCategory = categoryListView21.getSelectionModel().getSelectedItem();
+            System.out.println("Selected category: " + selectedCategory);
         }
         if (selectedCategory != null){
             deleteCategory(selectedCategory, false);
@@ -276,9 +294,12 @@ public class Controller {
     private void setupCategoryListViews(JFXListView<String>... listViews) {
         for (JFXListView<String> listView : listViews) {
             listView.setItems(categories);
-            listView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    loadTasksForCategory(newSelection);
+            listView.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY){
+                    String selectedCategory = listView.getSelectionModel().getSelectedItem();
+                    if (selectedCategory != null){
+                        loadTasksForCategory(selectedCategory);
+                    }
                 }
             });
         }
@@ -290,6 +311,10 @@ public class Controller {
         slider.setNode(editForm);
         slider.setToX(0);
         slider.setDuration(Duration.seconds(0));
+        mainVbox.setPadding(new Insets(0, 320, 0, 0));
+        mainVbox1.setPadding(new Insets(0, 320, 0, 0));
+        mainVbox2.setPadding(new Insets(0, 320, 0, 0));
+        mainVbox3.setPadding(new Insets(0, 320, 0, 0));
 
         slider.setOnFinished((ActionEvent e) -> {
             resizeMainPaneForEdit();
@@ -329,6 +354,10 @@ public class Controller {
             taskListView1.refresh();
             taskListView2.refresh();
             categoryTasks.refresh();
+            mainVbox.setPadding(new Insets(0, 0, 0, 0));
+            mainVbox1.setPadding(new Insets(0, 0, 0, 0));
+            mainVbox2.setPadding(new Insets(0, 0, 0, 0));
+            mainVbox3.setPadding(new Insets(0, 0, 0, 0));
             showNotification("Task updated successfully.", "Task", "has been updated", taskName);
         }
     }
@@ -338,6 +367,10 @@ public class Controller {
         editForm.setVisible(false);
         resetMainPaneSize();
         taskListView.refresh();
+        mainVbox.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox1.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox2.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox3.setPadding(new Insets(0, 0, 0, 0));
 
     }
 
@@ -351,6 +384,10 @@ public class Controller {
         taskListView1.refresh();
         taskListView2.refresh();
         categoryTasks.refresh();
+        mainVbox.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox1.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox2.setPadding(new Insets(0, 0, 0, 0));
+        mainVbox3.setPadding(new Insets(0, 0, 0, 0));
     }
 
     private void resetMainPaneSize() {

@@ -140,6 +140,7 @@ public class Controller {
         this.userID = userName;
         setupUser(userNameLabel, userNameLabel1, userNameLabel2, userNameLabel21);
         setupUserImage(imageLabel, imageLabel1, imageLabel2, imageLabel21);
+
         loadTasks();
         loadCategories();
     }
@@ -164,6 +165,8 @@ public class Controller {
 
         setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21);
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
+        setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+
 
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
@@ -177,12 +180,93 @@ public class Controller {
         }
     }
 
+    private void setupCategoryContextMenu(JFXListView<String>... listViews){
+        for (JFXListView<String> listView : listViews) {
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem deleteCategoryItem = new MenuItem("Delete Category");
+            deleteCategoryItem.setOnAction(event ->  deleteSelectedCategory());
+
+            MenuItem deleteCategoryWithTasksItem = new MenuItem("Delete Category and Tasks");
+            deleteCategoryWithTasksItem.setOnAction(event -> deleteCategoryWithTasks());
+
+            contextMenu.getItems().addAll(deleteCategoryItem, deleteCategoryWithTasksItem);
+
+            listView.setContextMenu(contextMenu);
+        }
+    }
+
+    private void deleteSelectedCategory(){
+        String selectedCategory;
+        if (myDayPane.isVisible()){
+            selectedCategory = categoryListView.getSelectionModel().getSelectedItem();
+        }else if (importantPane.isVisible()){
+            selectedCategory = categoryListView1.getSelectionModel().getSelectedItem();
+        }else if (displayTasksPane.isVisible()){
+            selectedCategory = categoryListView2.getSelectionModel().getSelectedItem();
+        }else {
+            selectedCategory = categoryListView21.getSelectionModel().getSelectedItem();
+        }
+        if (selectedCategory != null){
+            deleteCategory(selectedCategory, false);
+            loadCategories();
+        }
+    }
+
+    private void deleteCategoryWithTasks(){
+        String selectedCategory;
+        if (myDayPane.isVisible()){
+            selectedCategory = categoryListView.getSelectionModel().getSelectedItem();
+        }else if (importantPane.isVisible()){
+            selectedCategory = categoryListView1.getSelectionModel().getSelectedItem();
+        }else if (displayTasksPane.isVisible()){
+            selectedCategory = categoryListView2.getSelectionModel().getSelectedItem();
+        }else {
+            selectedCategory = categoryListView21.getSelectionModel().getSelectedItem();
+        }
+        if (selectedCategory != null){
+            deleteCategory(selectedCategory, true);
+            loadCategories();
+        }
+    }
+
+    private void deleteCategory(String categoryName, boolean deleteTasks) {
+        String deleteCategoryQuery = "DELETE FROM categories WHERE category_name = ? AND user_id = ?";
+        String deleteTasksQuery = "DELETE FROM tasks WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
+             PreparedStatement categoryStmt = connection.prepareStatement(deleteCategoryQuery);
+             PreparedStatement tasksStmt = deleteTasks ? connection.prepareStatement(deleteTasksQuery) : null) {
+
+            if (deleteTasks) {
+                tasksStmt.setString(1, categoryName);
+                tasksStmt.setString(2, userID);
+                int rowsAffected = tasksStmt.executeUpdate();
+                System.out.println("Deleted " + rowsAffected + " tasks associated with category: " + categoryName);
+            }
+
+            categoryStmt.setString(1, categoryName);
+            categoryStmt.setString(2, userID);
+            int rowsAffected = categoryStmt.executeUpdate();
+            System.out.println("Deleted category: " + categoryName + ", rows affected: " + rowsAffected);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Refresh the category list
+            loadCategories();
+            // Clear selection
+            categoryListView.getSelectionModel().clearSelection();
+        }
+    }
+
     private void setupTaskListViews(JFXListView<TaskImpl>... listViews) {
         for (JFXListView<TaskImpl> listView : listViews) {
             listView.setItems(tasks);
             listView.setOnMouseClicked(event -> {
                 TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
                 if (selectedTask != null) {
+                    System.out.println(selectedTask.getName());
                     handleEditTask(selectedTask);
                 }
             });
@@ -217,6 +301,7 @@ public class Controller {
             TaskStatusField.setPromptText(task.getStatus().toString());
         });
         slider.play();
+        this.selectedTask = task;
     }
 
     private void resizeMainPaneForEdit() {
@@ -229,21 +314,23 @@ public class Controller {
 
     @FXML
     public void handleSaveButton() {
-        String taskName = taskNameField.getText();
-        String taskDescription = taskDescriptionField.getText();
-        LocalDate taskDueDate = TaskDueDateField.getValue();
-        Status taskStatus = TaskStatusField.getValue();
+        if (selectedTask != null){
+            String taskName = taskNameField.getText();
+            String taskDescription = taskDescriptionField.getText();
+            LocalDate taskDueDate = TaskDueDateField.getValue();
+            Status taskStatus = TaskStatusField.getValue();
 
-        selectedTask.editTask(taskName, taskDescription, taskDueDate, taskStatus);
-        updateTask(selectedTask);
+            selectedTask.editTask(taskName, taskDescription, taskDueDate, taskStatus);
+            updateTask(selectedTask);
 
-        editForm.setVisible(false);
-        resetMainPaneSize();
-        taskListView.refresh();
-        taskListView1.refresh();
-        taskListView2.refresh();
-        categoryTasks.refresh();
-        showNotification("Task updated successfully.", "Task", "has been updated", taskName);
+            editForm.setVisible(false);
+            resetMainPaneSize();
+            taskListView.refresh();
+            taskListView1.refresh();
+            taskListView2.refresh();
+            categoryTasks.refresh();
+            showNotification("Task updated successfully.", "Task", "has been updated", taskName);
+        }
     }
 
     @FXML

@@ -1,9 +1,6 @@
 package org.openjfx.miniprojet;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -46,7 +42,7 @@ public class loginPopUPController {
     }
 
     @FXML
-    public void handleCreateAccount(MouseEvent event) throws IOException {
+    public void handleCreateAccount() throws IOException {
         // Loading the signUp fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("signUp.fxml"));
         Parent root = loader.load();
@@ -74,7 +70,7 @@ public class loginPopUPController {
     }
 
     @FXML
-    public void handleSignInButton(ActionEvent event) throws IOException {
+    public void handleSignInButton() throws IOException {
         String username = userName.getText();
         String pass = password.getText();
 

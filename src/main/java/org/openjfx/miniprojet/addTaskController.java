@@ -1,6 +1,5 @@
 package org.openjfx.miniprojet;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -45,13 +44,14 @@ public class addTaskController {
     }
 
     @FXML
-    public void handleAddButton(ActionEvent event) {
+    public void handleAddButton() {
         String name = getTaskName();
         String description = getTaskDescription();
         LocalDate dueDate = getTaskDueDate();
 
         if (name != null && !name.isEmpty() && dueDate != null) {
             insertTask(name, description, dueDate);
+            mainController.setLatestTaskName(name);
             addTaskStage.close();
         } else {
             // Handle invalid input
@@ -82,7 +82,7 @@ public class addTaskController {
     }
 
     @FXML
-    public void handleCancelButton(ActionEvent event) {
+    public void handleCancelButton() {
         addTaskStage.close();
     }
 

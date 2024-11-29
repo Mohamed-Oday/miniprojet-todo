@@ -238,5 +238,9 @@
     -fx-background-color: "#4b423a";
 }
 
+.notification-background{
+    -fx-background-color: "#323232";
+    -fx-background-radius: 0 0 0 10;
+}
 
 

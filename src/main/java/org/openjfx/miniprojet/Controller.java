@@ -1,6 +1,7 @@
 package org.openjfx.miniprojet;
 
 import com.jfoenix.controls.JFXListView;
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Controller{
+
+    @FXML
+    private Label notificationMessage;
+
+    @FXML
+    private Label notificationTaskName;
+
+    private String latestTaskName;
+
+    @FXML
+    private AnchorPane notificationForm;
 
     @FXML
     private DatePicker TaskDueDateField;
@@ -59,6 +71,10 @@ public class Controller{
     private AnchorPane editForm;
 
     private TaskImpl selectedTask;
+
+    public void setLatestTaskName(String latestTaskName) {
+        this.latestTaskName = latestTaskName;
+    }
 
     public void setUserName(String userName) {
         this.userID = userName;
@@ -123,6 +139,7 @@ public class Controller{
         editForm.setVisible(false);
         mainPane.setPrefWidth(1200);
         taskListView.refresh();
+        showNotification("Task updated successfully.", "Task", "has been updated", taskName);
         System.out.println("Task Updated: " + selectedTask.getStatus());
     }
 
@@ -165,7 +182,7 @@ public class Controller{
 
     public void deleteTask(TaskImpl task){
         String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
-
+        setLatestTaskName(task.getName());
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
 
@@ -175,6 +192,7 @@ public class Controller{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        showNotification("Task deleted successfully.", "Task", "has been deleted", latestTaskName);
     }
 
     public void updateTask(TaskImpl task) {
@@ -253,9 +271,41 @@ public class Controller{
 
         // Display the addTask page
         addTaskStage.showAndWait();
-
+        showNotification("Task added successfully.", "Task", "has been added", latestTaskName);
         loadTasks();
     }
+
+    public void showNotification(String message, String part1, String part2, String taskName) {
+        if (taskName != null && !taskName.isEmpty()) {
+            notificationMessage.setText(message);
+            notificationTaskName.setText(part1 + " " + "\"" + taskName + "\"" + " " + part2);
+            // Reset position and visibility
+            notificationForm.setVisible(true);
+            notificationForm.setTranslateX(300);
+            notificationForm.setTranslateY(0);
+
+            // Slide in the notification
+            TranslateTransition sliderIn = new TranslateTransition(Duration.seconds(0.5), notificationForm);
+            sliderIn.setToX(0); // Bring it into view
+            sliderIn.setOnFinished(e -> {
+                // Wait for 3 seconds before sliding it out
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                pause.setOnFinished(event -> {
+                    // Slide out the notification
+                    TranslateTransition sliderOut = new TranslateTransition(Duration.seconds(0.5), notificationForm);
+                    sliderOut.setToX(400); // Move it back off-screen
+                    sliderOut.setOnFinished(evt -> notificationForm.setVisible(false)); // Hide after sliding out
+                    sliderOut.play();
+                });
+                pause.play();
+            });
+            sliderIn.play();
+            this.latestTaskName = null;
+        }
+    }
+
+
+
 
     @FXML
     public void handleImportantButton(ActionEvent event) throws IOException {

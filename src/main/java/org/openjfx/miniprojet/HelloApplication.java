@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
 
 public class HelloApplication extends Application {
     @Override
@@ -31,7 +32,7 @@ public class HelloApplication extends Application {
                 fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EntryPage.fxml"));
                 scene = new Scene(fxmlLoader.load());
             }
-            String css = this.getClass().getResource("styles/style.css").toExternalForm();
+            String css = Objects.requireNonNull(this.getClass().getResource("styles/style.css")).toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("ToDo List");
             stage.setScene(scene);

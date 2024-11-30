@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
+import org.openjfx.miniprojet.utiil.Database;
 
 import java.io.IOException;
 import java.sql.*;
@@ -151,7 +152,6 @@ public class Controller {
         this.userID = userName;
         setupUser(userNameLabel, userNameLabel1, userNameLabel2, userNameLabel21);
         setupUserImage(imageLabel, imageLabel1, imageLabel2, imageLabel21);
-
         loadTasks();
         loadCategories();
     }
@@ -163,8 +163,9 @@ public class Controller {
     }
 
     private void setupUserImage(Label... userImage){
+        String initials = userID.substring(0, 2).toUpperCase();
         for (Label imageLabel : userImage) {
-            imageLabel.setText(userID.substring(0, 2).toUpperCase());
+            imageLabel.setText(initials);
         }
     }
 
@@ -249,33 +250,23 @@ public class Controller {
         String deleteCategoryQuery = "DELETE FROM categories WHERE category_name = ? AND user_id = ?";
         String deleteTasksQuery = "DELETE FROM tasks WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement categoryStmt = connection.prepareStatement(deleteCategoryQuery);
-             PreparedStatement tasksStmt = connection.prepareStatement(deleteTasksQuery)) {
-
-            if (deleteTasks) {
-                tasksStmt.setString(1, categoryName);
-                tasksStmt.setString(2, userID);
-                int rowsAffected = tasksStmt.executeUpdate();
-                System.out.println("Deleted " + rowsAffected + " tasks associated with category: " + categoryName);
+        try{
+            if (deleteTasks){
+                int rowAffected = Database.getInstance().executeUpdate(deleteTasksQuery, categoryName, userID);
+                System.out.println(rowAffected + " tasks deleted");
             }
+            int rowAffected = Database.getInstance().executeUpdate(deleteCategoryQuery, categoryName, userID);
+            System.out.println(rowAffected + " category deleted");
 
-            categoryStmt.setString(1, categoryName);
-            categoryStmt.setString(2, userID);
-            int rowsAffected = categoryStmt.executeUpdate();
-            System.out.println("Deleted category: " + categoryName + ", rows affected: " + rowsAffected);
             if (categoryTasksPane.isVisible()){
                 categoryTasksPane.setVisible(false);
                 myDayPane.setVisible(true);
             }
             loadTasks();
-
-        } catch (SQLException e) {
+        } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            // Refresh the category list
             loadCategories();
-            // Clear selection
             categoryListView.getSelectionModel().clearSelection();
         }
     }
@@ -407,10 +398,9 @@ public class Controller {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
         Parent root = loader.load();
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM saveduser")) {
-            statement.executeUpdate("DELETE FROM saveduser");
-        } catch (SQLException e) {
+        try {
+            Database.getInstance().deleteSavedUser();
+        } catch (SQLException e){
             e.printStackTrace();
         }
 
@@ -425,69 +415,54 @@ public class Controller {
 
     public void deleteTask(TaskImpl task) {
         String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
-        setLatestTaskName(task.getName());
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
-
-            preparedStatement.setInt(1, task.getId());
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
+        Object[] params = {task.getId()};
+        try {
+            Database.getInstance().executeUpdate(deleteQuery, params);
+            setLatestTaskName(task.getName());
+            showNotification("Task deleted successfully.", "Task", "has been deleted", latestTaskName);
+        } catch (SQLException e){
             e.printStackTrace();
         }
-        showNotification("Task deleted successfully.", "Task", "has been deleted", latestTaskName);
     }
 
     public void updateTask(TaskImpl task) {
         String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ? WHERE task_id = ?";
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+        Object[] params = {
+                task.getName(),
+                task.getDescription(),
+                Date.valueOf(task.getDueDate()),
+                task.getStatus().toString(),
+                task.getId(),
+        };
 
-            preparedStatement.setString(1, task.getName());
-            preparedStatement.setString(2, task.getDescription());
-            preparedStatement.setDate(3, Date.valueOf(task.getDueDate()));
-            preparedStatement.setString(4, task.getStatus().toString());
-            preparedStatement.setInt(5, task.getId());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
+        try {
+            Database.getInstance().executeUpdate(updateQuery, params);
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }
 
     private void loadTasks() {
         String loadTasksQuery = getLoadTasksQuery();
-
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {
-
-            int parameterIndex = 1;
-            preparedStatement.setString(parameterIndex++ , userID);
-
+        try {
+            ResultSet resultSet = Database.getInstance().executeQuery(loadTasksQuery, userID);
             if (categoryTasksPane.isVisible()){
-                preparedStatement.setString(parameterIndex++, categoryTitle.getText());
-                preparedStatement.setString(parameterIndex, userID);
+                loadTasksByCategory(categoryTitle.getText());
+                return;
             }
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                tasks.clear();
-                while (resultSet.next()) {
-                    int taskID = resultSet.getInt("task_id");
-                    String taskName = resultSet.getString("task_name");
-                    String description = resultSet.getString("task_description");
-                    LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                    Status status = Status.valueOf(resultSet.getString("task_status"));
-                    TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
-                    task.setId(taskID);
-                    tasks.add(task);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            tasks.clear();
+            while (resultSet.next()){
+                int taskID = resultSet.getInt("task_id");
+                String taskName = resultSet.getString("task_name");
+                String description = resultSet.getString("task_description");
+                LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                Status status = Status.valueOf(resultSet.getString("task_status"));
+                TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                task.setId(taskID);
+                tasks.add(task);
             }
-
-        } catch (SQLException e) {
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }

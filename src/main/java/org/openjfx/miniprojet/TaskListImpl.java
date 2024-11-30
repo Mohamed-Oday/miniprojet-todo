@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.lang.reflect.Type;
@@ -26,11 +25,11 @@ import com.google.gson.reflect.TypeToken;
  */
 public class TaskListImpl extends TaskList{
 
-    private List<TaskImpl> tasks;
-    private List<String> categories;
+    private final List<TaskImpl> tasks;
+
     public TaskListImpl() {
-        this.tasks = new ArrayList<TaskImpl>();
-        this.categories = new ArrayList<String>();
+        this.tasks = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
     }
 
     /**
@@ -66,7 +65,6 @@ public class TaskListImpl extends TaskList{
 
     /**
      * Returns the list of tasks.
-     * @return
      *
      * @return a list of TaskImpl objects representing the tasks.
      */
@@ -85,7 +83,7 @@ public class TaskListImpl extends TaskList{
      */
     public List<TaskImpl> searchTasks(String keyword) {
         List<TaskImpl> matchingTasks = new ArrayList<>();
-        if (keyword.isEmpty() || keyword == null) {
+        if (keyword == null || keyword.isEmpty()) {
             return null;
         }
 
@@ -123,7 +121,7 @@ public class TaskListImpl extends TaskList{
      */
     public List<TaskImpl> sortTaskByDueDate() {
         List<TaskImpl> sortedTasks = new ArrayList<>();
-        Collections.sort(sortedTasks, Comparator.comparing(TaskImpl::getDueDate));
+        sortedTasks.sort(Comparator.comparing(TaskImpl::getDueDate));
         return sortedTasks;
     }
 

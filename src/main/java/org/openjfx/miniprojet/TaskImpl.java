@@ -14,7 +14,7 @@ public class TaskImpl implements Task{
     private String description;
     private LocalDate dueDate;
     private Status status;
-    private List<String> comments;
+    private final List<String> comments;
 
     /**
      * Constructs a new TaskImpl with the specified name, description, due date, and status.

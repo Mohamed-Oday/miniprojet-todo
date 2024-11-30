@@ -16,12 +16,10 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="584.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.addTaskController">
-   <children>
+
       <VBox layoutX="190.0" layoutY="225.0" prefHeight="516.0" prefWidth="383.0" styleClass="editTask-background" stylesheets="@styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
             <Pane prefHeight="25.0" prefWidth="283.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
-               <children>
                   <Label prefHeight="51.0" prefWidth="165.0" text="Add a Task" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="32.0" />
@@ -31,17 +29,13 @@
                      </HBox.margin>
                   </Label>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
                         <Image url="@assets/clipboard.png" />
-                     </image>
                   </ImageView>
-               </children>
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </HBox>
             <VBox prefHeight="262.0" prefWidth="283.0">
-               <children>
                   <Label text="Name:" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="16.0" />
@@ -81,7 +75,6 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </DatePicker>
-               </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -99,7 +92,6 @@
                </VBox.margin>
             </JFXCheckBox>
             <HBox alignment="CENTER" prefHeight="18.0" prefWidth="380.0">
-               <children>
                   <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleAddButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-addButton" stylesheets="@styles/style.css" text="Add" textFill="WHITE">
                      <HBox.margin>
                         <Insets right="20.0" />
@@ -113,15 +105,12 @@
                         <Font name="Segoe UI Bold" size="12.0" />
                      </font>
                   </JFXButton>
-               </children>
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
             </HBox>
-         </children>
          <padding>
             <Insets left="50.0" right="50.0" />
          </padding>
       </VBox>
-   </children>
 </AnchorPane>

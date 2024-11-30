@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,16 +28,11 @@ import java.time.format.DateTimeFormatter;
 
 public class Controller {
 
-    private String loadTasksQuery;
-
     @FXML
     private Label categoryTitle;
 
     @FXML
     private JFXListView<TaskImpl> categoryTasks;
-
-    @FXML
-    private BorderPane borderPane;
 
     @FXML
     private AnchorPane displayTasksPane;
@@ -194,6 +188,7 @@ public class Controller {
         }
     }
 
+    @SafeVarargs
     private void setupCategoryContextMenu(JFXListView<String>... listViews){
         for (JFXListView<String> listView : listViews) {
             ContextMenu contextMenu = new ContextMenu();
@@ -254,7 +249,7 @@ public class Controller {
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement categoryStmt = connection.prepareStatement(deleteCategoryQuery);
-             PreparedStatement tasksStmt = deleteTasks ? connection.prepareStatement(deleteTasksQuery) : null) {
+             PreparedStatement tasksStmt = connection.prepareStatement(deleteTasksQuery)) {
 
             if (deleteTasks) {
                 tasksStmt.setString(1, categoryName);
@@ -267,6 +262,11 @@ public class Controller {
             categoryStmt.setString(2, userID);
             int rowsAffected = categoryStmt.executeUpdate();
             System.out.println("Deleted category: " + categoryName + ", rows affected: " + rowsAffected);
+            if (categoryTasksPane.isVisible()){
+                categoryTasksPane.setVisible(false);
+                myDayPane.setVisible(true);
+            }
+            loadTasks();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -278,6 +278,7 @@ public class Controller {
         }
     }
 
+    @SafeVarargs
     private void setupTaskListViews(JFXListView<TaskImpl>... listViews) {
         for (JFXListView<TaskImpl> listView : listViews) {
             listView.setItems(tasks);
@@ -291,6 +292,7 @@ public class Controller {
         }
     }
 
+    @SafeVarargs
     private void setupCategoryListViews(JFXListView<String>... listViews) {
         for (JFXListView<String> listView : listViews) {
             listView.setItems(categories);
@@ -454,20 +456,18 @@ public class Controller {
     }
 
     private void loadTasks() {
-        this.loadTasksQuery = "SELECT task_id, task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
-
-        // Filter for current day tasks if `myDayPane` is visible
-        if (myDayPane.isVisible()) {
-            this.loadTasksQuery += " AND task_startDate = CURDATE()";
-        } else if (importantPane.isVisible()) {
-            // Filter for important tasks if `importantPane` is visible
-            this.loadTasksQuery += " AND is_important = 1";
-        }
+        String loadTasksQuery = getLoadTasksQuery();
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {
 
-            preparedStatement.setString(1, userID);
+            int parameterIndex = 1;
+            preparedStatement.setString(parameterIndex++ , userID);
+
+            if (categoryTasksPane.isVisible()){
+                preparedStatement.setString(parameterIndex++, categoryTitle.getText());
+                preparedStatement.setString(parameterIndex, userID);
+            }
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 tasks.clear();
@@ -488,6 +488,21 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getLoadTasksQuery() {
+        String loadTasksQuery = "SELECT task_id, task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
+
+        // Filter for current day tasks if `myDayPane` is visible
+        if (myDayPane.isVisible()) {
+            loadTasksQuery += " AND task_startDate = CURDATE()";
+        } else if (importantPane.isVisible()) {
+            // Filter for important tasks if `importantPane` is visible
+            loadTasksQuery += " AND is_important = 1";
+        }else if (categoryTasksPane.isVisible()) {
+            loadTasksQuery += " AND category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
+        }
+        return loadTasksQuery;
     }
 
     private void loadTasksForCategory(String categoryName) {
@@ -532,16 +547,13 @@ public class Controller {
     }
 
     @FXML
-    public void handleAddButton(ActionEvent event) throws IOException {
+    public void handleAddButton() throws IOException {
         // Loading the addTask fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("addTask.fxml"));
         Parent root = loader.load();
 
         // Getting the addTask Controller
         addTaskController addTaskController = loader.getController();
-
-        // Getting main stage
-        Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Creating new stage for the addTask page
         Stage addTaskStage = new Stage();
@@ -551,7 +563,6 @@ public class Controller {
         addTaskStage.initModality(Modality.APPLICATION_MODAL);
 
         // Setting the main stage and addTask stage
-        addTaskController.setMainStage(mainStage);
         addTaskController.setAddTaskStage(addTaskStage);
         addTaskController.setMainController(this);
         addTaskController.setUserID(userID);
@@ -563,36 +574,28 @@ public class Controller {
     }
 
     @FXML
-    public void handleAddCategory(ActionEvent event) throws IOException {
+    public void handleAddCategory() throws IOException {
         // Loading the addCategory fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("addCategory.fxml"));
-        try {
-            Parent root = loader.load();
+        Parent root = loader.load();
 
-            // Getting the addCategory Controller
-            AddCategoryController addCategoryController = loader.getController();
+        // Getting the addCategory Controller
+        AddCategoryController addCategoryController = loader.getController();
 
-            // Getting main stage
-            Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Creating new stage for the addCategory page
+        Stage addCategoryStage = new Stage();
+        addCategoryStage.setTitle("Add Category");
+        addCategoryStage.setScene(new Scene(root));
+        addCategoryStage.initStyle(StageStyle.UTILITY);
+        addCategoryStage.initModality(Modality.APPLICATION_MODAL);
 
-            // Creating new stage for the addCategory page
-            Stage addCategoryStage = new Stage();
-            addCategoryStage.setTitle("Add Category");
-            addCategoryStage.setScene(new Scene(root));
-            addCategoryStage.initStyle(StageStyle.UTILITY);
-            addCategoryStage.initModality(Modality.APPLICATION_MODAL);
+        // Setting the main stage and addCategory stage
+        addCategoryController.setAddCategoryStage(addCategoryStage);
+        addCategoryController.setMainController(this);
+        addCategoryController.setUserID(userID);
 
-            // Setting the main stage and addCategory stage
-            addCategoryController.setMainStage(mainStage);
-            addCategoryController.setAddCategoryStage(addCategoryStage);
-            addCategoryController.setMainController(this);
-            addCategoryController.setUserID(userID);
-
-            // Display the addCategory page
-            addCategoryStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Display the addCategory page
+        addCategoryStage.showAndWait();
     }
 
     public void loadCategories() {

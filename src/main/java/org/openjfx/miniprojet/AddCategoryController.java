@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 public class AddCategoryController {
 
     private Stage addCategoryStage;
-    private Stage mainStage;
     private Controller mainController;
     private String userID;
 
@@ -21,10 +20,6 @@ public class AddCategoryController {
 
     public void setAddCategoryStage(Stage addCategoryStage) {
         this.addCategoryStage = addCategoryStage;
-    }
-
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
     }
 
     public void setMainController(Controller mainController) {

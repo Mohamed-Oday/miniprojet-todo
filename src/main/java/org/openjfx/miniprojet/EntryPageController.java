@@ -33,7 +33,7 @@ public class EntryPageController {
         loginStage.initModality(Modality.APPLICATION_MODAL);
 
         // Setting the entry stage and login stage
-        if (entryStage != null && loginStage != null){
+        if (entryStage != null){
             loginController.setLoginStage(loginStage);
             loginController.setEntryStage(entryStage);
             // Show the login

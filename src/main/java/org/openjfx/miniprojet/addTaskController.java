@@ -31,18 +31,12 @@ public class addTaskController {
     @FXML
     private ComboBox<String> categoryComboBox;
 
-    private ObservableList<String> categories = FXCollections.observableArrayList();
+    private final ObservableList<String> categories = FXCollections.observableArrayList();
 
 
     private String userID;
-
-    private Stage mainStage;
     private Stage addTaskStage;
     private Controller mainController;
-
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
-    }
 
     public void setAddTaskStage(Stage addTaskStage) {
         this.addTaskStage = addTaskStage;

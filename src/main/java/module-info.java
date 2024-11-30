@@ -8,6 +8,8 @@ module org.openjfx.miniprojet {
     requires org.slf4j;
 
 
-    opens org.openjfx.miniprojet to javafx.fxml;
-    exports org.openjfx.miniprojet;
+    opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;
+    exports org.openjfx.miniprojet.controller;
+    opens org.openjfx.miniprojet.controller to javafx.fxml;
+    exports org.openjfx.miniprojet.model;
 }

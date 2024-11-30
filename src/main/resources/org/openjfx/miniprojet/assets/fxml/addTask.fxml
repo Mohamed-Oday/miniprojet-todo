@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="584.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.addTaskController">
+<AnchorPane prefHeight="584.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.addTaskController">
 
-      <VBox layoutX="190.0" layoutY="225.0" prefHeight="516.0" prefWidth="383.0" styleClass="editTask-background" stylesheets="@styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="190.0" layoutY="225.0" prefHeight="516.0" prefWidth="383.0" styleClass="editTask-background" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <Pane prefHeight="25.0" prefWidth="283.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
                   <Label prefHeight="51.0" prefWidth="165.0" text="Add a Task" textFill="WHITE">
@@ -29,7 +29,7 @@
                      </HBox.margin>
                   </Label>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@assets/clipboard.png" />
+                        <Image url="@../images/clipboard.png" />
                   </ImageView>
                <VBox.margin>
                   <Insets bottom="30.0" />
@@ -44,7 +44,7 @@
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="nameField" prefHeight="32.0" prefWidth="283.0" styleClass="addTask-textField" stylesheets="@styles/style.css">
+                  <TextField fx:id="nameField" prefHeight="32.0" prefWidth="283.0" styleClass="addTask-textField" stylesheets="@../styles/style.css">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
@@ -57,7 +57,7 @@
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="descriptionField" alignment="TOP_LEFT" prefHeight="81.0" prefWidth="380.0" styleClass="addTask-textField" stylesheets="@styles/style.css">
+                  <TextField fx:id="descriptionField" alignment="TOP_LEFT" prefHeight="81.0" prefWidth="380.0" styleClass="addTask-textField" stylesheets="@../styles/style.css">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
@@ -79,7 +79,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </VBox>
-            <ComboBox fx:id="categoryComboBox" prefHeight="50.0" prefWidth="338.0" promptText="Select a Category" styleClass="add-task-category-combo-box" stylesheets="@styles/style.css">
+            <ComboBox fx:id="categoryComboBox" prefHeight="50.0" prefWidth="338.0" promptText="Select a Category" styleClass="add-task-category-combo-box" stylesheets="@../styles/style.css">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin></ComboBox>
@@ -92,7 +92,7 @@
                </VBox.margin>
             </JFXCheckBox>
             <HBox alignment="CENTER" prefHeight="18.0" prefWidth="380.0">
-                  <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleAddButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-addButton" stylesheets="@styles/style.css" text="Add" textFill="WHITE">
+                  <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleAddButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-addButton" stylesheets="@../styles/style.css" text="Add" textFill="WHITE">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -100,7 +100,7 @@
                         <Font name="Segoe UI Bold" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleCancelButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-cancelButton" stylesheets="@styles/style.css" text="Cancel" textFill="WHITE">
+                  <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleCancelButton" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-cancelButton" stylesheets="@../styles/style.css" text="Cancel" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="12.0" />
                      </font>

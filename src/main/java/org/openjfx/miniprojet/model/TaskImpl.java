@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents a task with a name, description, due date, status, and comments.
  */
-public class TaskImpl implements Task{
+public class TaskImpl implements Task {
 
     private int id;
     private String name;

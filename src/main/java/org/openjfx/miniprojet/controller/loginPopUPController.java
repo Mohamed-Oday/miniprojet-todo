@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.fxml.FXML;
@@ -44,7 +44,7 @@ public class loginPopUPController {
     @FXML
     public void handleCreateAccount() throws IOException {
         // Loading the signUp fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("signUp.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/signUp.fxml"));
         Parent root = loader.load();
 
         // Getting the signUp Controller
@@ -97,7 +97,7 @@ public class loginPopUPController {
             }
 
             // Loading Main fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/Main.fxml"));
             Parent root = loader.load();
 
             Controller controller = loader.getController();

@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.model;
 
 import java.time.LocalDate;
 

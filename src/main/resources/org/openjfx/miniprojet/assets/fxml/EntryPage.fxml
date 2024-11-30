@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="910.0" prefWidth="1200.0" styleClass="entry-background" stylesheets="@styles/style.css"
+<AnchorPane prefHeight="910.0" prefWidth="1200.0" styleClass="entry-background" stylesheets="@../styles/style.css"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.openjfx.miniprojet.EntryPageController">
+            fx:controller="org.openjfx.miniprojet.controller.EntryPageController">
    <VBox alignment="TOP_CENTER" layoutX="550.0" layoutY="355.0" prefHeight="200.0" prefWidth="100.0"
          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
          AnchorPane.topAnchor="0.0">
@@ -26,10 +26,10 @@
          <VBox.margin>
             <Insets bottom="-30.0"/>
          </VBox.margin>
-         <Image url="@assets/Checklist-rafiki.png"/>
+         <Image url="@../images/Checklist-rafiki.png"/>
       </ImageView>
       <Button mnemonicParsing="false" onAction="#handleSignInButton" prefHeight="35.0"
-              prefWidth="257.0" styleClass="login-button" stylesheets="@styles/style.css" text="Sign in"
+              prefWidth="257.0" styleClass="login-button" stylesheets="@../styles/style.css" text="Sign in"
               textFill="WHITE">
          <font>
             <Font name="Segoe UI Bold" size="13.0"/>

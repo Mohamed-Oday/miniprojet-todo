@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.animation.PauseTransition;
@@ -20,6 +20,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.openjfx.miniprojet.model.Status;
+import org.openjfx.miniprojet.model.TaskImpl;
 
 import java.io.IOException;
 import java.sql.*;
@@ -402,7 +404,7 @@ public class Controller {
 
     @FXML
     public void handleSignOutButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EntryPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
         Parent root = loader.load();
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
@@ -549,7 +551,7 @@ public class Controller {
     @FXML
     public void handleAddButton() throws IOException {
         // Loading the addTask fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addTask.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/addTask.fxml"));
         Parent root = loader.load();
 
         // Getting the addTask Controller
@@ -576,7 +578,7 @@ public class Controller {
     @FXML
     public void handleAddCategory() throws IOException {
         // Loading the addCategory fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addCategory.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/addCategory.fxml"));
         Parent root = loader.load();
 
         // Getting the addCategory Controller

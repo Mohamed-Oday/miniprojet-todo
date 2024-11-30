@@ -1,15 +1,16 @@
-package org .openjfx.miniprojet;
+package org.openjfx.miniprojet.model;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.openjfx.miniprojet.controller.Controller;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
 
-public class HelloApplication extends Application {
+public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         String check = "SELECT * FROM saveduser";
@@ -20,7 +21,7 @@ public class HelloApplication extends Application {
             ResultSet resultSet = preparedStatement.executeQuery();
             Scene scene;
             if (resultSet.next()){
-                fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Main.fxml"));
+                fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/Main.fxml"));
                 scene = new Scene(fxmlLoader.load());
                 Controller controller = fxmlLoader.getController();
                 if (controller != null){
@@ -29,10 +30,10 @@ public class HelloApplication extends Application {
                     System.out.println("Controller is null");
                 }
             }else{
-                fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EntryPage.fxml"));
+                fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
                 scene = new Scene(fxmlLoader.load());
             }
-            String css = Objects.requireNonNull(this.getClass().getResource("styles/style.css")).toExternalForm();
+            String css = Objects.requireNonNull(this.getClass().getResource("/org/openjfx/miniprojet/assets/styles/style.css")).toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("ToDo List");
             stage.setScene(scene);

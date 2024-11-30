@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

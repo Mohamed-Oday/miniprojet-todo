@@ -37,17 +37,17 @@
 }
 
 .myDay{
-    -fx-graphic: url("../assets/sun.png");
+    -fx-graphic: url("../images/sun.png");
     -fx-graphic-text-gap: 10;
 }
 
 .important{
-    -fx-graphic: url("../assets/star.png");
+    -fx-graphic: url("../images/star.png");
     -fx-graphic-text-gap: 10;
 }
 
 .tasks{
-    -fx-graphic: url("../assets/home.png");
+    -fx-graphic: url("../images/home.png");
     -fx-graphic-text-gap: 10;
 }
 
@@ -244,7 +244,7 @@
 }
 
 .category-label{
-    -fx-graphic: url("../assets/application.png");
+    -fx-graphic: url("../images/application.png");
     -fx-graphic-text-gap: 10;
 }
 

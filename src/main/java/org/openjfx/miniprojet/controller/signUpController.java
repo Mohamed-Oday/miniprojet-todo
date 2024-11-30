@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,14 +38,13 @@ public class signUpController {
     private Label signLabel;
 
     private Stage entryStage;
-    private Stage signInStage;
 
     public void setEntryStage(Stage entryStage) {
         this.entryStage = entryStage;
     }
 
     public void setSignInStage(Stage signInStage) {
-        this.signInStage = signInStage;
+        this.entryStage = signInStage;
     }
 
     @FXML
@@ -108,7 +107,7 @@ public class signUpController {
 
     public void returnToSignIn() throws IOException {
         // Loading the signUp fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("loginPopUP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/loginPopUP.fxml"));
         Parent root = loader.load();
 
         loginPopUPController loginPopUPController = loader.getController();

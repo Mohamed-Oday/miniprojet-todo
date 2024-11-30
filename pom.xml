@@ -95,12 +95,17 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>org.openjfx.miniprojet/org.openjfx.miniprojet.HelloApplication</mainClass>
+              <mainClass>org.openjfx.miniprojet/org.openjfx.miniprojet.model.App</mainClass>
               <launcher>app</launcher>
             </configuration>
           </execution>
         </executions>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
   </build>
 </project>

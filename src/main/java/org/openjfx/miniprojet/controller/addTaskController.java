@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
@@ -8,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.openjfx.miniprojet.model.Status;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

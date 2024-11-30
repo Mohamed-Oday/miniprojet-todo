@@ -1,4 +1,4 @@
-package org.openjfx.miniprojet;
+package org.openjfx.miniprojet.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +16,7 @@ public class EntryPageController {
     @FXML
     public void handleSignInButton(ActionEvent event) throws IOException {
         // Loading the login fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("loginPopUP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/loginPopUP.fxml"));
         Parent root = loader.load();
 
         // Getting login Controller

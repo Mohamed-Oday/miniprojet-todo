@@ -16,6 +16,13 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.io.IOException;
 import java.sql.*;
 
+/**
+ * Controller class for handling login pop-up functionality.
+ * @version 1.0
+ * @since 1.0
+ * @author Sellami Mohamed Oday
+ * @see BCrypt
+ */
 public class loginPopUPController {
 
     @FXML
@@ -33,14 +40,29 @@ public class loginPopUPController {
     private Stage entryStage;
     private Stage loginStage;
 
+    /**
+     * Sets the login stage.
+     *
+     * @param loginStage the login stage to set
+     */
     public void setLoginStage(Stage loginStage) {
         this.loginStage = loginStage;
     }
 
+    /**
+     * Sets the entry stage.
+     *
+     * @param entryStage the entry stage to set
+     */
     public void setEntryStage(Stage entryStage) {
         this.entryStage = entryStage;
     }
 
+    /**
+     * Handles the creation of a new account by loading the sign-up FXML and displaying it in a new stage.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     public void handleCreateAccount() throws IOException {
         // Loading the signUp fxml
@@ -69,6 +91,11 @@ public class loginPopUPController {
         loginStage.close();
     }
 
+    /**
+     * Handles the sign-in button action by validating the login credentials and loading the main application scene if successful.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     public void handleSignInButton() throws IOException {
         String username = userName.getText();
@@ -108,12 +135,21 @@ public class loginPopUPController {
             entryStage.setScene(scene);
             entryStage.setTitle("ToDo App");
             loginStage.close();
+            entryStage.setMaximized(true);
             entryStage.show();
         }else{
             System.out.println("Login Failed");
         }
     }
 
+    /**
+     * Validates the login credentials by checking the username and password against the database.
+     *
+     * @param username the username to validate
+     * @param password the password to validate
+     * @return true if the login is valid, false otherwise
+     * @apiNote This method uses the BCrypt library to compare the hashed password from the database with the password entered by the user.
+     */
     public boolean isValidLogin(String username, String password){
         String selectQuery = "SELECT password FROM userinforamtion WHERE username = ?";
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");

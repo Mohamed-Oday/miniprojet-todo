@@ -10,6 +10,8 @@ import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * TaskListImpl is a concrete implementation of the TaskList class.
@@ -25,11 +27,18 @@ import com.google.gson.reflect.TypeToken;
  */
 public class TaskListImpl extends TaskList{
 
-    private final List<TaskImpl> tasks;
+    private final ObservableList<TaskImpl> tasks;
 
     public TaskListImpl() {
-        this.tasks = new ArrayList<>();
-        List<String> categories = new ArrayList<>();
+        this.tasks = FXCollections.observableArrayList();
+    }
+
+    public TaskListImpl(ObservableList<TaskImpl> tasks){
+        this.tasks = tasks;
+    }
+
+    public ObservableList<TaskImpl> getTasks(){
+        return tasks;
     }
 
     /**

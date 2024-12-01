@@ -3,10 +3,14 @@ package org.openjfx.miniprojet.model;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.openjfx.miniprojet.controller.Controller;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.util.Objects;
 
@@ -29,6 +33,7 @@ public class App extends Application {
                 }else{
                     System.out.println("Controller is null");
                 }
+                stage.setMaximized(true);
             }else{
                 fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
                 scene = new Scene(fxmlLoader.load());
@@ -36,6 +41,9 @@ public class App extends Application {
             String css = Objects.requireNonNull(this.getClass().getResource("/org/openjfx/miniprojet/assets/styles/style.css")).toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("ToDo List");
+            URL icon = getClass().getResource("/org/openjfx/miniprojet/assets/images/logo.png");
+            Image appIcon = new Image(Objects.requireNonNull(icon).toString());
+            stage.getIcons().add(appIcon);
             stage.setScene(scene);
             stage.show();
         } catch (SQLException e){

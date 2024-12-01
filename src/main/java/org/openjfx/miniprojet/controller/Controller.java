@@ -1,10 +1,19 @@
 package org.openjfx.miniprojet.controller;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+
 import com.jfoenix.controls.JFXListView;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,19 +24,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
+import org.openjfx.miniprojet.model.TaskListImpl;
 import org.openjfx.miniprojet.utiil.Database;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Controller {
 
@@ -117,9 +127,21 @@ public class Controller {
     private Label userNameLabel21;
 
     @FXML
+    private TextField searchField;
+
+    @FXML
+    private TextField searchField1;
+
+    @FXML
+    private TextField searchField2;
+
+    @FXML
+    private TextField searchField3;
+
+    @FXML
     private Label todayLabel;
 
-    private final ObservableList<TaskImpl> tasks = FXCollections.observableArrayList();
+    private final TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
     private final ObservableList<String> categories = FXCollections.observableArrayList();
 
     private String userID;
@@ -178,6 +200,7 @@ public class Controller {
         setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21);
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        setupSearchField(searchField, searchField1, searchField2, searchField3);
 
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
@@ -189,6 +212,27 @@ public class Controller {
         } else {
             System.out.println("todayLabel is null!");
         }
+    }
+
+    private void setupSearchField(TextField... searchFields) {
+        FilteredList<TaskImpl> filteredList = new FilteredList<>(tasks.getTasks(), task -> true);
+        for (TextField searchField : searchFields) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredList.setPredicate(task -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    return task.getName().toLowerCase().contains(lowerCaseFilter)
+                            || task.getDescription().toLowerCase().contains(lowerCaseFilter);
+                });
+            });
+        }
+        taskListView.setItems(filteredList);
+        taskListView.refresh();
+        taskListView1.setItems(filteredList);
+        taskListView2.setItems(filteredList);
+        categoryTasks.setItems(filteredList);
     }
 
     @SafeVarargs
@@ -203,7 +247,6 @@ public class Controller {
             deleteCategoryWithTasksItem.setOnAction(event -> deleteCategoryWithTasks());
 
             contextMenu.getItems().addAll(deleteCategoryItem, deleteCategoryWithTasksItem);
-
             listView.setContextMenu(contextMenu);
         }
     }
@@ -274,7 +317,19 @@ public class Controller {
     @SafeVarargs
     private void setupTaskListViews(JFXListView<TaskImpl>... listViews) {
         for (JFXListView<TaskImpl> listView : listViews) {
-            listView.setItems(tasks);
+            // Create the placeholder label
+            Label placeholderLabel = new Label("Add your first task!");
+            placeholderLabel.setId("noTaskLabel");
+
+            javafx.scene.image.Image image = new Image(Objects.requireNonNull(getClass().getResource("/org/openjfx/miniprojet/assets/images/AddNotes-pana-2x.png")).toString());
+            ImageView placeholderImage = new ImageView(image);
+
+            VBox placeholderContainer = new VBox(placeholderLabel, placeholderImage);
+            placeholderContainer.setAlignment(Pos.CENTER); // Centers the items
+
+            listView.setPlaceholder(placeholderContainer);
+
+            listView.setItems(tasks.getTasks());
             listView.setOnMouseClicked(event -> {
                 TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
                 if (selectedTask != null) {
@@ -310,7 +365,7 @@ public class Controller {
         mainVbox1.setPadding(new Insets(0, 320, 0, 0));
         mainVbox2.setPadding(new Insets(0, 320, 0, 0));
         mainVbox3.setPadding(new Insets(0, 320, 0, 0));
-
+        showEditFormSearchField(false ,searchField, searchField1, searchField2, searchField3);
         slider.setOnFinished((ActionEvent e) -> {
             resizeMainPaneForEdit();
             editForm.setVisible(true);
@@ -349,10 +404,8 @@ public class Controller {
             taskListView1.refresh();
             taskListView2.refresh();
             categoryTasks.refresh();
-            mainVbox.setPadding(new Insets(0, 0, 0, 0));
-            mainVbox1.setPadding(new Insets(0, 0, 0, 0));
-            mainVbox2.setPadding(new Insets(0, 0, 0, 0));
-            mainVbox3.setPadding(new Insets(0, 0, 0, 0));
+            hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
+            showEditFormSearchField(true ,searchField, searchField1, searchField2, searchField3);
             showNotification("Task updated successfully.", "Task", "has been updated", taskName);
         }
     }
@@ -362,32 +415,51 @@ public class Controller {
         editForm.setVisible(false);
         resetMainPaneSize();
         taskListView.refresh();
-        mainVbox.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox1.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox2.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox3.setPadding(new Insets(0, 0, 0, 0));
+        hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
+        showEditFormSearchField(true ,searchField, searchField1, searchField2, searchField3);
 
     }
 
     @FXML
     public void handleDeleteButton() {
         deleteTask(selectedTask);
-        tasks.remove(selectedTask);
+        tasks.deleteTask(selectedTask);
         editForm.setVisible(false);
         resetMainPaneSize();
         taskListView.refresh();
         taskListView1.refresh();
         taskListView2.refresh();
         categoryTasks.refresh();
-        mainVbox.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox1.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox2.setPadding(new Insets(0, 0, 0, 0));
-        mainVbox3.setPadding(new Insets(0, 0, 0, 0));
+        hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
+        showEditFormSearchField(true, searchField1, searchField2, searchField3, searchField);
+    }
+
+    private void hideEditFormVBox(VBox... mainVbox){
+        for (VBox vbox : mainVbox){
+            vbox.setPadding(new Insets(0, 0, 0, 0));
+            vbox.applyCss();
+            vbox.layout();
+        }
+    }
+
+    private void showEditFormSearchField(boolean show, TextField... searchFields) {
+        for (TextField searchField : searchFields) {
+            searchField.setVisible(show);
+        }
+        // Adjust padding based on search field visibility
+        if (!show) {
+            mainVbox.setPadding(new Insets(0, 320, 0, 0));
+        } else {
+            mainVbox.setPadding(new Insets(0, 0, 0, 0));
+        }
+        mainVbox.applyCss();
+        mainVbox.layout();
     }
 
     private void resetMainPaneSize() {
         if (mainPane != null) {
             mainPane.setPrefWidth(1200);
+            mainPane.setPadding(new Insets(0, 0, 0, 0));
             mainPane.applyCss();
             mainPane.layout();
         }
@@ -445,13 +517,14 @@ public class Controller {
 
     private void loadTasks() {
         String loadTasksQuery = getLoadTasksQuery();
+        Object[] params = getQueryParameters();
         try {
-            ResultSet resultSet = Database.getInstance().executeQuery(loadTasksQuery, userID);
+            ResultSet resultSet = Database.getInstance().executeQuery(loadTasksQuery, params);
             if (categoryTasksPane.isVisible()){
                 loadTasksByCategory(categoryTitle.getText());
                 return;
             }
-            tasks.clear();
+            tasks.getTasks().clear();
             while (resultSet.next()){
                 int taskID = resultSet.getInt("task_id");
                 String taskName = resultSet.getString("task_name");
@@ -460,7 +533,7 @@ public class Controller {
                 Status status = Status.valueOf(resultSet.getString("task_status"));
                 TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
                 task.setId(taskID);
-                tasks.add(task);
+                tasks.addTask(task);
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -482,7 +555,23 @@ public class Controller {
         return loadTasksQuery;
     }
 
+    private Object[] getQueryParameters() {
+        if (categoryTasksPane.isVisible()) {
+            String categoryName = categoryTitle.getText();
+            if (categoryName == null || categoryName.isEmpty()) {
+                throw new IllegalArgumentException("Category name cannot be null or empty.");
+            }
+            return new Object[]{userID, categoryName, userID};
+        } else {
+            return new Object[]{userID};
+        }
+    }
+
     private void loadTasksForCategory(String categoryName) {
+        clearSearch(searchField, searchField1, searchField2, searchField3);
+        if (editForm.isVisible()) {
+            handleCancelButton();
+        }
         categoryTasksPane.setVisible(true);
         myDayPane.setVisible(false);
         displayTasksPane.setVisible(false);
@@ -490,8 +579,6 @@ public class Controller {
         categoryTitle.setText(categoryName);
         mainPane = categoryTasksPane;
         loadTasksByCategory(categoryName);
-        categoryTasks.setItems(tasks);
-        categoryTitle.setText(categoryName);
     }
 
     private void loadTasksByCategory(String categoryName) {
@@ -506,16 +593,20 @@ public class Controller {
             preparedStatement.setString(2, categoryName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                tasks.clear();
-                while (resultSet.next()) {
-                    int taskID = resultSet.getInt("task_id");
-                    String taskName = resultSet.getString("task_name");
-                    String description = resultSet.getString("task_description");
-                    LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                    Status status = Status.valueOf(resultSet.getString("task_status"));
-                    TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
-                    task.setId(taskID);
-                    tasks.add(task);
+                tasks.getTasks().clear();
+                if (resultSet.next()) {
+                    do {
+                        int taskID = resultSet.getInt("task_id");
+                        String taskName = resultSet.getString("task_name");
+                        String description = resultSet.getString("task_description");
+                        LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                        Status status = Status.valueOf(resultSet.getString("task_status"));
+                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                        task.setId(taskID);
+                        tasks.addTask(task);
+                    } while (resultSet.next());
+                } else {
+                    System.out.println("No tasks found for category: " + categoryName);
                 }
             }
         } catch (SQLException e) {
@@ -627,6 +718,7 @@ public class Controller {
 
     @FXML
     public void handleMyDayButton() {
+        clearSearch(searchField, searchField1, searchField2, searchField3);
         resetMainPaneSize();
         if (editForm.isVisible()) {
             handleCancelButton();
@@ -644,6 +736,7 @@ public class Controller {
 
     @FXML
     public void handleImportantButton() {
+        clearSearch(searchField, searchField1, searchField2, searchField3);
         resetMainPaneSize();
         if (editForm.isVisible()) {
             handleCancelButton();
@@ -661,6 +754,7 @@ public class Controller {
 
     @FXML
     public void handleDisplayTasksButton() {
+        clearSearch(searchField, searchField1, searchField2, searchField3);
         resetMainPaneSize();
         if (editForm.isVisible()) {
             handleCancelButton();
@@ -674,5 +768,11 @@ public class Controller {
         loadCategories();
         taskListView.refresh();
         categoryListView.refresh();
+    }
+
+    private void clearSearch(TextField... searchFields){
+        for (TextField searchField : searchFields){
+            searchField.clear();
+        }
     }
 }

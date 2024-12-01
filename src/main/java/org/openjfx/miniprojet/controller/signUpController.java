@@ -21,6 +21,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Controller class for handling sign-up functionality.
+ * @version 1.0
+ * @since 1.0
+ * @author Sellami Mohamed Oday
+ * @see BCrypt
+ */
 public class signUpController {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/accounts";
@@ -39,19 +46,40 @@ public class signUpController {
 
     private Stage entryStage;
 
+    /**
+     * Sets the entry stage.
+     *
+     * @param entryStage the entry stage to set
+     */
     public void setEntryStage(Stage entryStage) {
         this.entryStage = entryStage;
     }
 
+    /**
+     * Sets the sign-in stage.
+     *
+     * @param signInStage the sign-in stage to set
+     */
     public void setSignInStage(Stage signInStage) {
         this.entryStage = signInStage;
     }
 
+    /**
+     * Handles the sign in label action by returning to the sign-in screen.
+     *
+     * @param event the mouse event that triggered the action
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     public void handleSignAccount(MouseEvent event) throws IOException {
         returnToSignIn();
     }
 
+    /**
+     * Handles the sign-up button action by validating the password, hashing it, and inserting the user into the database.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     public void handleSignUpButton() throws IOException {
         String username = userName.getText();
@@ -71,10 +99,23 @@ public class signUpController {
         }
     }
 
+    /**
+     * Hashes the given password using BCrypt.
+     *
+     * @param password the password to hash
+     * @return the hashed password
+     */
     private static String hashPassword(String password){
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
+    /**
+     * Inserts a new user into the database.
+     *
+     * @param username the username of the new user
+     * @param pass the hashed password of the new user
+     * @return true if the user was added successfully, false otherwise
+     */
     @FXML
     private static boolean insertUser(String username, String pass){
         String insertQueue = "INSERT INTO userinforamtion (username, password) VALUES (?, ?)";
@@ -98,13 +139,21 @@ public class signUpController {
         return false;
     }
 
+    /**
+     * Validates the given password based on length and character requirements.
+     *
+     * @param password the password to validate
+     * @return true if the password is valid, false otherwise
+     */
     private static boolean isValidPassword(String password){
-        if (password.length() >= 8 && password.matches(".*\\d.*") && password.matches(".*[A-Z].*")){
-            return true;
-        }
-        return false;
+        return password.length() >= 8 && password.matches(".*\\d.*") && password.matches(".*[A-Z].*");
     }
 
+    /**
+     * Returns to the sign-in screen by loading the login FXML and displaying it in a new stage.
+     *
+     * @throws IOException if the FXML file cannot be loaded
+     */
     public void returnToSignIn() throws IOException {
         // Loading the signUp fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/loginPopUP.fxml"));

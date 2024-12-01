@@ -6,6 +6,7 @@ module org.openjfx.miniprojet {
     requires java.sql;
     requires spring.security.crypto;
     requires org.slf4j;
+    requires java.desktop;
 
 
     opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;

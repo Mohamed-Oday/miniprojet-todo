@@ -1,5 +1,6 @@
 package org.openjfx.miniprojet.controller;
 
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -164,6 +165,21 @@ public class Controller {
     @FXML
     private VBox mainVbox3;
 
+    @FXML
+    private JFXRadioButton high;
+
+    @FXML
+    private JFXRadioButton medium;
+
+    @FXML
+    private JFXRadioButton low;
+
+    @FXML
+    private ToggleGroup priorityGroup;
+
+    @FXML
+    private ComboBox<String> categoryComboBox;
+
     private TaskImpl selectedTask;
 
     public void setLatestTaskName(String latestTaskName) {
@@ -201,6 +217,10 @@ public class Controller {
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
         setupSearchField(searchField, searchField1, searchField2, searchField3);
+        priorityGroup = new ToggleGroup();
+        high.setToggleGroup(priorityGroup);
+        medium.setToggleGroup(priorityGroup);
+        low.setToggleGroup(priorityGroup);
 
         // Get current date and format it
         LocalDate currentDate = LocalDate.now();
@@ -266,10 +286,21 @@ public class Controller {
             selectedCategory = categoryListView21.getSelectionModel().getSelectedItem();
             System.out.println("Selected category: " + selectedCategory);
         }
-        if (selectedCategory != null){
-            deleteCategory(selectedCategory, false);
-            loadCategories();
+        if (selectedCategory.equals("General")){
+            alert("General category cannot be deleted.");
+            return;
         }
+        deleteCategory(selectedCategory, false);
+        loadCategories();
+    }
+
+    private void alert(String s)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(s);
+        alert.showAndWait();
     }
 
     private void deleteCategoryWithTasks(){
@@ -283,10 +314,12 @@ public class Controller {
         }else {
             selectedCategory = categoryListView21.getSelectionModel().getSelectedItem();
         }
-        if (selectedCategory != null){
-            deleteCategory(selectedCategory, true);
-            loadCategories();
+        if (selectedCategory.equals("General")){
+            alert("General category cannot be deleted.");
+            return;
         }
+        deleteCategory(selectedCategory, true);
+        loadCategories();
     }
 
     private void deleteCategory(String categoryName, boolean deleteTasks) {
@@ -374,9 +407,25 @@ public class Controller {
             TaskDueDateField.setValue(task.getDueDate());
             TaskStatusField.setValue(task.getStatus());
             TaskStatusField.setPromptText(task.getStatus().toString());
+            priorityGroup.selectToggle(getPriorityToggle(task.getPriority()));
+            categoryComboBox.setValue(task.getCategory());
+
         });
         slider.play();
         this.selectedTask = task;
+    }
+
+    private JFXRadioButton getPriorityToggle(String priority){
+        switch (priority){
+            case "High":
+                return high;
+            case "Medium":
+                return medium;
+            case "Low":
+                return low;
+            default:
+                return null;
+        }
     }
 
     private void resizeMainPaneForEdit() {
@@ -389,13 +438,18 @@ public class Controller {
 
     @FXML
     public void handleSaveButton() {
+        String selectedCategory = categoryComboBox.getValue();
+        if (selectedCategory == null){
+            selectedCategory = "General";
+        }
         if (selectedTask != null){
             String taskName = taskNameField.getText();
             String taskDescription = taskDescriptionField.getText();
             LocalDate taskDueDate = TaskDueDateField.getValue();
             Status taskStatus = TaskStatusField.getValue();
+            String taskPriority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
 
-            selectedTask.editTask(taskName, taskDescription, taskDueDate, taskStatus);
+            selectedTask.editTask(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, selectedCategory);
             updateTask(selectedTask);
 
             editForm.setVisible(false);
@@ -403,6 +457,7 @@ public class Controller {
             taskListView.refresh();
             taskListView1.refresh();
             taskListView2.refresh();
+            loadTasksForCategory(categoryTitle.getText());
             categoryTasks.refresh();
             hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
             showEditFormSearchField(true ,searchField, searchField1, searchField2, searchField3);
@@ -498,13 +553,17 @@ public class Controller {
     }
 
     public void updateTask(TaskImpl task) {
-        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ? WHERE task_id = ?";
+        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ? WHERE task_id = ?";
+
+        int categoryID = getCategoryID(task.getCategory());
 
         Object[] params = {
                 task.getName(),
                 task.getDescription(),
                 Date.valueOf(task.getDueDate()),
                 task.getStatus().toString(),
+                task.getPriority(),
+                categoryID,
                 task.getId(),
         };
 
@@ -513,6 +572,21 @@ public class Controller {
         } catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    private int getCategoryID(String categoryName){
+        String query = "SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?";
+        try (PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(query)){
+            preparedStatement.setString(1, categoryName);
+            preparedStatement.setString(2, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return resultSet.getInt("category_id");
+            }
+        } catch (SQLException e){
+            System.out.println("Category not found");
+        }
+        return -1;
     }
 
     private void loadTasks() {
@@ -528,10 +602,15 @@ public class Controller {
             while (resultSet.next()){
                 int taskID = resultSet.getInt("task_id");
                 String taskName = resultSet.getString("task_name");
-                String description = resultSet.getString("task_description");
-                LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                Status status = Status.valueOf(resultSet.getString("task_status"));
-                TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                String taskDescription = resultSet.getString("task_description");
+                LocalDate taskDueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
+                String taskPriority = resultSet.getString("task_priority");
+                String taskCategory = resultSet.getString("category_name");
+                if (taskCategory == null){
+                    taskCategory = "General";
+                }
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory);
                 task.setId(taskID);
                 tasks.addTask(task);
             }
@@ -541,15 +620,15 @@ public class Controller {
     }
 
     private String getLoadTasksQuery() {
-        String loadTasksQuery = "SELECT task_id, task_name, task_description, task_dueDate, task_status FROM tasks WHERE user_id = ?";
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name "
+                + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id "
+                + "WHERE tasks.user_id = ?";
 
-        // Filter for current day tasks if `myDayPane` is visible
         if (myDayPane.isVisible()) {
             loadTasksQuery += " AND task_startDate = CURDATE()";
         } else if (importantPane.isVisible()) {
-            // Filter for important tasks if `importantPane` is visible
             loadTasksQuery += " AND is_important = 1";
-        }else if (categoryTasksPane.isVisible()) {
+        } else if (categoryTasksPane.isVisible()) {
             loadTasksQuery += " AND category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
         }
         return loadTasksQuery;
@@ -582,7 +661,7 @@ public class Controller {
     }
 
     private void loadTasksByCategory(String categoryName) {
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority "
                 + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
                 + "WHERE tasks.user_id = ? AND categories.category_name = ?";
 
@@ -601,7 +680,9 @@ public class Controller {
                         String description = resultSet.getString("task_description");
                         LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
                         Status status = Status.valueOf(resultSet.getString("task_status"));
-                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status);
+                        String priority = resultSet.getString("task_priority");
+                        String category = categoryName; // Set the category name
+                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status, priority, category);
                         task.setId(taskID);
                         tasks.addTask(task);
                     } while (resultSet.next());
@@ -668,6 +749,8 @@ public class Controller {
 
     public void loadCategories() {
         categories.clear();
+        ObservableList<String> tempCategories = FXCollections.observableArrayList();
+        boolean flag = false;
         String loadCategoriesQuery = "SELECT category_name FROM categories WHERE user_id = ?";
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(loadCategoriesQuery)) {
@@ -675,9 +758,21 @@ public class Controller {
             preparedStatement.setString(1, userID);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                if (resultSet.getString("category_name").equals("General")) {
+                    flag = true;
+                    continue;
+                }
                 String categoryName = resultSet.getString("category_name");
-                categories.add(categoryName);
+                tempCategories.add(categoryName);
             }
+            if (!tempCategories.contains("General") && !flag) {
+                String insertQuery = "INSERT INTO categories (category_name, user_id) VALUES ('General', ?)";
+                Database.getInstance().executeUpdate(insertQuery, userID);
+            }
+            categories.add("General");
+            categories.addAll(tempCategories);
+            System.out.println(categories);
+            categoryComboBox.setItems(categories);
         } catch (SQLException e) {
             e.printStackTrace();
         }

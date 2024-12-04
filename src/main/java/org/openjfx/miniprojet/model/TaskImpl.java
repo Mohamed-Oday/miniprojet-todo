@@ -15,6 +15,8 @@ public class TaskImpl implements Task {
     private LocalDate dueDate;
     private Status status;
     private final List<String> comments;
+    private String priority;
+    private String category;
 
     /**
      * Constructs a new TaskImpl with the specified name, description, due date, and status.
@@ -24,12 +26,22 @@ public class TaskImpl implements Task {
      * @param dueDate the due date of the task
      * @param status the status of the task
      */
-    public TaskImpl(String name, String description, LocalDate dueDate, Status status) {
+    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
         this.status = status;
         this.comments = new ArrayList<>();
+        this.priority = priority;
+        this.category = category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     /**
@@ -121,12 +133,22 @@ public class TaskImpl implements Task {
      * @param dueDate the new due date of the task
      * @param status the new status of the task
      */
-    public void editTask(String name, String description, LocalDate dueDate, Status status) {
+    public void editTask(String name, String description, LocalDate dueDate, Status status, String priority, String category) {
         setId(id);
         setName(name);
         setDescription(description);
         setDueDate(dueDate);
         changeStatus(status);
+        setPriority(priority);
+        setCategory(category);
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     /**

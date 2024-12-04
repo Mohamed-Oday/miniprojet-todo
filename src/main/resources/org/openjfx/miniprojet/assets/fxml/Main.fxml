@@ -2,12 +2,14 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,6 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
@@ -680,30 +683,68 @@
                <Insets bottom="10.0" />
             </VBox.margin>
          </HBox>
-         <TextField fx:id="taskNameField" prefHeight="55.0" prefWidth="332.0" styleClass="editTask-textField" stylesheets="@../styles/style.css">
+         <TextField fx:id="taskNameField" prefHeight="55.0" prefWidth="332.0" promptText="Update the name" styleClass="editTask-textField" stylesheets="@../styles/style.css">
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin>
          </TextField>
-         <TextField fx:id="taskDescriptionField" alignment="TOP_LEFT" prefHeight="115.0" prefWidth="332.0" styleClass="editTask-textField">
+         <TextField fx:id="taskDescriptionField" alignment="TOP_LEFT" prefHeight="115.0" prefWidth="332.0" promptText="Update the description" styleClass="editTask-textField">
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin>
          </TextField>
-         <DatePicker fx:id="TaskDueDateField" prefHeight="38.0" prefWidth="332.0" styleClass="editTask-datePicker" stylesheets="@../styles/style.css">
+         <DatePicker fx:id="TaskDueDateField" prefHeight="38.0" prefWidth="332.0" promptText="Update the due date" styleClass="editTask-datePicker" stylesheets="@../styles/style.css">
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin>
          </DatePicker>
-         <ComboBox fx:id="TaskStatusField" prefHeight="41.0" prefWidth="324.0" stylesheets="@../styles/style.css">
+         <ComboBox fx:id="TaskStatusField" prefHeight="41.0" prefWidth="324.0" promptText="Update the status" stylesheets="@../styles/style.css">
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin>
          </ComboBox>
-         <ComboBox prefHeight="50.0" prefWidth="347.0" />
-
-         <Pane prefHeight="429.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
-         <JFXButton onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="332.0" styleClass="editTask-button-background" stylesheets="@../styles/style.css" text="Delete Task" textFill="#c7c7c7">
+         <ComboBox fx:id="categoryComboBox" prefHeight="50.0" prefWidth="347.0" promptText="Update the category">
+            <VBox.margin>
+               <Insets bottom="20.0" />
+            </VBox.margin></ComboBox>
+         <HBox alignment="CENTER" prefHeight="0.0" prefWidth="324.0">
+            <children>
+               <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
+                  <HBox.margin>
+                     <Insets right="40.0" />
+                  </HBox.margin>
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <toggleGroup>
+                     <ToggleGroup fx:id="priorityGroup" />
+                  </toggleGroup>
+                  <selectedColor>
+                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
+                  </selectedColor>
+               </JFXRadioButton>
+               <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
+                  <HBox.margin>
+                     <Insets right="40.0" />
+                  </HBox.margin>
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <selectedColor>
+                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
+                  </selectedColor>
+               </JFXRadioButton>
+               <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <selectedColor>
+                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
+                  </selectedColor></JFXRadioButton>
+            </children>
+         </HBox>
+         <Pane prefHeight="335.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
+         <JFXButton onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="324.0" styleClass="editTask-button-background" stylesheets="@../styles/style.css" text="Delete Task" textFill="#c7c7c7">
             <font>
                <Font name="Segoe UI" size="16.0" />
             </font>

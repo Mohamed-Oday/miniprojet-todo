@@ -60,7 +60,9 @@
 }
 
 .myDay-background{
-    -fx-background-color: linear-gradient(to bottom, #25555a, #ad9790);
+    -fx-background-image: url("../images/mydaybg.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
 
 .important-tasks-background{

@@ -1,12 +1,14 @@
 package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import org.openjfx.miniprojet.model.Status;
 
@@ -32,8 +34,29 @@ public class addTaskController {
     @FXML
     private ComboBox<String> categoryComboBox;
 
+    @FXML
+    private ToggleGroup priorityGroup;
+
+    @FXML
+    private JFXRadioButton high;
+
+    @FXML
+    private JFXRadioButton medium;
+
+    @FXML
+    private JFXRadioButton low;
+
     private final ObservableList<String> categories = FXCollections.observableArrayList();
 
+
+    public void initialize() {
+        priorityGroup = new ToggleGroup();
+        high.setToggleGroup(priorityGroup);
+        medium.setToggleGroup(priorityGroup);
+        low.setToggleGroup(priorityGroup);
+        low.setSelected(true);
+        categoryComboBox.setValue("General");
+    }
 
     private String userID;
     private Stage addTaskStage;
@@ -81,9 +104,10 @@ public class addTaskController {
         String description = getTaskDescription();
         LocalDate dueDate = getTaskDueDate();
         String selectedCategory = categoryComboBox.getValue();
+        String priority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
 
         if (name != null && !name.isEmpty() && dueDate != null) {
-            insertTask(name, description, dueDate, selectedCategory);
+            insertTask(name, description, dueDate, selectedCategory, priority);
             mainController.setLatestTaskName(name);
             addTaskStage.close();
         } else {
@@ -92,9 +116,8 @@ public class addTaskController {
         }
     }
 
-    private void insertTask(String name, String description, LocalDate dueDate, String category) {
-        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?))";
-
+    private void insertTask(String name, String description, LocalDate dueDate, String category, String priority) {
+        String insertQuery = getString(priority);
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
             preparedStatement.setString(1, userID);
@@ -106,6 +129,7 @@ public class addTaskController {
             preparedStatement.setDate(7, java.sql.Date.valueOf(LocalDate.now()));
             preparedStatement.setString(8, category);
             preparedStatement.setString(9, userID);
+            preparedStatement.setString(10, priority);
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0){
@@ -116,6 +140,14 @@ public class addTaskController {
         } catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    private static String getString(String priority) {
+        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?))";
+        if (priority != null) {
+            insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?), ?)";
+        }
+        return insertQuery;
     }
 
     @FXML

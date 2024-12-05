@@ -83,7 +83,7 @@
     -fx-border-width: 0;
 }
 
-.list-cell {
+/*.list-cell {
     -fx-alignment: center-left;
     -fx-background-color: "#37393a";
     -fx-text-fill: "#FFFFFF";
@@ -95,6 +95,34 @@
 
 .list-cell:hover{
     -fx-background-color: "#303030";
+}*/
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-background-color: "#37393a";
+    -fx-text-fill: #fff;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 20px;
+    -fx-background-insets: 0 0 5 0;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-transition: 0.3s ease-in-out;
+}
+
+.list-cell:hover {
+    -fx-background-color: #303030;
+}
+
+.list-cell:selected {
+    -fx-background-color: #303030;
+    -fx-text-fill: #fff;
 }
 
 .addTask-background{
@@ -281,4 +309,62 @@
 
 .title-bar {
     -fx-background-color: #3498db; /* Your desired color */
+}
+
+.menu-button {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-border-width: 1;
+    -fx-border-color: #3b3b3b; /* Subtle dark border */
+    -fx-border-radius: 20;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+.menu-button .text{
+    -fx-fill: white !important;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.menu-button .arrow {
+    -fx-background-color: white; /* White arrow */
+}
+
+.menu-button:hover {
+    -fx-border-color: #4b423a; /* Slightly lighter border on hover */
+}
+
+.menu-button:focused {
+    -fx-border-color: #00C6FF; /* Light blue outline for focus */
+    -fx-border-width: 2;
+}
+
+.context-menu {
+    -fx-background-color: #2B2B2B; /* Dark background */
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.1); /* Subtle light border */
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0, 2, 2);
+}
+
+.menu-item .text{
+    -fx-fill: white !important;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.context-menu .menu-item {
+    -fx-padding: 10 15; /* Modern padding for menu items */
+}
+
+.context-menu .menu-item:hover {
+    -fx-background-color: #0078E0; /* Blue highlight on hover */
+    -fx-background-radius: 10;
+    -fx-text-fill:"#FFFFFF"; /* Maintain white text on hover */
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: #0078E0; /* Stronger blue for focused item */
+    -fx-text-fill: "#FFFFFF";
 }

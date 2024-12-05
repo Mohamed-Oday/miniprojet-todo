@@ -117,7 +117,7 @@ public class addTaskController {
     }
 
     private void insertTask(String name, String description, LocalDate dueDate, String category, String priority) {
-        String insertQuery = getString(priority);
+        String insertQuery = getString();
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
             preparedStatement.setString(1, userID);
@@ -142,12 +142,8 @@ public class addTaskController {
         }
     }
 
-    private static String getString(String priority) {
-        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?))";
-        if (priority != null) {
-            insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?), ?)";
-        }
-        return insertQuery;
+    private static String getString() {
+        return "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?), ?)";
     }
 
     @FXML

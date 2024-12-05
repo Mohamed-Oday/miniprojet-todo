@@ -180,6 +180,9 @@ public class Controller {
     @FXML
     private ComboBox<String> categoryComboBox;
 
+    @FXML
+    private MenuButton sortingMenu;
+
     private TaskImpl selectedTask;
 
     public void setLatestTaskName(String latestTaskName) {
@@ -217,6 +220,7 @@ public class Controller {
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
         setupSearchField(searchField, searchField1, searchField2, searchField3);
+        setupSortingMenu();
         priorityGroup = new ToggleGroup();
         high.setToggleGroup(priorityGroup);
         medium.setToggleGroup(priorityGroup);
@@ -232,6 +236,42 @@ public class Controller {
         } else {
             System.out.println("todayLabel is null!");
         }
+    }
+
+    private void setupSortingMenu(){
+        MenuItem originalSort = getMenuItem(tasks, "Original Order");
+        MenuItem sortByPriority = getMenuItem(tasks, "Sort by Priority");
+        sortingMenu.getItems().addAll(originalSort ,sortByPriority);
+    }
+
+    private MenuItem getMenuItem(TaskListImpl tempTasks, String sortMethod) {
+        MenuItem sortType = new MenuItem(sortMethod);
+        sortType.setOnAction(event -> {
+            sortingMenu.setText(sortMethod);
+            if (tempTasks == null) {
+                System.out.println("Task list is null");
+                return;
+            }
+            ObservableList<TaskImpl> sortedTasks = null;
+            if (sortMethod.equals("Sort by Priority")){
+                sortedTasks = tempTasks.sortTasksByPriority();
+            }
+
+            if (sortMethod.equals("Original Order")){
+                sortedTasks = tempTasks.getTasks();
+            }
+
+            taskListView.setItems(sortedTasks);
+            taskListView1.setItems(sortedTasks);
+            taskListView2.setItems(sortedTasks);
+            categoryTasks.setItems(sortedTasks);
+
+            taskListView.refresh();
+            taskListView1.refresh();
+            taskListView2.refresh();
+            categoryTasks.refresh();
+        });
+        return sortType;
     }
 
     private void setupSearchField(TextField... searchFields) {
@@ -354,7 +394,7 @@ public class Controller {
             Label placeholderLabel = new Label("Add your first task!");
             placeholderLabel.setId("noTaskLabel");
 
-            javafx.scene.image.Image image = new Image(Objects.requireNonNull(getClass().getResource("/org/openjfx/miniprojet/assets/images/AddNotes-pana-2x.png")).toString());
+            Image image = new Image(Objects.requireNonNull(getClass().getResource("/org/openjfx/miniprojet/assets/images/AddNotes-pana-2x.png")).toString());
             ImageView placeholderImage = new ImageView(image);
 
             VBox placeholderContainer = new VBox(placeholderLabel, placeholderImage);
@@ -457,11 +497,17 @@ public class Controller {
             taskListView.refresh();
             taskListView1.refresh();
             taskListView2.refresh();
-            loadTasksForCategory(categoryTitle.getText());
+            if (categoryTasksPane.isVisible()){
+                loadTasksForCategory(categoryTitle.getText());
+            }
             categoryTasks.refresh();
             hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
             showEditFormSearchField(true ,searchField, searchField1, searchField2, searchField3);
             showNotification("Task updated successfully.", "Task", "has been updated", taskName);
+            taskListView.getSelectionModel().clearSelection();
+            taskListView1.getSelectionModel().clearSelection();
+            taskListView2.getSelectionModel().clearSelection();
+            categoryTasks.getSelectionModel().clearSelection();
         }
     }
 
@@ -472,7 +518,10 @@ public class Controller {
         taskListView.refresh();
         hideEditFormVBox(mainVbox, mainVbox1, mainVbox2, mainVbox3);
         showEditFormSearchField(true ,searchField, searchField1, searchField2, searchField3);
-
+        taskListView.getSelectionModel().clearSelection();
+        taskListView1.getSelectionModel().clearSelection();
+        taskListView2.getSelectionModel().clearSelection();
+        categoryTasks.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -629,7 +678,7 @@ public class Controller {
         } else if (importantPane.isVisible()) {
             loadTasksQuery += " AND is_important = 1";
         } else if (categoryTasksPane.isVisible()) {
-            loadTasksQuery += " AND category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
+            loadTasksQuery += " AND tasks.category_id = (SELECT categories.category_id FROM categories WHERE categories.category_name = ? AND categories.user_id = ?)";
         }
         return loadTasksQuery;
     }
@@ -681,8 +730,8 @@ public class Controller {
                         LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
                         Status status = Status.valueOf(resultSet.getString("task_status"));
                         String priority = resultSet.getString("task_priority");
-                        String category = categoryName; // Set the category name
-                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status, priority, category);
+                        // Set the category name
+                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status, priority, categoryName);
                         task.setId(taskID);
                         tasks.addTask(task);
                     } while (resultSet.next());
@@ -776,10 +825,15 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        categoryListView.setItems(categories);
-        categoryListView1.setItems(categories);
-        categoryListView2.setItems(categories);
-        categoryListView21.setItems(categories);
+        setCategoryViewItems(categories, categoryListView, categoryListView1, categoryListView2, categoryListView21);
+    }
+
+    @SafeVarargs
+    @FXML
+    private void setCategoryViewItems(ObservableList<String> categories, ListView<String>... listView) {
+        for (ListView<String> list : listView) {
+            list.setItems(categories);
+        }
     }
 
     public void showNotification(String message, String part1, String part2, String taskName) {
@@ -813,24 +867,20 @@ public class Controller {
 
     @FXML
     public void handleMyDayButton() {
-        clearSearch(searchField, searchField1, searchField2, searchField3);
-        resetMainPaneSize();
-        if (editForm.isVisible()) {
-            handleCancelButton();
-        }
-        myDayPane.setVisible(true);
-        displayTasksPane.setVisible(false);
-        importantPane.setVisible(false);
-        categoryTasksPane.setVisible(false);
-        mainPane = myDayPane; // Ensure mainPane points to myDayPane
-        loadTasks();
-        loadCategories();
-        taskListView.refresh();
-        categoryListView.refresh();
+        handleChangePane(myDayPane, taskListView);
     }
 
     @FXML
     public void handleImportantButton() {
+        handleChangePane(importantPane, taskListView1);
+    }
+
+    @FXML
+    public void handleDisplayTasksButton() {
+        handleChangePane(displayTasksPane, taskListView2);
+    }
+
+    private void handleChangePane(AnchorPane pane, ListView<TaskImpl> listView){
         clearSearch(searchField, searchField1, searchField2, searchField3);
         resetMainPaneSize();
         if (editForm.isVisible()) {
@@ -838,27 +888,10 @@ public class Controller {
         }
         myDayPane.setVisible(false);
         displayTasksPane.setVisible(false);
-        importantPane.setVisible(true);
-        categoryTasksPane.setVisible(false);
-        mainPane = importantPane; // Ensure mainPane points to importantPane
-        loadTasks();
-        loadCategories();
-        taskListView.refresh();
-        categoryListView.refresh();
-    }
-
-    @FXML
-    public void handleDisplayTasksButton() {
-        clearSearch(searchField, searchField1, searchField2, searchField3);
-        resetMainPaneSize();
-        if (editForm.isVisible()) {
-            handleCancelButton();
-        }
-        myDayPane.setVisible(false);
-        displayTasksPane.setVisible(true);
         importantPane.setVisible(false);
         categoryTasksPane.setVisible(false);
-        mainPane = displayTasksPane; // Ensure mainPane points to displayTasksPane
+        pane.setVisible(true);
+        mainPane = pane;
         loadTasks();
         loadCategories();
         taskListView.refresh();

@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
@@ -169,7 +170,15 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Label>
-                  <VBox prefHeight="617.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                  <VBox alignment="TOP_RIGHT" prefHeight="617.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                     <MenuButton fx:id="sortingMenu" mnemonicParsing="false" prefWidth="200.0" text="Select Sort" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="14.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin>
+                     </MenuButton>
                      <JFXListView fx:id="taskListView" prefHeight="684.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">

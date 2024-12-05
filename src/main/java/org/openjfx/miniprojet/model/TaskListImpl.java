@@ -134,6 +134,33 @@ public class TaskListImpl extends TaskList{
         return sortedTasks;
     }
 
+    public ObservableList<TaskImpl> sortTasksByPriority() {
+        ObservableList<TaskImpl> sortedTasks = FXCollections.observableArrayList();
+
+        // Add High priority tasks
+        for (TaskImpl task : tasks) {
+            if ("High".equals(task.getPriority())) {
+                sortedTasks.add(task);
+            }
+        }
+
+        // Add Medium priority tasks
+        for (TaskImpl task : tasks) {
+            if ("Medium".equals(task.getPriority())) {
+                sortedTasks.add(task);
+            }
+        }
+
+        // Add Low priority tasks
+        for (TaskImpl task : tasks) {
+            if ("Low".equals(task.getPriority())) {
+                sortedTasks.add(task);
+            }
+        }
+
+        return sortedTasks;
+    }
+
 
     /**
      * Exports the list of tasks to a specified file in JSON format.

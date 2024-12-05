@@ -1,11 +1,14 @@
 package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXRadioButton;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 
@@ -403,6 +406,9 @@ public class Controller {
             listView.setPlaceholder(placeholderContainer);
 
             listView.setItems(tasks.getTasks());
+
+            setupTasksButtons(listView);
+
             listView.setOnMouseClicked(event -> {
                 TaskImpl selectedTask = listView.getSelectionModel().getSelectedItem();
                 if (selectedTask != null) {
@@ -411,6 +417,41 @@ public class Controller {
                 }
             });
         }
+    }
+
+    private void setupTasksButtons(ListView<TaskImpl> listView) {
+        listView.setCellFactory(param -> {
+            ListCell<TaskImpl> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(TaskImpl task, boolean empty) {
+                    super.updateItem(task, empty);
+                    if (empty || task == null) {
+                        setGraphic(null);
+                        setText(null);
+                        setVisible(false);
+                        setStyle("-fx-background-color: transparent;");
+                    } else {
+                        setText(task.getName());
+                        Button deleteButton = new Button("Delete");
+                        deleteButton.setOnAction(event -> {
+                            deleteTask(task);
+                            tasks.deleteTask(task);
+                            taskListView.refresh();
+                        });
+                        deleteButton.setId("deleteButton");
+                        HBox container = new HBox(5, deleteButton);
+                        setGraphic(container);
+                        setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        setVisible(true);
+                        setStyle("-fx-background-color: #37393a");
+
+                        setOnMouseEntered(event -> setStyle("-fx-background-color: #4a4a4a"));
+                        setOnMouseExited(event -> setStyle("-fx-background-color: #303030"));
+                    }
+                }
+            };
+            return cell;
+        });
     }
 
     @SafeVarargs
@@ -456,16 +497,12 @@ public class Controller {
     }
 
     private JFXRadioButton getPriorityToggle(String priority){
-        switch (priority){
-            case "High":
-                return high;
-            case "Medium":
-                return medium;
-            case "Low":
-                return low;
-            default:
-                return null;
-        }
+        return switch (priority) {
+            case "High" -> high;
+            case "Medium" -> medium;
+            case "Low" -> low;
+            default -> null;
+        };
     }
 
     private void resizeMainPaneForEdit() {

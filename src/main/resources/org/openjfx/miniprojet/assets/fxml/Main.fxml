@@ -179,7 +179,10 @@
                            <Insets bottom="20.0" />
                         </VBox.margin>
                      </MenuButton>
-                     <JFXListView fx:id="taskListView" prefHeight="684.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
+                     <JFXListView fx:id="taskListView" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin></JFXListView>
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                      <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@../styles/style.css" text="+" textFill="WHITE">
@@ -315,9 +318,9 @@
                   <VBox.margin>
                      <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
                   </VBox.margin>
-                  <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="824.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                      <VBox.margin>
-                        <Insets bottom="20.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                      <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
@@ -341,12 +344,23 @@
                      <font>
                         <Font size="16.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
                   </Label>
-                  <VBox prefHeight="657.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                  <VBox alignment="TOP_RIGHT" prefHeight="657.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
-                     <JFXListView fx:id="taskListView1" prefHeight="643.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" />
+                     <MenuButton fx:id="sortingMenu1" mnemonicParsing="false" prefWidth="200.0" text="Select Sort" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="14.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin>
+                     </MenuButton>
+                     <JFXListView fx:id="taskListView1" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                      <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@../styles/style.css" text="+" textFill="#f5b6c2">
@@ -505,7 +519,7 @@
                      </TextField>
                   </HBox>
                   <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
-                     <JFXListView fx:id="taskListView2" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
+                     <JFXListView fx:id="taskListView2" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                      <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@../styles/style.css" text="+" textFill="#788cde">
@@ -657,7 +671,7 @@
                      </TextField>
                   </HBox>
                   <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
-                     <JFXListView fx:id="categoryTasks" prefHeight="701.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
+                     <JFXListView fx:id="categoryTasks" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
                      <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@../styles/style.css" text="+" textFill="#788cde">

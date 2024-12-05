@@ -104,7 +104,6 @@
 }
 
 .list-cell {
-    -fx-background-color: transparent;
     -fx-background-color: "#37393a";
     -fx-text-fill: #fff;
     -fx-font-family: "Segoe UI", sans-serif;
@@ -367,4 +366,9 @@
 .context-menu .menu-item:focused {
     -fx-background-color: #0078E0; /* Stronger blue for focused item */
     -fx-text-fill: "#FFFFFF";
+}
+
+#deleteButton{
+    -fx-background-color: "#e74c3c";
+    -fx-background-radius: 99999;
 }

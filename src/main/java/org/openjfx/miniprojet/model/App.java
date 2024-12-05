@@ -36,8 +36,8 @@ public class App extends Application {
                 fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
                 scene = new Scene(fxmlLoader.load());
             }
-            String css = Objects.requireNonNull(this.getClass().getResource("/org/openjfx/miniprojet/assets/styles/style.css")).toExternalForm();
-            scene.getStylesheets().add(css);
+                String css = Objects.requireNonNull(this.getClass().getResource("/org/openjfx/miniprojet/assets/styles/style.css")).toExternalForm();
+                scene.getStylesheets().add(css);
             stage.setTitle("ToDo List");
             URL icon = getClass().getResource("/org/openjfx/miniprojet/assets/images/logo.png");
             Image appIcon = new Image(Objects.requireNonNull(icon).toString());

@@ -420,37 +420,34 @@ public class Controller {
     }
 
     private void setupTasksButtons(ListView<TaskImpl> listView) {
-        listView.setCellFactory(param -> {
-            ListCell<TaskImpl> cell = new ListCell<>() {
-                @Override
-                protected void updateItem(TaskImpl task, boolean empty) {
-                    super.updateItem(task, empty);
-                    if (empty || task == null) {
-                        setGraphic(null);
-                        setText(null);
-                        setVisible(false);
-                        setStyle("-fx-background-color: transparent;");
-                    } else {
-                        setText(task.getName());
-                        Button deleteButton = new Button("Delete");
-                        deleteButton.setOnAction(event -> {
-                            deleteTask(task);
-                            tasks.deleteTask(task);
-                            taskListView.refresh();
-                        });
-                        deleteButton.setId("deleteButton");
-                        HBox container = new HBox(5, deleteButton);
-                        setGraphic(container);
-                        setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        setVisible(true);
-                        setStyle("-fx-background-color: #37393a");
+        listView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(TaskImpl task, boolean empty) {
+                super.updateItem(task, empty);
+                if (empty || task == null) {
+                    setGraphic(null);
+                    setText(null);
+                    setStyle("-fx-background-color: transparent;");
+                    setOnMouseEntered(null);
+                    setOnMouseExited(null);
+                } else {
+                    setText(task.getName());
+                    Button deleteButton = new Button("Delete");
+                    deleteButton.setOnAction(event -> {
+                        deleteTask(task);
+                        tasks.deleteTask(task);
 
-                        setOnMouseEntered(event -> setStyle("-fx-background-color: #4a4a4a"));
-                        setOnMouseExited(event -> setStyle("-fx-background-color: #303030"));
-                    }
+                    });
+                    deleteButton.setId("deleteButton");
+                    HBox container = new HBox(5, deleteButton);
+                    setGraphic(container);
+                    setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    setStyle("-fx-background-color: #37393a; -fx-cursor: hand;");
+
+                    setOnMouseEntered(event -> setStyle("-fx-background-color: #303030; -fx-cursor: hand;"));
+                    setOnMouseExited(event -> setStyle("-fx-background-color: #37393a; -fx-cursor: hand;"));
                 }
-            };
-            return cell;
+            }
         });
     }
 

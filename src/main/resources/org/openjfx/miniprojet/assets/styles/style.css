@@ -119,6 +119,10 @@
     -fx-background-color: #303030;
 }
 
+.task-cell:hover{
+    -fx-background-color: "#303030";
+}
+
 .list-cell:selected {
     -fx-background-color: #303030;
     -fx-text-fill: #fff;

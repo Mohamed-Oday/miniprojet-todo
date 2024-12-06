@@ -7,9 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 
 import com.jfoenix.controls.JFXListView;
@@ -27,7 +25,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -431,16 +432,135 @@ public class Controller {
                     setOnMouseEntered(null);
                     setOnMouseExited(null);
                 } else {
-                    setText(task.getName());
-                    Button deleteButton = new Button("Delete");
+                    HBox container = new HBox();
+                    container.setSpacing(5);
+
+                    Label namelabel = new Label(task.getName());
+                    namelabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+
+                    namelabel.setMaxWidth(Double.MAX_VALUE);
+                    HBox.setHgrow(namelabel, Priority.ALWAYS);
+
+                    Label priorityLabel = getLabel(task);
+
+                    Label statusLabel = new Label(task.getStatus().toString());
+                    if (task.getStatus().equals(Status.Completed)){
+                        statusLabel.setStyle("-fx-text-fill: #00FF7F; -fx-font-size: 14px; -fx-font-weight: bold;");
+                    }else if (task.getStatus().equals(Status.Started)){
+                        statusLabel.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 14px; -fx-font-weight: bold;");
+                    } else {
+                        statusLabel.setStyle("-fx-text-fill: #FF6F61; -fx-font-size: 14px; -fx-font-weight: bold;");
+                    }
+
+                    Button deleteButton = new Button();
+                    deleteButton.setPrefSize(30, 30);
+                    deleteButton.setMaxSize(30, 30);
+
+                    Text xIcon = new Text("✖");
+                    xIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 12));
+                    xIcon.setFill(Color.WHITE);
+                    StackPane iconContainer = new StackPane(xIcon);
+                    iconContainer.setAlignment(Pos.CENTER);
+
+                    deleteButton.setGraphic(iconContainer);
+                    deleteButton.setStyle("-fx-background-color: transparent;" + // Blue background
+                            "-fx-border-radius: 50%;" +
+                            "-fx-background-radius: 50%;" +
+                            "-fx-padding: 0;" +
+                            "-fx-border-width: 0;" +
+                            "-fx-margin: 0 10px 0 0;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-border-color: #d4d5d5;" +
+                            "-fx-border-width: 2 2 2 2");
+
+                    deleteButton.setOnMouseEntered(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #FF6F61"));
+                    deleteButton.setOnMouseExited(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
+
                     deleteButton.setOnAction(event -> {
                         deleteTask(task);
                         tasks.deleteTask(task);
-
                     });
-                    deleteButton.setId("deleteButton");
-                    HBox container = new HBox(5, deleteButton);
+
+                    Button checkButton = new Button();
+                    checkButton.setPrefSize(30, 30);
+                    checkButton.setMaxSize(30, 30);
+
+                    Text checkIcon = new Text("✔");
+                    checkIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 12));
+                    checkIcon.setFill(Color.WHITE);
+                    StackPane checkIconContainer = new StackPane(checkIcon);
+                    checkIconContainer.setAlignment(Pos.CENTER);
+
+                    checkButton.setGraphic(checkIconContainer);
+
+                    checkButton.setStyle("-fx-background-color: transparent;" + // Blue background
+                            "-fx-border-radius: 50%;" +
+                            "-fx-background-radius: 50%;" +
+                            "-fx-padding: 0;" +
+                            "-fx-border-width: 0;" +
+                            "-fx-margin: 0 10px 0 0;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-border-color: #d4d5d5;" +
+                            "-fx-border-width: 2 2 2 2");
+
+                    checkButton.setOnMouseEntered(event -> checkButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #00FF7F"));
+                    checkButton.setOnMouseExited(event -> checkButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
+
+                    checkButton.setOnAction(event -> {
+                        if (task.getStatus().equals(Status.Completed)){
+                            showNotification("Task already completed.", "Task", "has already been completed", task.getName());
+                            return;
+                        }
+                        task.changeStatus(Status.Completed);
+                        updateTask(task);
+                        taskListView.refresh();
+                        taskListView1.refresh();
+                        taskListView2.refresh();
+                        categoryTasks.refresh();
+                        showNotification("Task completed successfully.", "Task", "has been completed", task.getName());
+                    });
+
+                    Button editButton = new Button();
+                    editButton.setPrefSize(30, 30);
+                    editButton.setMaxSize(30, 30);
+
+                    Text editIcon = new Text("\u270E");
+                    editIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 20));
+                    editIcon.setFill(Color.WHITE);
+                    StackPane editIconContainer = new StackPane(editIcon);
+                    editIconContainer.setAlignment(Pos.CENTER);
+
+                    editButton.setGraphic(editIconContainer);
+
+                    editButton.setStyle("-fx-background-color: transparent;" + // Blue background
+                            "-fx-border-radius: 50%;" +
+                            "-fx-background-radius: 50%;" +
+                            "-fx-padding: 0;" +
+                            "-fx-border-width: 0;" +
+                            "-fx-margin: 0 10px 0 0;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-border-color: #d4d5d5;" +
+                            "-fx-border-width: 2 2 2 2");
+
+
+                    editButton.setOnMouseEntered(event -> editButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #FFD700"));
+                    editButton.setOnMouseExited(event -> editButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
+
+                    HBox.setMargin(editButton, new Insets(0, 5, 0, 0));
+                    HBox.setMargin(checkButton, new Insets(0, 5, 0, 0));
+                    HBox.setMargin(statusLabel, new Insets(0, 15, 0, 0));
+
+                    editButton.setOnAction(event -> {
+                        handleEditTask(task);
+                    });
+
+                    container.getChildren().addAll(checkButton ,namelabel ,statusLabel ,priorityLabel ,editButton ,deleteButton);
+                    container.setAlignment(Pos.CENTER_LEFT);
+
+
                     setGraphic(container);
+                    setText("");
+
                     setPrefHeight(Region.USE_COMPUTED_SIZE);
                     setStyle("-fx-background-color: #37393a; -fx-cursor: hand;");
 
@@ -449,6 +569,19 @@ public class Controller {
                 }
             }
         });
+    }
+
+    private static Label getLabel(TaskImpl task) {
+        Label priorityLabel = new Label(task.getPriority());
+        if (task.getPriority().equals("High")){
+            priorityLabel.setStyle("-fx-text-fill: #FF6F61; -fx-font-size: 14px; -fx-font-weight: bold;");
+        }else if (task.getPriority().equals("Medium")){
+            priorityLabel.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 14px; -fx-font-weight: bold;");
+        } else {
+            priorityLabel.setStyle("-fx-text-fill: #00FF7F; -fx-font-size: 14px; -fx-font-weight: bold;");
+        }
+        priorityLabel.setPrefWidth(80);
+        return priorityLabel;
     }
 
     @SafeVarargs
@@ -655,6 +788,7 @@ public class Controller {
         } catch (SQLException e){
             e.printStackTrace();
         }
+        loadTasks();
     }
 
     private int getCategoryID(String categoryName){
@@ -704,13 +838,13 @@ public class Controller {
 
     private String getLoadTasksQuery() {
         String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name "
-                + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id "
-                + "WHERE tasks.user_id = ?";
+                + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id"
+                + " WHERE tasks.user_id = ?";
 
         if (myDayPane.isVisible()) {
-            loadTasksQuery += " AND task_startDate = CURDATE()";
+            loadTasksQuery += " AND task_startDate = CURDATE() AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         } else if (importantPane.isVisible()) {
-            loadTasksQuery += " AND is_important = 1";
+            loadTasksQuery += " AND is_important = 1 AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         } else if (categoryTasksPane.isVisible()) {
             loadTasksQuery += " AND tasks.category_id = (SELECT categories.category_id FROM categories WHERE categories.category_name = ? AND categories.user_id = ?)";
         }
@@ -746,7 +880,7 @@ public class Controller {
     private void loadTasksByCategory(String categoryName) {
         String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority "
                 + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
-                + "WHERE tasks.user_id = ? AND categories.category_name = ?";
+                + "WHERE tasks.user_id = ? AND categories.category_name = ? AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
 
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
              PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {

@@ -372,7 +372,4 @@
     -fx-text-fill: "#FFFFFF";
 }
 
-#deleteButton{
-    -fx-background-color: "#e74c3c";
-    -fx-background-radius: 99999;
-}
+

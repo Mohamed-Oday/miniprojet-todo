@@ -179,7 +179,7 @@
                            <Insets bottom="20.0" />
                         </VBox.margin>
                      </MenuButton>
-                     <JFXListView fx:id="taskListView" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                     <JFXListView fx:id="taskListView" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                         <VBox.margin>
                            <Insets />
                         </VBox.margin></JFXListView>
@@ -496,9 +496,9 @@
                   <VBox.margin>
                      <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
                   </VBox.margin>
-                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="824.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                      <VBox.margin>
-                        <Insets bottom="20.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                      <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
@@ -518,7 +518,23 @@
                         </font>
                      </TextField>
                   </HBox>
-                  <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                  <Label textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox alignment="TOP_RIGHT" prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                     <MenuButton fx:id="sortingMenu11" mnemonicParsing="false" prefWidth="200.0" text="Select Sort" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="14.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin>
+                     </MenuButton>
                      <JFXListView fx:id="taskListView2" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
@@ -654,9 +670,9 @@
                   <VBox.margin>
                      <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
                   </VBox.margin>
-                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="824.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                      <VBox.margin>
-                        <Insets bottom="20.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                      <Label fx:id="categoryTitle" prefHeight="39.0" prefWidth="200.0" text="Tasks" textFill="#788cde">
                         <font>
@@ -670,7 +686,23 @@
                         </font>
                      </TextField>
                   </HBox>
-                  <VBox prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                  <Label textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox alignment="TOP_RIGHT" prefHeight="696.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                     <MenuButton fx:id="sortingMenu111" mnemonicParsing="false" prefWidth="200.0" text="Select Sort" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="14.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin>
+                     </MenuButton>
                      <JFXListView fx:id="categoryTasks" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
                   </VBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">

@@ -3,6 +3,7 @@ package org.openjfx.miniprojet.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.openjfx.miniprojet.dao.CategoryDAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +17,8 @@ public class AddCategoryController {
 
     @FXML
     private TextField categoryName;
+
+    private final CategoryDAO categoryDAO = new CategoryDAO();
 
 
     public void setAddCategoryStage(Stage addCategoryStage) {
@@ -40,15 +43,7 @@ public class AddCategoryController {
     }
 
     public void insertCategory(String name) {
-        String insert = "INSERT INTO categories (user_id, category_name) VALUES (?, ?)";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
-            preparedStatement.setString(1, userID);
-            preparedStatement.setString(2, name);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        categoryDAO.addCategory(name, userID);
         categoryName.clear();
         addCategoryStage.close();
         mainController.loadCategories();

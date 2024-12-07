@@ -1,7 +1,6 @@
 package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXRadioButton;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -34,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
@@ -149,7 +149,7 @@ public class Controller {
     private Label todayLabel;
 
     private final TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
-    private final ObservableList<String> categories = FXCollections.observableArrayList();
+    private ObservableList<String> categories = FXCollections.observableArrayList();
 
     private String userID;
 
@@ -191,7 +191,9 @@ public class Controller {
 
     private TaskImpl selectedTask;
 
-    private TaskDAO taskDAO = new TaskDAO();
+    private final TaskDAO taskDAO = new TaskDAO();
+
+    private final CategoryDAO categoryDAO = new CategoryDAO();
 
     public void setLatestTaskName(String latestTaskName) {
         this.latestTaskName = latestTaskName;
@@ -371,28 +373,15 @@ public class Controller {
     }
 
     private void deleteCategory(String categoryName, boolean deleteTasks) {
-        String deleteCategoryQuery = "DELETE FROM categories WHERE category_name = ? AND user_id = ?";
-        String deleteTasksQuery = "DELETE FROM tasks WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
-
-        try{
-            if (deleteTasks){
-                int rowAffected = Database.getInstance().executeUpdate(deleteTasksQuery, categoryName, userID);
-                System.out.println(rowAffected + " tasks deleted");
-            }
-            int rowAffected = Database.getInstance().executeUpdate(deleteCategoryQuery, categoryName, userID);
-            System.out.println(rowAffected + " category deleted");
-
-            if (categoryTasksPane.isVisible()){
-                categoryTasksPane.setVisible(false);
-                myDayPane.setVisible(true);
-            }
-            loadTasks();
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            loadCategories();
-            categoryListView.getSelectionModel().clearSelection();
+        categoryDAO.deleteCategory(categoryName, userID, deleteTasks);
+        if (categoryTasksPane.isVisible()){
+            categoryTasksPane.setVisible(false);
+            myDayPane.setVisible(true);
+            mainPane = myDayPane;
         }
+        loadTasks();
+        loadCategories();
+        categoryListView.getSelectionModel().clearSelection();
     }
 
     @SafeVarargs
@@ -728,10 +717,6 @@ public class Controller {
         tasks.setTasks(taskDAO.loadTasks(userID, mainPane, categoryTitle.getText()));
     }
 
-    private void loadTasksByCategory(String categoryName) {
-        tasks.setTasks(taskDAO.loadTasksByCategory(categoryName, userID));
-    }
-
     private void loadTasksForCategory(String categoryName) {
         clearSearch(searchField, searchField1, searchField2, searchField3);
         if (editForm.isVisible()) {
@@ -744,6 +729,10 @@ public class Controller {
         categoryTitle.setText(categoryName);
         mainPane = categoryTasksPane;
         loadTasksByCategory(categoryName);
+    }
+
+    private void loadTasksByCategory(String categoryName) {
+        tasks.setTasks(taskDAO.loadTasksByCategory(categoryName, userID));
     }
 
     @FXML
@@ -800,33 +789,8 @@ public class Controller {
 
     public void loadCategories() {
         categories.clear();
-        ObservableList<String> tempCategories = FXCollections.observableArrayList();
-        boolean flag = false;
-        String loadCategoriesQuery = "SELECT category_name FROM categories WHERE user_id = ?";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(loadCategoriesQuery)) {
-
-            preparedStatement.setString(1, userID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                if (resultSet.getString("category_name").equals("General")) {
-                    flag = true;
-                    continue;
-                }
-                String categoryName = resultSet.getString("category_name");
-                tempCategories.add(categoryName);
-            }
-            if (!tempCategories.contains("General") && !flag) {
-                String insertQuery = "INSERT INTO categories (category_name, user_id) VALUES ('General', ?)";
-                Database.getInstance().executeUpdate(insertQuery, userID);
-            }
-            categories.add("General");
-            categories.addAll(tempCategories);
-            System.out.println(categories);
-            categoryComboBox.setItems(categories);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        categories = categoryDAO.loadCategories(userID);
+        categoryComboBox.setItems(categories);
         setCategoryViewItems(categories, categoryListView, categoryListView1, categoryListView2, categoryListView21);
     }
 

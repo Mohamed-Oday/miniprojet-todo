@@ -62,9 +62,8 @@ public class TaskDAO {
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
 
         try (ResultSet resultSet  = Database.getInstance().executeQuery(query, params)){
-            if (visiblePane.getId().equals("categoryTaskPane")){
-                loadTasksByCategory(categoryName, userID);
-                return null;
+            if (visiblePane.getId().equals("categoryTasksPane")){
+                return loadTasksByCategory(categoryName, userID);
             }
             while (resultSet.next()){
                 int taskID = resultSet.getInt("task_id");
@@ -121,7 +120,7 @@ public class TaskDAO {
     }
 
     private Object[] getQueryParams(String userID, AnchorPane visiblePane, String categoryName){
-        if (visiblePane.getId().equals("categoryTaskPane")){
+        if (visiblePane.getId().equals("categoryTasksPane")){
             return new Object[]{userID ,categoryName, userID};
         }
         return new Object[]{userID};
@@ -136,7 +135,7 @@ public class TaskDAO {
             loadTasksQuery += " AND task_startDate = CURDATE() AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         } else if (visiblePane.getId().equals("importantPane")) {
             loadTasksQuery += " AND is_important = 1 AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
-        } else if (visiblePane.getId().equals("categoryTaskPane")) {
+        } else if (visiblePane.getId().equals("categoryTasksPane")) {
             loadTasksQuery += " AND tasks.category_id = (SELECT categories.category_id FROM categories WHERE categories.category_name = ? AND categories.user_id = ?)";
         }
         return loadTasksQuery;

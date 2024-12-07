@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 
@@ -49,7 +50,9 @@ public class addTaskController {
 
     private final ObservableList<String> categories = FXCollections.observableArrayList();
 
-    private TaskDAO taskDAO = new TaskDAO();
+    private final TaskDAO taskDAO = new TaskDAO();
+
+    private final CategoryDAO categoryDAO = new CategoryDAO();
 
 
     public void initialize() {
@@ -79,26 +82,9 @@ public class addTaskController {
     }
 
     private void loadCategories() {
-        String loadCategoriesQuery = "SELECT category_name FROM categories WHERE user_id = ?";
         categories.clear();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(loadCategoriesQuery)) {
-            System.out.println("UserID: " + userID);
-            preparedStatement.setString(1, userID);
-            preparedStatement.execute();
-            var resultSet = preparedStatement.getResultSet();
-            while (resultSet.next()) {
-                categories.add(resultSet.getString("category_name"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Categories size: " + categories.size());
-        if (categoryComboBox != null) {
-            categoryComboBox.setItems(categories);
-        } else {
-            System.out.println("categoryComboBox is null");
-        }
+        categories.addAll(categoryDAO.loadCategories(userID));
+        categoryComboBox.setItems(categories);
     }
 
     @FXML
@@ -121,10 +107,6 @@ public class addTaskController {
 
     private void insertTask(String name, String description, LocalDate dueDate, String category, String priority) {
         taskDAO.createTasks(name, description, dueDate, Status.Started, category, priority, userID, importantCheck.isSelected());
-    }
-
-    private static String getString() {
-        return "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?), ?)";
     }
 
     @FXML

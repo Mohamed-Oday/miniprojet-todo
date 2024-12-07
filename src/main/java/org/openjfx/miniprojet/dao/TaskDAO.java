@@ -57,7 +57,7 @@ public class TaskDAO {
     }
 
     public ObservableList<TaskImpl> loadTasks(String userID, AnchorPane visiblePane, String categoryName) throws DataAccessException{
-        String query = getTasksQuery(userID, visiblePane);
+        String query = getTasksQuery(visiblePane);
         Object[] params = getQueryParams(userID, visiblePane, categoryName);
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
 
@@ -126,7 +126,7 @@ public class TaskDAO {
         return new Object[]{userID};
     }
 
-    private String getTasksQuery(String userID, AnchorPane visiblePane){
+    private String getTasksQuery(AnchorPane visiblePane){
         String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name "
                 + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id"
                 + " WHERE tasks.user_id = ?";

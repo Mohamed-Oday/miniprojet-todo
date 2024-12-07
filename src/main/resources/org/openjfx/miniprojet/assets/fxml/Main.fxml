@@ -145,22 +145,21 @@
                      <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
                   </VBox.margin>
                   <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
-                     <children>
-                        <Label prefHeight="39.0" prefWidth="200.0" text="My Day" textFill="WHITE">
-                           <font>
-                              <Font name="Segoe UI Bold" size="32.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search" styleClass="search-bar" stylesheets="@../styles/style.css">
-                           <font>
-                              <Font name="Segoe UI" size="13.0" />
-                           </font>
-                        </TextField>
-                     </children>
                      <VBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets bottom="10.0"/>
                      </VBox.margin>
+                     <Label prefHeight="39.0" prefWidth="200.0" text="My Day" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI Bold" size="32.0"/>
+                        </font>
+                     </Label>
+                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                     <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search"
+                                styleClass="search-bar" stylesheets="@../styles/style.css">
+                        <font>
+                           <Font name="Segoe UI" size="13.0"/>
+                        </font>
+                     </TextField>
                   </HBox>
                   <Label fx:id="todayLabel" textFill="WHITE">
                      <font>
@@ -763,40 +762,39 @@
                <Insets bottom="20.0" />
             </VBox.margin></ComboBox>
          <HBox alignment="CENTER" prefHeight="0.0" prefWidth="324.0">
-            <children>
-               <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
-                  <HBox.margin>
-                     <Insets right="40.0" />
-                  </HBox.margin>
-                  <font>
-                     <Font name="Segoe UI" size="13.0" />
-                  </font>
-                  <toggleGroup>
-                     <ToggleGroup fx:id="priorityGroup" />
-                  </toggleGroup>
-                  <selectedColor>
-                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
-                  </selectedColor>
-               </JFXRadioButton>
-               <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
-                  <HBox.margin>
-                     <Insets right="40.0" />
-                  </HBox.margin>
-                  <font>
-                     <Font name="Segoe UI" size="13.0" />
-                  </font>
-                  <selectedColor>
-                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
-                  </selectedColor>
-               </JFXRadioButton>
-               <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
-                  <font>
-                     <Font name="Segoe UI" size="13.0" />
-                  </font>
-                  <selectedColor>
-                     <Color green="0.7215686440467834" blue="0.8313725590705872" />
-                  </selectedColor></JFXRadioButton>
-            </children>
+            <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
+               <HBox.margin>
+                  <Insets right="40.0"/>
+               </HBox.margin>
+               <font>
+                  <Font name="Segoe UI" size="13.0"/>
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="priorityGroup"/>
+               </toggleGroup>
+               <selectedColor>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+               </selectedColor>
+            </JFXRadioButton>
+            <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
+               <HBox.margin>
+                  <Insets right="40.0"/>
+               </HBox.margin>
+               <font>
+                  <Font name="Segoe UI" size="13.0"/>
+               </font>
+               <selectedColor>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+               </selectedColor>
+            </JFXRadioButton>
+            <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
+               <font>
+                  <Font name="Segoe UI" size="13.0"/>
+               </font>
+               <selectedColor>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+               </selectedColor>
+            </JFXRadioButton>
          </HBox>
          <Pane prefHeight="335.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
          <JFXButton onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="324.0" styleClass="editTask-button-background" stylesheets="@../styles/style.css" text="Delete Task" textFill="#c7c7c7">

@@ -103,52 +103,50 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </Label>
-      <HBox alignment="CENTER_LEFT" prefHeight="8.0" prefWidth="300.0">
-         <children>
-            <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
-               <HBox.margin>
-                  <Insets right="40.0" />
-               </HBox.margin>
-               <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
-               </selectedColor>
-               <font>
-                  <Font name="Segoe UI Bold" size="13.0" />
-               </font>
-               <toggleGroup>
-                  <ToggleGroup fx:id="priorityGroup" />
-               </toggleGroup>
-            </JFXRadioButton>
-            <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <padding>
-                  <Insets right="40.0" />
-               </padding>
-               <font>
-                  <Font name="Segoe UI Bold" size="13.0" />
-               </font>
-               <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
-               </selectedColor>
-            </JFXRadioButton>
-            <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
-               </selectedColor>
-               <font>
-                  <Font name="Segoe UI Bold" size="13.0" />
-               </font>
-            </JFXRadioButton>
-         </children>
-         <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin>
-      </HBox>
+          <HBox alignment="CENTER_LEFT" prefHeight="8.0" prefWidth="300.0">
+              <VBox.margin>
+                  <Insets bottom="20.0"/>
+              </VBox.margin>
+              <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
+                  <HBox.margin>
+                      <Insets right="40.0"/>
+                  </HBox.margin>
+                  <selectedColor>
+                      <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  </selectedColor>
+                  <font>
+                      <Font name="Segoe UI Bold" size="13.0"/>
+                  </font>
+                  <toggleGroup>
+                      <ToggleGroup fx:id="priorityGroup"/>
+                  </toggleGroup>
+              </JFXRadioButton>
+              <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
+                  <HBox.margin>
+                      <Insets/>
+                  </HBox.margin>
+                  <padding>
+                      <Insets right="40.0"/>
+                  </padding>
+                  <font>
+                      <Font name="Segoe UI Bold" size="13.0"/>
+                  </font>
+                  <selectedColor>
+                      <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  </selectedColor>
+              </JFXRadioButton>
+              <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
+                  <HBox.margin>
+                      <Insets/>
+                  </HBox.margin>
+                  <selectedColor>
+                      <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  </selectedColor>
+                  <font>
+                      <Font name="Segoe UI Bold" size="13.0"/>
+                  </font>
+              </JFXRadioButton>
+          </HBox>
             <JFXCheckBox fx:id="importantCheck" checkedColor="#00afca" prefHeight="19.0" prefWidth="291.0" text="Important" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="16.0" />

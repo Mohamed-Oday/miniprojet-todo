@@ -7,12 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.io.IOException;
@@ -33,7 +30,6 @@ public class signUpController {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/accounts";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "admin";
-    private static final Logger log = LoggerFactory.getLogger(signUpController.class);
 
     @FXML
     private PasswordField password;
@@ -67,11 +63,10 @@ public class signUpController {
     /**
      * Handles the sign in label action by returning to the sign-in screen.
      *
-     * @param event the mouse event that triggered the action
      * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
-    public void handleSignAccount(MouseEvent event) throws IOException {
+    public void handleSignAccount() throws IOException {
         returnToSignIn();
     }
 

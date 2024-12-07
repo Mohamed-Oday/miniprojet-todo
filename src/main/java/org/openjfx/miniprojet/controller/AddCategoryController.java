@@ -4,11 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CategoryDAO;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-
 public class AddCategoryController {
 
     private Stage addCategoryStage;

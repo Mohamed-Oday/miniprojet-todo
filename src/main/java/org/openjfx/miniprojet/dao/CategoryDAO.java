@@ -2,7 +2,6 @@ package org.openjfx.miniprojet.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.AnchorPane;
 import org.openjfx.miniprojet.utiil.Database;
 
 import java.sql.ResultSet;

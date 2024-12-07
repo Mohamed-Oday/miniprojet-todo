@@ -13,11 +13,6 @@ import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class addTaskController {

@@ -1,7 +1,8 @@
 package org.openjfx.miniprojet.controller;
 
 import com.jfoenix.controls.JFXRadioButton;
-import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -33,6 +34,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
 import org.openjfx.miniprojet.model.TaskListImpl;
@@ -188,6 +190,8 @@ public class Controller {
     private MenuButton sortingMenu;
 
     private TaskImpl selectedTask;
+
+    private TaskDAO taskDAO = new TaskDAO();
 
     public void setLatestTaskName(String latestTaskName) {
         this.latestTaskName = latestTaskName;
@@ -452,61 +456,14 @@ public class Controller {
                         statusLabel.setStyle("-fx-text-fill: #FF6F61; -fx-font-size: 14px; -fx-font-weight: bold;");
                     }
 
-                    Button deleteButton = new Button();
-                    deleteButton.setPrefSize(30, 30);
-                    deleteButton.setMaxSize(30, 30);
+                    statusLabel.setPrefWidth(80);
 
-                    Text xIcon = new Text("✖");
-                    xIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 12));
-                    xIcon.setFill(Color.WHITE);
-                    StackPane iconContainer = new StackPane(xIcon);
-                    iconContainer.setAlignment(Pos.CENTER);
-
-                    deleteButton.setGraphic(iconContainer);
-                    deleteButton.setStyle("-fx-background-color: transparent;" + // Blue background
-                            "-fx-border-radius: 50%;" +
-                            "-fx-background-radius: 50%;" +
-                            "-fx-padding: 0;" +
-                            "-fx-border-width: 0;" +
-                            "-fx-margin: 0 10px 0 0;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-border-color: #d4d5d5;" +
-                            "-fx-border-width: 2 2 2 2");
-
-                    deleteButton.setOnMouseEntered(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #FF6F61"));
-                    deleteButton.setOnMouseExited(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
-
-                    deleteButton.setOnAction(event -> {
+                    Button deleteButton = createButton("✖", Font.font("System Bold", FontWeight.BOLD, 12), Color.WHITE, "#FF6F61", event -> {
                         deleteTask(task);
                         tasks.deleteTask(task);
                     });
 
-                    Button checkButton = new Button();
-                    checkButton.setPrefSize(30, 30);
-                    checkButton.setMaxSize(30, 30);
-
-                    Text checkIcon = new Text("✔");
-                    checkIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 12));
-                    checkIcon.setFill(Color.WHITE);
-                    StackPane checkIconContainer = new StackPane(checkIcon);
-                    checkIconContainer.setAlignment(Pos.CENTER);
-
-                    checkButton.setGraphic(checkIconContainer);
-
-                    checkButton.setStyle("-fx-background-color: transparent;" + // Blue background
-                            "-fx-border-radius: 50%;" +
-                            "-fx-background-radius: 50%;" +
-                            "-fx-padding: 0;" +
-                            "-fx-border-width: 0;" +
-                            "-fx-margin: 0 10px 0 0;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-border-color: #d4d5d5;" +
-                            "-fx-border-width: 2 2 2 2");
-
-                    checkButton.setOnMouseEntered(event -> checkButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #00FF7F"));
-                    checkButton.setOnMouseExited(event -> checkButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
-
-                    checkButton.setOnAction(event -> {
+                    Button checkButton = createButton("✔", Font.font("System Bold", FontWeight.BOLD, 12), Color.WHITE, "#00FF7F", event -> {
                         if (task.getStatus().equals(Status.Completed)){
                             showNotification("Task already completed.", "Task", "has already been completed", task.getName());
                             return;
@@ -520,43 +477,17 @@ public class Controller {
                         showNotification("Task completed successfully.", "Task", "has been completed", task.getName());
                     });
 
-                    Button editButton = new Button();
-                    editButton.setPrefSize(30, 30);
-                    editButton.setMaxSize(30, 30);
 
-                    Text editIcon = new Text("\u270E");
-                    editIcon.setFont(Font.font("System Bold", FontWeight.BOLD, 20));
-                    editIcon.setFill(Color.WHITE);
-                    StackPane editIconContainer = new StackPane(editIcon);
-                    editIconContainer.setAlignment(Pos.CENTER);
-
-                    editButton.setGraphic(editIconContainer);
-
-                    editButton.setStyle("-fx-background-color: transparent;" + // Blue background
-                            "-fx-border-radius: 50%;" +
-                            "-fx-background-radius: 50%;" +
-                            "-fx-padding: 0;" +
-                            "-fx-border-width: 0;" +
-                            "-fx-margin: 0 10px 0 0;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-border-color: #d4d5d5;" +
-                            "-fx-border-width: 2 2 2 2");
-
-
-                    editButton.setOnMouseEntered(event -> editButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #FFD700"));
-                    editButton.setOnMouseExited(event -> editButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
+                    Button editButton = createButton("\u270E", Font.font("System Bold", FontWeight.BOLD, 20), Color.WHITE, "#FFD700", event -> {
+                        handleEditTask(task);
+                    });
 
                     HBox.setMargin(editButton, new Insets(0, 5, 0, 0));
                     HBox.setMargin(checkButton, new Insets(0, 5, 0, 0));
                     HBox.setMargin(statusLabel, new Insets(0, 15, 0, 0));
 
-                    editButton.setOnAction(event -> {
-                        handleEditTask(task);
-                    });
-
                     container.getChildren().addAll(checkButton ,namelabel ,statusLabel ,priorityLabel ,editButton ,deleteButton);
                     container.setAlignment(Pos.CENTER_LEFT);
-
 
                     setGraphic(container);
                     setText("");
@@ -569,6 +500,32 @@ public class Controller {
                 }
             }
         });
+    }
+
+    private Button createButton(String iconText, Font font, Color color, String hoverColor, EventHandler<ActionEvent> action){
+        Button button = new Button();
+        button.setPrefSize(30, 30);
+        button.setMaxSize(30, 30);
+
+        Text icon = new Text(iconText);
+        icon.setFont(font);
+        icon.setFill(color);
+        StackPane iconContainer = new StackPane(icon);
+        iconContainer.setAlignment(Pos.CENTER);
+
+        button.setGraphic(iconContainer);
+        button.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-radius: 50%;" +
+                "-fx-background-radius: 50%;" +
+                "-fx-padding: 0;" +
+                "-fx-border-width: 2;" +
+                "-fx-cursor: hand;" +
+                "-fx-border-color: #d4d5d5;");
+        button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: " + hoverColor));
+        button.setOnMouseExited(event -> button.setStyle("-fx-background-color: transparent; -fx-border-radius: 50%; -fx-background-radius: 50%; -fx-padding: 0; -fx-border-width: 2 2 2 2; -fx-border-color: #d4d5d5"));
+
+        button.setOnAction(action);
+        return button;
     }
 
     private static Label getLabel(TaskImpl task) {
@@ -757,110 +714,22 @@ public class Controller {
     }
 
     public void deleteTask(TaskImpl task) {
-        String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
-        Object[] params = {task.getId()};
-        try {
-            Database.getInstance().executeUpdate(deleteQuery, params);
-            setLatestTaskName(task.getName());
-            showNotification("Task deleted successfully.", "Task", "has been deleted", latestTaskName);
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        taskDAO.deleteTask(task);
+        setLatestTaskName(task.getName());
+        showNotification("Task deleted successfully.", "Task", "has been deleted", latestTaskName);
     }
 
     public void updateTask(TaskImpl task) {
-        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ? WHERE task_id = ?";
-
-        int categoryID = getCategoryID(task.getCategory());
-
-        Object[] params = {
-                task.getName(),
-                task.getDescription(),
-                Date.valueOf(task.getDueDate()),
-                task.getStatus().toString(),
-                task.getPriority(),
-                categoryID,
-                task.getId(),
-        };
-
-        try {
-            Database.getInstance().executeUpdate(updateQuery, params);
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        taskDAO.updateTask(task, userID);
         loadTasks();
     }
 
-    private int getCategoryID(String categoryName){
-        String query = "SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?";
-        try (PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(query)){
-            preparedStatement.setString(1, categoryName);
-            preparedStatement.setString(2, userID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                return resultSet.getInt("category_id");
-            }
-        } catch (SQLException e){
-            System.out.println("Category not found");
-        }
-        return -1;
-    }
-
     private void loadTasks() {
-        String loadTasksQuery = getLoadTasksQuery();
-        Object[] params = getQueryParameters();
-        try {
-            ResultSet resultSet = Database.getInstance().executeQuery(loadTasksQuery, params);
-            if (categoryTasksPane.isVisible()){
-                loadTasksByCategory(categoryTitle.getText());
-                return;
-            }
-            tasks.getTasks().clear();
-            while (resultSet.next()){
-                int taskID = resultSet.getInt("task_id");
-                String taskName = resultSet.getString("task_name");
-                String taskDescription = resultSet.getString("task_description");
-                LocalDate taskDueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
-                String taskPriority = resultSet.getString("task_priority");
-                String taskCategory = resultSet.getString("category_name");
-                if (taskCategory == null){
-                    taskCategory = "General";
-                }
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory);
-                task.setId(taskID);
-                tasks.addTask(task);
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        tasks.setTasks(taskDAO.loadTasks(userID, mainPane, categoryTitle.getText()));
     }
 
-    private String getLoadTasksQuery() {
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name "
-                + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id"
-                + " WHERE tasks.user_id = ?";
-
-        if (myDayPane.isVisible()) {
-            loadTasksQuery += " AND task_startDate = CURDATE() AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
-        } else if (importantPane.isVisible()) {
-            loadTasksQuery += " AND is_important = 1 AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
-        } else if (categoryTasksPane.isVisible()) {
-            loadTasksQuery += " AND tasks.category_id = (SELECT categories.category_id FROM categories WHERE categories.category_name = ? AND categories.user_id = ?)";
-        }
-        return loadTasksQuery;
-    }
-
-    private Object[] getQueryParameters() {
-        if (categoryTasksPane.isVisible()) {
-            String categoryName = categoryTitle.getText();
-            if (categoryName == null || categoryName.isEmpty()) {
-                throw new IllegalArgumentException("Category name cannot be null or empty.");
-            }
-            return new Object[]{userID, categoryName, userID};
-        } else {
-            return new Object[]{userID};
-        }
+    private void loadTasksByCategory(String categoryName) {
+        tasks.setTasks(taskDAO.loadTasksByCategory(categoryName, userID));
     }
 
     private void loadTasksForCategory(String categoryName) {
@@ -875,41 +744,6 @@ public class Controller {
         categoryTitle.setText(categoryName);
         mainPane = categoryTasksPane;
         loadTasksByCategory(categoryName);
-    }
-
-    private void loadTasksByCategory(String categoryName) {
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority "
-                + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
-                + "WHERE tasks.user_id = ? AND categories.category_name = ? AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
-
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(loadTasksQuery)) {
-
-            preparedStatement.setString(1, userID);
-            preparedStatement.setString(2, categoryName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                tasks.getTasks().clear();
-                if (resultSet.next()) {
-                    do {
-                        int taskID = resultSet.getInt("task_id");
-                        String taskName = resultSet.getString("task_name");
-                        String description = resultSet.getString("task_description");
-                        LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
-                        Status status = Status.valueOf(resultSet.getString("task_status"));
-                        String priority = resultSet.getString("task_priority");
-                        // Set the category name
-                        TaskImpl task = new TaskImpl(taskName, description, dueDate, status, priority, categoryName);
-                        task.setId(taskID);
-                        tasks.addTask(task);
-                    } while (resultSet.next());
-                } else {
-                    System.out.println("No tasks found for category: " + categoryName);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

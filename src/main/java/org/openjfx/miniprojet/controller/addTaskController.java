@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 
 import java.sql.Connection;
@@ -47,6 +48,8 @@ public class addTaskController {
     private JFXRadioButton low;
 
     private final ObservableList<String> categories = FXCollections.observableArrayList();
+
+    private TaskDAO taskDAO = new TaskDAO();
 
 
     public void initialize() {
@@ -117,29 +120,7 @@ public class addTaskController {
     }
 
     private void insertTask(String name, String description, LocalDate dueDate, String category, String priority) {
-        String insertQuery = getString();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
-            preparedStatement.setString(1, userID);
-            preparedStatement.setString(2, name);
-            preparedStatement.setString(3, description);
-            preparedStatement.setDate(4, java.sql.Date.valueOf(dueDate));
-            preparedStatement.setString(5, Status.Started.toString());
-            preparedStatement.setString(6, importantCheck.isSelected() ? "1" : "0");
-            preparedStatement.setDate(7, java.sql.Date.valueOf(LocalDate.now()));
-            preparedStatement.setString(8, category);
-            preparedStatement.setString(9, userID);
-            preparedStatement.setString(10, priority);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0){
-                System.out.println("Task added successfully.");
-            }else{
-                System.out.println("Task not added.");
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        taskDAO.createTasks(name, description, dueDate, Status.Started, category, priority, userID, importantCheck.isSelected());
     }
 
     private static String getString() {

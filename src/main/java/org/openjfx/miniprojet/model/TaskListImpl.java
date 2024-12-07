@@ -41,6 +41,10 @@ public class TaskListImpl extends TaskList{
         return tasks;
     }
 
+    public void setTasks(ObservableList<TaskImpl> tasks){
+        this.tasks.setAll(tasks);
+    }
+
     /**
      * Adds a task to the task list.
      *

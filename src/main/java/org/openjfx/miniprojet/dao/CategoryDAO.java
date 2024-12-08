@@ -10,36 +10,16 @@ import java.sql.SQLException;
 public class CategoryDAO {
 
     public void addCategory(String categoryName, String userID) {
-        String query = "INSERT INTO categories (category_name, user_id) VALUES (?, ?)";
-        try {
-            Database.getInstance().executeUpdate(query, categoryName, userID);
-        } catch (SQLException e) {
-            throw new DataAccessException("Error adding category", e);
-        }
+        executeUpdate("INSERT INTO categories (category_name, user_id) VALUES (?, ?)", "Error adding category", categoryName, userID);
     }
 
-    public void deleteCategory(String categoryName, String userID, boolean deleteTask){
-        if (deleteTask){
-            String deleteTasksQuery = "DELETE FROM tasks WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
-            try{
-                Database.getInstance().executeUpdate(deleteTasksQuery, categoryName, userID);
-            } catch (SQLException e){
-                throw new DataAccessException("Error deleting tasks", e);
-            }
-        } else{
-            String updateTasksQuery = "UPDATE tasks SET category_id = (SELECT category_id FROM categories WHERE category_name = 'General' AND user_id = ?) WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)";
-            try{
-                Database.getInstance().executeUpdate(updateTasksQuery, userID, categoryName, userID);
-            } catch (SQLException e){
-                throw new DataAccessException("Error updating tasks", e);
-            }
+    public void deleteCategory(String categoryName, String userID, boolean deleteTask) {
+        if (deleteTask) {
+            executeUpdate("DELETE FROM tasks WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)", "Error deleting tasks", categoryName, userID);
+        } else {
+            executeUpdate("UPDATE tasks SET category_id = (SELECT category_id FROM categories WHERE category_name = 'General' AND user_id = ?) WHERE category_id = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?)", "Error updating tasks", userID, categoryName, userID);
         }
-        String deleteCategoryQuery = "DELETE FROM categories WHERE category_name = ? AND user_id = ?";
-        try{
-            Database.getInstance().executeUpdate(deleteCategoryQuery, categoryName, userID);
-        } catch (SQLException e){
-            throw new DataAccessException("Error deleting category", e);
-        }
+        executeUpdate("DELETE FROM categories WHERE category_name = ? AND user_id = ?", "Error deleting category", categoryName, userID);
     }
 
     public ObservableList<String> loadCategories(String userID) {
@@ -53,19 +33,26 @@ public class CategoryDAO {
                 String category = resultSet.getString("category_name");
                 if (category.equals("General")) {
                     generalExists = true;
-                    continue;
+                } else {
+                    tempCategories.add(category);
                 }
-                tempCategories.add(category);
             }
             if (!generalExists) {
-                String addGeneralQuery = "INSERT INTO categories (category_name, user_id) VALUES ('General', ?)";
-                Database.getInstance().executeUpdate(addGeneralQuery, userID);
+                executeUpdate("INSERT INTO categories (category_name, user_id) VALUES ('General', ?)", "Error adding General category", userID);
             }
             categories.add("General");
             categories.addAll(tempCategories);
-            return categories;
         } catch (SQLException e) {
             throw new DataAccessException("Error loading categories", e);
+        }
+        return categories;
+    }
+
+    private void executeUpdate(String query, String errorMessage, String... params) {
+        try {
+            Database.getInstance().executeUpdate(query, params);
+        } catch (SQLException e) {
+            throw new DataAccessException(errorMessage, e);
         }
     }
 }

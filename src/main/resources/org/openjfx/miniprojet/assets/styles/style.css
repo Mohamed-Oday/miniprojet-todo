@@ -416,3 +416,188 @@
     -fx-background-color: "#4b423a";
 }
 
+/* Add these new styles for the info pane */
+.info-pane-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.85);
+}
+
+.task-info-container {
+    -fx-background-color: linear-gradient(to bottom right, #2B2B2B, #1a1a1a);
+    -fx-padding: 30px;
+    -fx-spacing: 25;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+    -fx-max-width: 700px;
+    -fx-max-height: 800px;
+}
+
+.info-header {
+    -fx-padding: 0 0 25 0;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.info-header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+}
+
+.close-button {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 0);
+}
+
+.close-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+}
+
+.glass-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-background-radius: 15px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.glass-panel:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.1), 15, 0, 0, 0);
+}
+
+.main-info-section {
+    -fx-padding: 20px;
+    -fx-background-color: linear-gradient(to right, rgba(33, 150, 243, 0.3), rgba(33, 150, 243, 0.1));
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.2), 10, 0, 0, 0);
+}
+
+.main-info-section:hover {
+    -fx-background-color: linear-gradient(to right, rgba(33, 150, 243, 0.4), rgba(33, 150, 243, 0.2));
+    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.3), 15, 0, 0, 0);
+}
+
+.section-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #aaa;
+    -fx-font-weight: bold;
+    -fx-text-transform: uppercase;
+}
+
+.info-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.info-description {
+    -fx-font-size: 15px;
+    -fx-text-fill: #fff;
+    -fx-wrap-text: true;
+    -fx-padding: 10 0 0 0;
+    -fx-opacity: 0.9;
+}
+
+.comments-section {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-padding: 20px;
+    -fx-spacing: 15;
+    -fx-background-radius: 15px;
+    -fx-min-height: 100px;
+    -fx-max-height: 250px;
+}
+
+.info-comments {
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+    -fx-wrap-text: true;
+    -fx-padding: 15px;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 10px;
+    -fx-line-spacing: 1.5;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 1;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 5px;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+.status-chip, .priority-chip, .category-chip {
+    -fx-padding: 8 16;
+    -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.status-chip:hover, .priority-chip:hover, .category-chip:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.status-chip {
+    -fx-background-color: #2196F3;
+}
+
+.priority-chip[text="High"] {
+    -fx-background-color: #f44336;
+}
+
+.priority-chip[text="Medium"] {
+    -fx-background-color: #ff9800;
+}
+
+.priority-chip[text="Low"] {
+    -fx-background-color: #4caf50;
+}
+
+.category-chip {
+    -fx-background-color: #9c27b0;
+}
+
+.date-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 10;
+}
+

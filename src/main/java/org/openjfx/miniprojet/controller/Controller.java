@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 public class Controller {
@@ -772,6 +773,33 @@ public class Controller {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    private void displayTaskInfo(TaskImpl task) {
+        infoPane.setVisible(true);
+        infoName.setText(task.getName());
+        infoDesc.setText(task.getDescription());
+        
+        // Format multiple comments with line breaks
+        List<String> comments = task.getComments();
+        if (comments != null && !comments.isEmpty()) {
+            StringBuilder formattedComments = new StringBuilder();
+            for (int i = 0; i < comments.size(); i++) {
+                formattedComments.append(i + 1).append(". ").append(comments.get(i));
+                if (i < comments.size() - 1) {
+                    formattedComments.append("\n\n"); // Add double line break between comments
+                }
+            }
+            infoComments.setText(formattedComments.toString());
+        } else {
+            infoComments.setText("No comments");
+        }
+        
+        infoDate.setText(task.getStartDate().toString());
+        infoDueDate.setText(task.getDueDate().toString());
+        infoStatus.setText(task.getStatus().toString());
+        infoPriority.setText(task.getPriority());
+        infoCategory.setText(task.getCategory());
     }
 
 }

@@ -60,14 +60,8 @@ public class TaskImpl implements Task {
      *
      * @return the list of comments
      */
-    public String  getComments() {
-        String commentString = "";
-        int index = 1;
-        for (String comment : comments) {
-            commentString += index + ". " + comment + "\n\t\t\t";
-            index++;
-        }
-        return commentString;
+    public List<String> getComments() {
+        return comments;
     }
 
     /**

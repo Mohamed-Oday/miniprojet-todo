@@ -372,4 +372,47 @@
     -fx-text-fill: "#FFFFFF";
 }
 
+/* AnchorPane styles */
+#task-info-pane {
+
+}
+
+/* VBox styles */
+#task-info-box {
+    -fx-background-color: #2B2B2B; /* Dark background */
+    -fx-padding: 20; /* Add padding to give breathing room */
+    -fx-spacing: 20; /* Add spacing between the fields */
+    -fx-alignment: center; /* Center align all items */
+    -fx-border-color: #444;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 10, 0, 4, 4);
+}
+
+/* Label styles */
+.task-label {
+    -fx-text-fill: #e0e0e0; /* Light gray text for contrast */
+    -fx-font-size: 16px;    /* Modern font size */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 2, 0, 1, 1);
+    -fx-padding: 5 0 5 0; /* Add vertical padding for better readability */
+}
+
+/* Add subtle hover animation for labels */
+.task-label:hover {
+    -fx-text-fill: #f39c12; /* Highlight with a golden accent */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.8), 4, 0, 1, 1);
+}
+
+.close-Button{
+    -fx-background-color: "#3b3b3b";
+    -fx-background-radius: 99999;
+}
+
+.close-Button:hover{
+    -fx-background-color: "#4b423a";
+}
 

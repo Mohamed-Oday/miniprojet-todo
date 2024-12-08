@@ -69,6 +69,7 @@ public class TaskDAO {
                 int taskID = resultSet.getInt("task_id");
                 String taskName = resultSet.getString("task_name");
                 String taskDescription = resultSet.getString("task_description");
+                LocalDate taskStartDate = resultSet.getDate("task_startDate").toLocalDate();
                 LocalDate taskDueDate = resultSet.getDate("task_dueDate").toLocalDate();
                 Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
                 String taskPriority = resultSet.getString("task_priority");
@@ -76,8 +77,9 @@ public class TaskDAO {
                 if (taskCategory == null){
                     taskCategory = "General";
                 }
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory);
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory, taskStartDate);
                 task.setId(taskID);
+                loadTaskComments(task, userID);
                 tasks.addTask(task);
             }
             return tasks.getTasks();
@@ -86,8 +88,19 @@ public class TaskDAO {
         }
     }
 
+    public void loadTaskComments(TaskImpl task, String userID){
+        String loadCommentsQuery = "SELECT comment FROM comments WHERE task_id = ? AND user_id = ?";
+        try (ResultSet resultSet = Database.getInstance().executeQuery(loadCommentsQuery, task.getId(), userID)){
+            while (resultSet.next()){
+                task.addComment(resultSet.getString("comment"));
+            }
+        } catch (SQLException e){
+            throw new DataAccessException("Error loading comments", e);
+        }
+    }
+
     public ObservableList<TaskImpl> loadTasksByCategory(String categoryName, String userID){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, tasks.task_startDate "
                 + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
                 + "WHERE tasks.user_id = ? AND categories.category_name = ? AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
@@ -96,10 +109,11 @@ public class TaskDAO {
                 int taskID = resultSet.getInt("task_id");
                 String taskName = resultSet.getString("task_name");
                 String taskDescription = resultSet.getString("task_description");
+                LocalDate taskStartDate = resultSet.getDate("task_startDate").toLocalDate();
                 LocalDate taskDueDate = resultSet.getDate("task_dueDate").toLocalDate();
                 Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
                 String taskPriority = resultSet.getString("task_priority");
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName);
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName, taskStartDate);
                 task.setId(taskID);
                 tasks.addTask(task);
             }
@@ -119,6 +133,16 @@ public class TaskDAO {
         }
     }
 
+    public void addComment(String comment, TaskImpl task, String userID) {
+        String insertQuery = "INSERT INTO comments (comment, task_id, user_id, creation_date) VALUES (?, ?, ?, ?)";
+        try{
+            Database.getInstance().executeUpdate(insertQuery, comment, task.getId(), userID, Date.valueOf(LocalDate.now()));
+            task.addComment(comment);
+        } catch (SQLException e){
+            throw new DataAccessException("Error adding comment", e);
+        }
+    }
+
     private Object[] getQueryParams(String userID, AnchorPane visiblePane, String categoryName){
         if (visiblePane.getId().equals("categoryTasksPane")){
             return new Object[]{userID ,categoryName, userID};
@@ -127,7 +151,7 @@ public class TaskDAO {
     }
 
     private String getTasksQuery(AnchorPane visiblePane){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name, tasks.task_startDate "
                 + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id"
                 + " WHERE tasks.user_id = ?";
 

@@ -93,6 +93,16 @@ public class Controller {
     @FXML private ToggleGroup priorityGroup;
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private MenuButton sortingMenu;
+    @FXML private Label infoName;
+    @FXML private Label infoDesc;
+    @FXML private Label infoDate;
+    @FXML private Label infoDueDate;
+    @FXML private Label infoStatus;
+    @FXML private Label infoPriority;
+    @FXML private Label infoCategory;
+    @FXML private AnchorPane infoPane;
+    @FXML private Label infoComments;
+
 
     private final TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
     private final TaskDAO taskDAO = new TaskDAO();
@@ -101,6 +111,7 @@ public class Controller {
     private String userID;
     private String latestTaskName;
     private TaskImpl selectedTask;
+    private String comment;
 
 
     @FXML
@@ -114,6 +125,12 @@ public class Controller {
         setupSortingMenu();
         setupPriorityRadioButtons();
         setupTodayLabel();
+    }
+
+    @FXML
+    private void closeInfoPane() {
+        infoPane.setVisible(false);
+        mainPane.setDisable(false);
     }
 
     private void setupStatusComboBox() {
@@ -261,12 +278,38 @@ public class Controller {
             showNotification("Task completed successfully.", "Task", "has been completed", task.getName());
         });
         Button editButton = createButton("✎", Font.font("System Bold", FontWeight.BOLD, 20), "#FFD700", event -> handleEditTask(task));
+        Button infoButton = createButton("\uD835\uDCF2", Font.font("System Bold", FontWeight.BOLD, 16), "#00FF7F", event -> {
+            infoName.setText("Name:        \t" + task.getName());
+            infoDesc.setText("Description: \t" + task.getDescription());
+            infoDate.setText("Start Date:  \t" + task.getStartDate().toString());
+            infoDueDate.setText("Due Date:    \t" + task.getDueDate().toString());
+            infoStatus.setText("Status:      \t" + task.getStatus().toString());
+            infoPriority.setText("Priority:    \t" + task.getPriority());
+            infoCategory.setText("Category:    \t" + task.getCategory());
+            infoComments.setText("Comments:    \t" + task.getComments());
+            System.out.println("Comments: " +task.getComments());
+            mainPane.setDisable(true);
+            infoPane.setVisible(true);
+        });
+        Button commentButton = createButton("\uD83D\uDCAC", Font.font("System Bold", FontWeight.BOLD, 16), "#FFD700", event -> {
+            try {
+                handleCommentButton(task);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        HBox.setMargin(commentButton, new Insets(0, 5, 0, 0));
+        HBox.setMargin(infoButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(editButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(checkButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(statusLabel, new Insets(0, 15, 0, 0));
-        container.getChildren().addAll(checkButton, nameLabel, statusLabel, priorityLabel, editButton, deleteButton);
+        container.getChildren().addAll(checkButton, nameLabel, statusLabel, priorityLabel, commentButton, infoButton, editButton, deleteButton);
         container.setAlignment(Pos.CENTER_LEFT);
         return container;
+    }
+
+    private void handleCommentButton(TaskImpl task) throws IOException{
+        showAddCommentDialog(task);
     }
 
     private Label createLabel(String text, String style) {
@@ -484,8 +527,9 @@ public class Controller {
         String taskDescription = taskDescriptionField.getText();
         LocalDate taskDueDate = TaskDueDateField.getValue();
         Status taskStatus = TaskStatusField.getValue();
+        String categoryName = categoryComboBox.getValue();
         String taskPriority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
-        task.editTask(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryTitle.getText());
+        task.editTask(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName);
     }
 
     @FXML
@@ -655,6 +699,22 @@ public class Controller {
         showAddCategoryDialog();
     }
 
+    private void showAddCommentDialog(TaskImpl task) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/addComment.fxml"));
+        Parent root = loader.load();
+        AddCommentController addCommentController = loader.getController();
+        Stage addCommentStage = new Stage();
+        addCommentStage.setTitle("Add Comment");
+        addCommentStage.setScene(new Scene(root));
+        addCommentStage.initStyle(StageStyle.UTILITY);
+        addCommentStage.initModality(Modality.APPLICATION_MODAL);
+        addCommentController.setUserID(userID);
+        addCommentController.setTask(task);
+        addCommentController.setMainController(this);
+        addCommentController.setAddCommentStage(addCommentStage);
+        addCommentStage.showAndWait();
+    }
+
     private void showAddTaskDialog() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/addTask.fxml"));
         Parent root = loader.load();
@@ -708,6 +768,10 @@ public class Controller {
         for (Label imageLabel : userImage) {
             imageLabel.setText(initials);
         }
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }

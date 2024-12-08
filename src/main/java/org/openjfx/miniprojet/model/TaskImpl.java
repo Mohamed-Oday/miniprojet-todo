@@ -12,6 +12,7 @@ public class TaskImpl implements Task {
     private int id;
     private String name;
     private String description;
+    private LocalDate startDate;
     private LocalDate dueDate;
     private Status status;
     private final List<String> comments;
@@ -26,7 +27,7 @@ public class TaskImpl implements Task {
      * @param dueDate the due date of the task
      * @param status the status of the task
      */
-    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category) {
+    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
@@ -34,6 +35,7 @@ public class TaskImpl implements Task {
         this.comments = new ArrayList<>();
         this.priority = priority;
         this.category = category;
+        this.startDate = startDate;
     }
 
     public void setCategory(String category) {
@@ -58,8 +60,14 @@ public class TaskImpl implements Task {
      *
      * @return the list of comments
      */
-    public List<String> getComments() {
-        return comments;
+    public String  getComments() {
+        String commentString = "";
+        int index = 1;
+        for (String comment : comments) {
+            commentString += index + ". " + comment + "\n\t\t\t";
+            index++;
+        }
+        return commentString;
     }
 
     /**
@@ -96,6 +104,14 @@ public class TaskImpl implements Task {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    private void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
     /**

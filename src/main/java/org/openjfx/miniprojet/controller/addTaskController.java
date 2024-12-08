@@ -5,15 +5,13 @@ import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 import java.time.LocalDate;
+import javafx.scene.control.DatePicker;
 
 public class addTaskController {
     @FXML
@@ -49,7 +47,6 @@ public class addTaskController {
 
     private final CategoryDAO categoryDAO = new CategoryDAO();
 
-
     public void initialize() {
         priorityGroup = new ToggleGroup();
         high.setToggleGroup(priorityGroup);
@@ -57,6 +54,8 @@ public class addTaskController {
         low.setToggleGroup(priorityGroup);
         low.setSelected(true);
         categoryComboBox.setValue("General");
+        setupDatePicker();
+
     }
 
     private String userID;
@@ -122,5 +121,18 @@ public class addTaskController {
     @FXML
     public LocalDate getTaskDueDate() {
         return dueDateField.getValue();
+    }
+
+    public void setupDatePicker() {
+        dueDateField.setDayCellFactory(datePicker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
+            }
+        });
     }
 }

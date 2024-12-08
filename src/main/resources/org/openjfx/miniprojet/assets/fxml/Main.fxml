@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -146,18 +147,17 @@
                   </VBox.margin>
                   <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                      <Label prefHeight="39.0" prefWidth="200.0" text="My Day" textFill="WHITE">
                         <font>
-                           <Font name="Segoe UI Bold" size="32.0"/>
+                           <Font name="Segoe UI Bold" size="32.0" />
                         </font>
                      </Label>
-                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                     <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search"
-                                styleClass="search-bar" stylesheets="@../styles/style.css">
+                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search" styleClass="search-bar" stylesheets="@../styles/style.css">
                         <font>
-                           <Font name="Segoe UI" size="13.0"/>
+                           <Font name="Segoe UI" size="13.0" />
                         </font>
                      </TextField>
                   </HBox>
@@ -764,35 +764,35 @@
          <HBox alignment="CENTER" prefHeight="0.0" prefWidth="324.0">
             <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
                <HBox.margin>
-                  <Insets right="40.0"/>
+                  <Insets right="40.0" />
                </HBox.margin>
                <font>
-                  <Font name="Segoe UI" size="13.0"/>
+                  <Font name="Segoe UI" size="13.0" />
                </font>
                <toggleGroup>
-                  <ToggleGroup fx:id="priorityGroup"/>
+                  <ToggleGroup fx:id="priorityGroup" />
                </toggleGroup>
                <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
                </selectedColor>
             </JFXRadioButton>
             <JFXRadioButton fx:id="medium" text="Medium" textFill="WHITE" toggleGroup="$priorityGroup">
                <HBox.margin>
-                  <Insets right="40.0"/>
+                  <Insets right="40.0" />
                </HBox.margin>
                <font>
-                  <Font name="Segoe UI" size="13.0"/>
+                  <Font name="Segoe UI" size="13.0" />
                </font>
                <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
                </selectedColor>
             </JFXRadioButton>
             <JFXRadioButton fx:id="low" text="Low" textFill="WHITE" toggleGroup="$priorityGroup">
                <font>
-                  <Font name="Segoe UI" size="13.0"/>
+                  <Font name="Segoe UI" size="13.0" />
                </font>
                <selectedColor>
-                  <Color green="0.7215686440467834" blue="0.8313725590705872"/>
+                  <Color green="0.7215686440467834" blue="0.8313725590705872" />
                </selectedColor>
             </JFXRadioButton>
          </HBox>
@@ -830,4 +830,28 @@
          </Label>
       </VBox>
    </AnchorPane>
+   <AnchorPane fx:id="infoPane" layoutX="625.0" layoutY="255.0" styleClass="list-transparent" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox id="task-info-box" alignment="BASELINE_LEFT" layoutX="297.0" layoutY="210.0" prefHeight="656.0" prefWidth="689.0" AnchorPane.bottomAnchor="150" AnchorPane.leftAnchor="700" AnchorPane.rightAnchor="700" AnchorPane.topAnchor="150">
+         <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="16.0" prefWidth="611.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#closeInfoPane" styleClass="close-Button" stylesheets="@../styles/style.css" text="X" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <Label fx:id="infoName" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Name" />
+            <Label fx:id="infoDesc" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Description" />
+            <Label fx:id="infoComments" alignment="TOP_LEFT" minHeight="200.0" prefHeight="200.0" prefWidth="700.0" styleClass="task-label" text="Comments" />
+            <Label fx:id="infoDate" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Creation Date" />
+            <Label fx:id="infoDueDate" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Due Date" />
+            <Label fx:id="infoStatus" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Status" />
+            <Label fx:id="infoPriority" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Priority" />
+            <Label fx:id="infoCategory" prefHeight="29.0" prefWidth="672.0" styleClass="task-label" text="Task Category" />
+         </children>
+      </VBox>
+   </AnchorPane>
+
 </AnchorPane>

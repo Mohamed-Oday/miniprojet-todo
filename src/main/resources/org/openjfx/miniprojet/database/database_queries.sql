@@ -40,3 +40,15 @@ CREATE TABLE userinforamtion (
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (username)
 );
+
+-- Create table: comments
+
+CREATE TABLE comments (
+  comment_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  comment VARCHAR(255),
+  task_id INT NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  creation_date DATE NOT NULL,
+  FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES userinforamtion(username)
+)

@@ -424,20 +424,21 @@
 .task-info-container {
     -fx-background-color: linear-gradient(to bottom right, #2B2B2B, #1a1a1a);
     -fx-padding: 30px;
-    -fx-spacing: 25;
+    -fx-spacing: 20;
     -fx-background-radius: 25px;
     -fx-border-radius: 25px;
     -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-width: 1px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
-    -fx-max-width: 700px;
-    -fx-max-height: 800px;
+    -fx-max-width: 900px;
+    -fx-max-height: 750px;
 }
 
 .info-header {
     -fx-padding: 0 0 25 0;
     -fx-border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent;
     -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
 }
 
 .info-header-title {
@@ -455,18 +456,18 @@
     -fx-min-height: 40px;
     -fx-background-radius: 20px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 0);
 }
 
 .close-button:hover {
     -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
 }
 
 .glass-panel {
     -fx-background-color: rgba(255, 255, 255, 0.07);
     -fx-background-radius: 15px;
-    -fx-padding: 20px;
+    -fx-padding: 15px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
     -fx-transition: all 0.3s ease-in-out;
 }
@@ -477,7 +478,7 @@
 }
 
 .main-info-section {
-    -fx-padding: 20px;
+    -fx-padding: 15px;
     -fx-background-color: linear-gradient(to right, rgba(33, 150, 243, 0.3), rgba(33, 150, 243, 0.1));
     -fx-background-radius: 15px;
     -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.2), 10, 0, 0, 0);
@@ -496,7 +497,7 @@
 }
 
 .info-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
@@ -511,14 +512,17 @@
 
 .comments-section {
     -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-padding: 20px;
-    -fx-spacing: 15;
+    -fx-padding: 15px;
+    -fx-spacing: 10;
     -fx-background-radius: 15px;
     -fx-min-height: 100px;
-    -fx-max-height: 250px;
+    -fx-pref-height: 150px;
+    -fx-max-height: 200px;
+    -fx-fit-to-width: true;
 }
 
 .info-comments {
+    -fx-font-family: "Segoe UI";
     -fx-font-size: 14px;
     -fx-text-fill: #fff;
     -fx-wrap-text: true;
@@ -526,17 +530,29 @@
     -fx-background-color: rgba(255, 255, 255, 0.05);
     -fx-background-radius: 10px;
     -fx-line-spacing: 1.5;
+    -fx-cursor: default;
+    -fx-fit-to-width: true;
 }
 
+/* Style for the comments container */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-padding: 0;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-fit-to-width: true;
+    -fx-min-height: 80px;
+    -fx-pref-height: 130px;
+    -fx-max-height: 180px;
 }
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
 }
 
+/* Customize scrollbar */
 .scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 1;
@@ -553,6 +569,22 @@
 
 .scroll-pane .corner {
     -fx-background-color: transparent;
+}
+
+/* Add hover effect for comments section */
+.comments-section:hover .info-comments {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.1), 10, 0, 0, 0);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Style for individual comments */
+.info-comments {
+    -fx-padding: 15px;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
 }
 
 .status-chip, .priority-chip, .category-chip {
@@ -596,8 +628,167 @@
     -fx-font-size: 14px;
     -fx-text-fill: #fff;
     -fx-font-weight: bold;
+    -fx-padding: 8 0;
+    -fx-background-color: transparent;
+    -fx-min-width: 0;
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.info-content {
+    -fx-spacing: 15;
+    -fx-fit-to-width: true;
+}
+
+/* Update the grid labels */
+.grid-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #aaa;
+    -fx-font-weight: bold;
+    -fx-text-transform: uppercase;
+    -fx-padding: 0 0 5 0;
+    -fx-min-width: 0;
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Add styles for the info header actions */
+.info-header-actions {
+    -fx-spacing: 10;
+    -fx-alignment: center-right;
+}
+
+/* Style for the delete button */
+.delete-button {
+    -fx-background-color: rgba(244, 67, 54, 0.1);
+    -fx-text-fill: #f44336;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
     -fx-padding: 8 16;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-border-color: #f44336;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+}
+
+.delete-button:hover {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(244, 67, 54, 0.4), 10, 0, 0, 0);
+}
+
+/* Update the status and metadata boxes */
+.status-box, .priority-box, .date-box {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-background-radius: 12;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-radius: 12;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+    -fx-pref-width: -1;
+}
+
+.status-box:hover, .priority-box:hover, .date-box:hover, .category-box:hover {
     -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Update the container HBox */
+.info-metadata-container {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-fill-height: true;
+}
+
+/* Update the category box */
+.category-box {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-background-radius: 12;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-radius: 12;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+    -fx-pref-width: -1;
+}
+
+/* Update the status and metadata boxes */
+.status-box, .priority-box, .date-box {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-background-radius: 12;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-radius: 12;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+    -fx-pref-width: -1;
+}
+
+/* Update the chips to have similar background styling */
+.status-chip, .priority-chip, .date-value {
+    -fx-padding: 8 16;
+    -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
+    -fx-min-width: 0;
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+}
+
+/* Specific colors for different statuses */
+.status-chip[text="Completed"] {
+    -fx-background-color: #2196F3;
+}
+
+.status-chip[text="In Progress"] {
+    -fx-background-color: #FF9800;
+}
+
+.status-chip[text="Not Started"] {
+    -fx-background-color: #9E9E9E;
+}
+
+/* Priority colors */
+.priority-chip[text="High"] {
+    -fx-background-color: #f44336;
+}
+
+.priority-chip[text="Medium"] {
+    -fx-background-color: #ff9800;
+}
+
+.priority-chip[text="Low"] {
+    -fx-background-color: #4caf50;
+}
+
+/* Date styling */
+.date-value {
+    -fx-background-color: #607D8B;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+/* Hover effects for all chips */
+.status-chip:hover, .priority-chip:hover, .date-value:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
 }
 

@@ -835,7 +835,11 @@
       </VBox>
    </AnchorPane>
    <AnchorPane fx:id="infoPane" styleClass="info-pane-overlay" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox id="task-info-box" alignment="CENTER" styleClass="task-info-container" AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="300" AnchorPane.rightAnchor="300" AnchorPane.topAnchor="100">
+      <VBox id="task-info-box" alignment="CENTER" styleClass="task-info-container" 
+            AnchorPane.bottomAnchor="100" 
+            AnchorPane.leftAnchor="200" 
+            AnchorPane.rightAnchor="200" 
+            AnchorPane.topAnchor="100">
          <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-header">
             <Label text="Task Details" styleClass="info-header-title" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#closeInfoPane" styleClass="close-button" text="×" />
@@ -855,9 +859,9 @@
             </VBox>
             
             <!-- Comments Section -->
-            <VBox styleClass="comments-section, glass-panel">
+            <VBox styleClass="comments-section, glass-panel" VBox.vgrow="ALWAYS">
                 <Label text="Comments" styleClass="section-label" />
-                <ScrollPane fitToWidth="true" prefViewportHeight="200" styleClass="scroll-pane">
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
                     <content>
                         <Label fx:id="infoComments" styleClass="info-comments" wrapText="true" text="Comments" />
                     </content>
@@ -865,7 +869,7 @@
             </VBox>
             
             <!-- Status and Priority Section -->
-            <HBox spacing="20">
+            <HBox spacing="20" styleClass="info-metadata-container">
                 <VBox styleClass="status-box, glass-panel" HBox.hgrow="ALWAYS">
                     <Label text="Status" styleClass="grid-label" />
                     <Label fx:id="infoStatus" styleClass="status-chip" />
@@ -878,7 +882,7 @@
             </HBox>
             
             <!-- Dates Section -->
-            <HBox spacing="20">
+            <HBox spacing="20" styleClass="info-metadata-container">
                 <VBox styleClass="date-box, glass-panel" HBox.hgrow="ALWAYS">
                     <Label text="Created" styleClass="grid-label" />
                     <Label fx:id="infoDate" styleClass="date-value" />
@@ -891,7 +895,7 @@
             </HBox>
             
             <!-- Category Section -->
-            <VBox styleClass="category-box, glass-panel">
+            <VBox styleClass="category-box, glass-panel" VBox.vgrow="ALWAYS">
                 <Label text="Category" styleClass="grid-label" />
                 <Label fx:id="infoCategory" styleClass="category-chip" />
             </VBox>

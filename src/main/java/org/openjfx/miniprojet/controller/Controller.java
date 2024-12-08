@@ -280,15 +280,7 @@ public class Controller {
         });
         Button editButton = createButton("✎", Font.font("System Bold", FontWeight.BOLD, 20), "#FFD700", event -> handleEditTask(task));
         Button infoButton = createButton("\uD835\uDCF2", Font.font("System Bold", FontWeight.BOLD, 16), "#00FF7F", event -> {
-            infoName.setText("Name:        \t" + task.getName());
-            infoDesc.setText("Description: \t" + task.getDescription());
-            infoDate.setText("Start Date:  \t" + task.getStartDate().toString());
-            infoDueDate.setText("Due Date:    \t" + task.getDueDate().toString());
-            infoStatus.setText("Status:      \t" + task.getStatus().toString());
-            infoPriority.setText("Priority:    \t" + task.getPriority());
-            infoCategory.setText("Category:    \t" + task.getCategory());
-            infoComments.setText("Comments:    \t" + task.getComments());
-            System.out.println("Comments: " +task.getComments());
+            displayTaskInfo(task);
             mainPane.setDisable(true);
             infoPane.setVisible(true);
         });
@@ -780,19 +772,19 @@ public class Controller {
         infoName.setText(task.getName());
         infoDesc.setText(task.getDescription());
         
-        // Format multiple comments with line breaks
+        // Format multiple comments with better styling
         List<String> comments = task.getComments();
         if (comments != null && !comments.isEmpty()) {
             StringBuilder formattedComments = new StringBuilder();
             for (int i = 0; i < comments.size(); i++) {
-                formattedComments.append(i + 1).append(". ").append(comments.get(i));
+                formattedComments.append("• ").append(comments.get(i));
                 if (i < comments.size() - 1) {
                     formattedComments.append("\n\n"); // Add double line break between comments
                 }
             }
             infoComments.setText(formattedComments.toString());
         } else {
-            infoComments.setText("No comments");
+            infoComments.setText("No comments yet");
         }
         
         infoDate.setText(task.getStartDate().toString());

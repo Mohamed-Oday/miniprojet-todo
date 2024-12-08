@@ -790,7 +790,13 @@ public class Controller {
         infoDate.setText(task.getStartDate().toString());
         infoDueDate.setText(task.getDueDate().toString());
         infoStatus.setText(task.getStatus().toString());
+        infoStatus.getStyleClass().clear();
+        infoStatus.getStyleClass().addAll("status-chip", "status-" + task.getStatus().toString().toLowerCase());
+        
         infoPriority.setText(task.getPriority());
+        infoPriority.getStyleClass().clear();
+        infoPriority.getStyleClass().addAll("priority-chip", "priority-" + task.getPriority().toLowerCase());
+        
         infoCategory.setText(task.getCategory());
     }
 

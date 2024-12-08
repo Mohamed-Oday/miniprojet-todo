@@ -23,9 +23,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.Controller">
    <AnchorPane fx:id="myDayPane" styleClass="myDay-background" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -835,35 +832,36 @@
       </VBox>
    </AnchorPane>
    <AnchorPane fx:id="infoPane" styleClass="info-pane-overlay" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox id="task-info-box" alignment="CENTER" styleClass="task-info-container" 
-            AnchorPane.bottomAnchor="100" 
-            AnchorPane.leftAnchor="200" 
-            AnchorPane.rightAnchor="200" 
-            AnchorPane.topAnchor="100">
+      <VBox id="task-info-box" alignment="CENTER" styleClass="task-info-container" AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="100">
          <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-header">
-            <Label text="Task Details" styleClass="info-header-title" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onAction="#closeInfoPane" styleClass="close-button" text="×" />
+            <Label styleClass="info-header-title" text="Task Details" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#closeInfoPane" styleClass="close-button" text="×">
+               <font>
+                  <Font name="Segoe UI" size="24.0" />
+               </font>
+            </Button>
          </HBox>
          
          <VBox spacing="25" styleClass="info-content">
             <!-- Task Name Section -->
             <VBox styleClass="info-section, main-info-section">
-                <Label text="Task Name" styleClass="section-label" />
+                <Label styleClass="section-label" text="Task Name" />
                 <Label fx:id="infoName" styleClass="info-title" text="Task Name" wrapText="true" />
             </VBox>
             
             <!-- Description Section -->
             <VBox styleClass="info-section, glass-panel">
-                <Label text="Description" styleClass="section-label" />
-                <Label fx:id="infoDesc" styleClass="info-description" wrapText="true" text="Task Description" />
+                <Label styleClass="section-label" text="Description" />
+                <Label fx:id="infoDesc" styleClass="info-description" text="Task Description" wrapText="true" />
             </VBox>
             
             <!-- Comments Section -->
             <VBox styleClass="comments-section, glass-panel" VBox.vgrow="ALWAYS">
-                <Label text="Comments" styleClass="section-label" />
-                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+                <Label styleClass="section-label" text="Comments" />
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
                     <content>
-                        <Label fx:id="infoComments" styleClass="info-comments" wrapText="true" text="Comments" />
+                        <Label fx:id="infoComments" styleClass="info-comments" text="Comments" wrapText="true" />
                     </content>
                 </ScrollPane>
             </VBox>
@@ -871,12 +869,12 @@
             <!-- Status and Priority Section -->
             <HBox spacing="20" styleClass="info-metadata-container">
                 <VBox styleClass="status-box, glass-panel" HBox.hgrow="ALWAYS">
-                    <Label text="Status" styleClass="grid-label" />
+                    <Label styleClass="grid-label" text="Status" />
                     <Label fx:id="infoStatus" styleClass="status-chip" />
                 </VBox>
                 
                 <VBox styleClass="priority-box, glass-panel" HBox.hgrow="ALWAYS">
-                    <Label text="Priority" styleClass="grid-label" />
+                    <Label styleClass="grid-label" text="Priority" />
                     <Label fx:id="infoPriority" styleClass="priority-chip" />
                 </VBox>
             </HBox>
@@ -884,19 +882,19 @@
             <!-- Dates Section -->
             <HBox spacing="20" styleClass="info-metadata-container">
                 <VBox styleClass="date-box, glass-panel" HBox.hgrow="ALWAYS">
-                    <Label text="Created" styleClass="grid-label" />
+                    <Label styleClass="grid-label" text="Created" />
                     <Label fx:id="infoDate" styleClass="date-value" />
                 </VBox>
                 
                 <VBox styleClass="date-box, glass-panel" HBox.hgrow="ALWAYS">
-                    <Label text="Due Date" styleClass="grid-label" />
+                    <Label styleClass="grid-label" text="Due Date" />
                     <Label fx:id="infoDueDate" styleClass="date-value" />
                 </VBox>
             </HBox>
             
             <!-- Category Section -->
             <VBox styleClass="category-box, glass-panel" VBox.vgrow="ALWAYS">
-                <Label text="Category" styleClass="grid-label" />
+                <Label styleClass="grid-label" text="Category" />
                 <Label fx:id="infoCategory" styleClass="category-chip" />
             </VBox>
          </VBox>

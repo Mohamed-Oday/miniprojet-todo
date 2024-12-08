@@ -681,8 +681,9 @@
     -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-radius: 12;
     -fx-min-width: 0;
+    -fx-pref-width: 100%;
     -fx-max-width: Infinity;
-    -fx-pref-width: -1;
+    -fx-hgrow: ALWAYS;
 }
 
 .status-box:hover, .priority-box:hover, .date-box:hover, .category-box:hover {
@@ -695,6 +696,7 @@
     -fx-alignment: center;
     -fx-padding: 0;
     -fx-fill-height: true;
+    -fx-min-width: 100%;
 }
 
 .category-box {
@@ -719,8 +721,9 @@
     -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-radius: 12;
     -fx-min-width: 0;
+    -fx-pref-width: 100%;
     -fx-max-width: Infinity;
-    -fx-pref-width: -1;
+    -fx-hgrow: ALWAYS;
 }
 
 .status-chip, .priority-chip, .date-value {
@@ -733,8 +736,9 @@
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
     -fx-min-width: 0;
-    -fx-pref-width: -1;
+    -fx-pref-width: 100%;
     -fx-max-width: Infinity;
+    -fx-hgrow: ALWAYS;
 }
 
 .status-chip[text="Completed"] {
@@ -804,5 +808,12 @@
     -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
+}
+
+.info-metadata-container > * {
+    -fx-hgrow: ALWAYS;
+    -fx-min-width: 0;
+    -fx-pref-width: 100%;
+    -fx-max-width: Infinity;
 }
 

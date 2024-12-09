@@ -10,7 +10,15 @@ import java.sql.SQLException;
 public class CategoryDAO {
 
     public void addCategory(String categoryName, String userID) {
-        executeUpdate("INSERT INTO categories (category_name, user_id) VALUES (?, ?)", "Error adding category", categoryName, userID);
+        try {
+            ResultSet resultSet = Database.getInstance().executeQuery("SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?", categoryName, userID);
+            if (resultSet.next()) {
+                throw new DataAccessException("Category already exists for this user", null);
+            }
+            executeUpdate("INSERT INTO categories (category_name, user_id) VALUES (?, ?)", "Error adding category", categoryName, userID);
+        } catch (SQLException e) {
+            throw new DataAccessException("Error adding category", e);
+        }
     }
 
     public void deleteCategory(String categoryName, String userID, boolean deleteTask) {

@@ -2,68 +2,142 @@
 
 A modern and feature-rich task management application built with JavaFX. This application helps users organize their daily tasks, set priorities, and manage categories efficiently.
 
-## Features
+## ✨ Features
 
-- **User Authentication**: Secure login and user management system
-- **Task Management**: Create, edit, and delete tasks
-- **Task Organization**:
+- **User Authentication**
+
+  - Secure login and user management system
+  - Session persistence
+  - Password encryption with Spring Security
+
+- **Task Management**
+
+  - Create, edit, and delete tasks
+  - Rich text descriptions
+  - Comments system
+
+- **Task Organization**
+
   - My Day view for daily tasks
   - Important tasks section
   - Category-based organization
-- **Task Details**:
+  - Custom labels and tags
+
+- **Task Details**
+
   - Task name and description
   - Due dates
-  - Priority levels
-  - Status tracking
-  - Comments system
-- **Search Functionality**: Quick task search across all views
-- **Modern UI**: Clean and intuitive interface with dark theme
+  - Priority levels (High, Medium, Low)
+  - Status tracking (Started, Completed, Abandoned)
+  - Comment System
 
-## Technologies Used
+- **User Interface**
+  - Modern dark theme
+  - Intuitive navigation
+  - Quick search functionality
+  - Task filtering and sorting
 
-- Java 21
-- JavaFX
-- Spring Security (for password encryption)
-- JFoenix (for modern UI components)
-- Maven (for dependency management)
-- MySQL (for data persistence)
+## 🛠️ Technologies Used
 
-## Prerequisites
+- **Backend**
+  - Java 21
+  - Spring Security
+  - MySQL Database
+- **Frontend**
+  - JavaFX
+  - JFoenix UI Components
+  - CSS3
+- **Build Tools**
+  - Maven
+  - Git
+
+## ⚙️ Prerequisites
+
+Before you begin, ensure you have the following installed:
 
 - Java Development Kit (JDK) 21 or later
 - Maven 3.8.5 or later
+- MySQL Server
 - An IDE that supports Java and Maven (e.g., IntelliJ IDEA, Eclipse)
 
-## Installation
+## 🚀 Installation
 
 1. Clone the repository:
+
+   ```bash
    git clone https://github.com/Mohamed-Oday/miniprojet-todo.git
+   ```
 
 2. Navigate to the project directory:
+
+   ```bash
    cd miniprojet-todo
+   ```
 
 3. Build the project using Maven:
+
+   ```bash
    mvn clean install
+   ```
 
 4. Run the application:
+   ```bash
    mvn javafx:run
+   ```
 
-## Project Structure
+## 📁 Project Structure
 
-src/main/
-├── java/
-│   └── org/openjfx/miniprojet/
-│       ├── controller/ # JavaFX controllers
-│       ├── model/ # Data models
-│       ├── dao/ # Data Access Objects
-│       └── util/ # Database connection and updates
-└── resources/
-└── org/openjfx/miniprojet/
-├── assets/
-│   ├── fxml/ # FXML layout files
-│   ├── images/ # Application images
-│   └── styles/ # CSS style sheets
-└── database/ # MySQL database
+miniprojet-todo/
+├── .mvn/
+│ └── wrapper/
+│ ├── maven-wrapper.jar
+│ └── maven-wrapper.properties
+├── .idea/
+│ ├── inspectionProfiles/
+│ │ └── Project_Default.xml
+│ ├── .gitignore
+│ ├── compiler.xml
+│ ├── encodings.xml
+│ ├── misc.xml
+│ ├── uiDesigner.xml
+│ └── vcs.xml
+├── src/
+│ ├── main/
+│ │ ├── java/
+│ │ │ ├── org/openjfx/miniprojet/
+│ │ │ │ ├── controller/
+│ │ │ │ │ ├── AddCategoryController.java
+│ │ │ │ │ ├── addTaskController.java
+│ │ │ │ │ ├── Controller.java
+│ │ │ │ │ └── EntryPageController.java
+│ │ │ │ ├── model/
+│ │ │ │ │ └── App.java
+│ │ │ │ └── util/
+│ │ │ │ └── Database.java
+│ │ │ └── module-info.java
+│ │ └── resources/
+│ │ └── org/openjfx/miniprojet/
+│ │ ├── assets/
+│ │ │ ├── fxml/
+│ │ │ │ ├── Main.fxml
+│ │ │ │ ├── EntryPage.fxml
+│ │ │ │ ├── addTask.fxml
+│ │ │ │ └── addCategory.fxml
+│ │ │ ├── images/
+│ │ │ │ ├── clipboard.png
+│ │ │ │ ├── category.png
+│ │ │ │ └── AddNotes-pana-2x.png
+│ │ │ └── styles/
+│ │ │ └── style.css
+│ │ └── database/
+│ │ └── database_queries.sql
+│ └── test/
+│ └── java/
+├── .gitignore
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── README.md
 
 ## Usage
 
@@ -88,8 +162,8 @@ src/main/
 
 ## Languages
 
-- Java (90.4%)
-- CSS (9.6%)
+- Java (81.9%)
+- CSS (18.1%)
 
 ## Contributing
 
@@ -101,7 +175,7 @@ src/main/
 
 ## Future Enhancements
 
-- Task categories/labels
+- Task categories/labels (Done)
 - Dark/Light theme toggle
 - Export tasks to PDF/Excel
 - Mobile companion app
@@ -111,10 +185,6 @@ src/main/
 
 - **Mohamed Oday**
   - GitHub: [Mohamed-Oday](https://github.com/Mohamed-Oday)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

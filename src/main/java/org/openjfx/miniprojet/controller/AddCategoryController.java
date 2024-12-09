@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CategoryDAO;
+import org.openjfx.miniprojet.dao.DataAccessException;
+
 public class AddCategoryController {
 
     private Stage addCategoryStage;
@@ -38,7 +40,11 @@ public class AddCategoryController {
     }
 
     public void insertCategory(String name) {
-        categoryDAO.addCategory(name, userID);
+        try{
+            categoryDAO.addCategory(name, userID);
+        } catch (DataAccessException e){
+            System.err.println(e.getMessage());
+        }
         categoryName.clear();
         addCategoryStage.close();
         mainController.loadCategories();

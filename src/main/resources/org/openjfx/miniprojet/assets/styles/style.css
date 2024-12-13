@@ -817,3 +817,13 @@
     -fx-max-width: Infinity;
 }
 
+.notifications{
+    -fx-graphic: url("../images/notification.png");
+    -fx-graphic-text-gap: 10;
+}
+
+.notification-number{
+    -fx-background-color: "#FF0000";
+    -fx-background-radius: 99999;
+    -fx-padding: 5 5 5 5;
+}

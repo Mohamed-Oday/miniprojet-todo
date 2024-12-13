@@ -34,7 +34,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.openjfx.miniprojet.dao.CategoryDAO;
+import org.openjfx.miniprojet.dao.NotificationDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
+import org.openjfx.miniprojet.model.Notification;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
 import org.openjfx.miniprojet.model.TaskListImpl;
@@ -72,7 +74,9 @@ public class Controller {
     @FXML private Label imageLabel;
     @FXML private Label userNameLabel;
     @FXML private Label imageLabel1;
+    @FXML private Label imageLabel11;
     @FXML private Label userNameLabel1;
+    @FXML private Label userNameLabel11;
     @FXML private Label imageLabel2;
     @FXML private Label imageLabel21;
     @FXML private Label userNameLabel2;
@@ -103,11 +107,15 @@ public class Controller {
     @FXML private Label infoCategory;
     @FXML private AnchorPane infoPane;
     @FXML private Label infoComments;
-
+    @FXML private AnchorPane notificationPane;
+    @FXML private JFXListView<String> categoryListView3;
+    @FXML private JFXListView<Notification> notificationList;
+    @FXML private Label notificationNumber;
 
     private final TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
     private final TaskDAO taskDAO = new TaskDAO();
     private final CategoryDAO categoryDAO = new CategoryDAO();
+    private final NotificationDAO notificationDAO = new NotificationDAO();
     private ObservableList<String> categories = FXCollections.observableArrayList();
     private String userID;
     private String latestTaskName;
@@ -119,13 +127,15 @@ public class Controller {
     public void initialize() {
         mainPane = myDayPane;
         setupStatusComboBox();
-        setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
-        setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
         setupSearchField(searchField, searchField1, searchField2, searchField3);
+        setupNotificationButtons(notificationList);
         setupSortingMenu();
         setupPriorityRadioButtons();
         setupTodayLabel();
+        loadNotifications();
     }
 
     @FXML
@@ -253,6 +263,47 @@ public class Controller {
                 }
             }
         });
+    }
+
+    private void setupNotificationButtons(ListView<Notification> listView) {
+        listView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Notification notification, boolean empty) {
+                super.updateItem(notification, empty);
+                if (empty || notification == null) {
+                    setGraphic(null);
+                    setText(null);
+                    setStyle("-fx-background-color: transparent;");
+                    setOnMouseEntered(null);
+                    setOnMouseExited(null);
+                } else {
+                    HBox container = createNotificationContainer(notification);
+                    setGraphic(container);
+                    setText("");
+                    setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    setStyle("-fx-background-color: #37393a; -fx-cursor: hand;");
+                    setOnMouseEntered(event -> setStyle("-fx-background-color: #303030; -fx-cursor: hand;"));
+                    setOnMouseExited(event -> setStyle("-fx-background-color: #37393a; -fx-cursor: hand;"));
+                }
+            }
+        });
+    }
+
+    private HBox createNotificationContainer(Notification notification){
+        HBox container = new HBox();
+        container.setSpacing(5);
+        Label messageLabel = createLabel(notification.getTitle(), "-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+        messageLabel.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(messageLabel, Priority.ALWAYS);
+        Label dateLabel = createLabel(notification.getTime().toString(), "-fx-text-fill: #f3b807; -fx-font-size: 14px; -fx-font-weight: bold;");
+        Button markAsReadButton = createButton("✔", Font.font("System Bold", FontWeight.BOLD, 12), "#00FF7F", event -> {
+            notificationDAO.markAsRead(notification.getId());
+            loadNotifications();
+        });
+        container.getChildren().addAll(messageLabel, dateLabel, markAsReadButton);
+        HBox.setMargin(markAsReadButton, new Insets(0, 0, 0, 10));
+        container.setAlignment(Pos.CENTER_LEFT);
+        return container;
     }
 
     private HBox createTaskContainer(TaskImpl task) {
@@ -401,6 +452,8 @@ public class Controller {
             return categoryListView1.getSelectionModel().getSelectedItem();
         } else if (displayTasksPane.isVisible()) {
             return categoryListView2.getSelectionModel().getSelectedItem();
+        } else if (notificationPane.isVisible()){
+            return categoryListView3.getSelectionModel().getSelectedItem();
         } else {
             return categoryListView21.getSelectionModel().getSelectedItem();
         }
@@ -413,7 +466,7 @@ public class Controller {
         }
         loadTasks();
         loadCategories();
-        clearSelection(categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        clearSelection(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
     }
 
     @SafeVarargs
@@ -459,6 +512,7 @@ public class Controller {
         myDayPane.setVisible(false);
         displayTasksPane.setVisible(false);
         importantPane.setVisible(false);
+        notificationPane.setVisible(false);
         categoryTitle.setText(categoryName);
         mainPane = categoryTasksPane;
     }
@@ -610,7 +664,7 @@ public class Controller {
         categories.clear();
         categories = categoryDAO.loadCategories(userID);
         categoryComboBox.setItems(categories);
-        setCategoryViewItems(categories, categoryListView, categoryListView1, categoryListView2, categoryListView21);
+        setCategoryViewItems(categories, categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
     }
 
     @SafeVarargs
@@ -623,6 +677,7 @@ public class Controller {
 
     public void showNotification(String message, String part1, String part2, String taskName) {
         if (taskName != null && !taskName.isEmpty()) {
+            notificationDAO.insertNotification(userID, part1 + " " + taskName + " " + part2, message);
             notificationMessage.setText(message);
             notificationTaskName.setText(part1 + " \"" + taskName + "\" " + part2);
             notificationForm.setVisible(true);
@@ -643,6 +698,14 @@ public class Controller {
             sliderIn.play();
             latestTaskName = null;
         }
+        loadNotifications();
+    }
+
+    @FXML
+    public void loadNotifications() {
+        List<Notification> notifications = notificationDAO.getNotificationsByUser(userID);
+        notificationNumber.setText(String.valueOf(notifications.size()));
+        notificationList.setItems(FXCollections.observableArrayList(notifications));
     }
 
     @FXML
@@ -660,7 +723,12 @@ public class Controller {
         handleChangePane(displayTasksPane);
     }
 
-    private void handleChangePane(AnchorPane pane){
+    @FXML
+    public void handleDisplayNotificationButton() {
+        handleChangePane(notificationPane);
+    }
+
+    private void handleChangePane(AnchorPane pane) {
         clearSearch(searchField, searchField1, searchField2, searchField3);
         resetMainPaneSize();
         if (editForm.isVisible()) {
@@ -669,6 +737,7 @@ public class Controller {
         switchToPane(pane);
         loadTasks();
         loadCategories();
+        loadNotifications();
         refreshListViews(taskListView, taskListView1, taskListView2, categoryTasks);
     }
 
@@ -677,6 +746,7 @@ public class Controller {
         displayTasksPane.setVisible(false);
         importantPane.setVisible(false);
         categoryTasksPane.setVisible(false);
+        notificationPane.setVisible(false);
         pane.setVisible(true);
         mainPane = pane;
     }
@@ -752,9 +822,10 @@ public class Controller {
 
     public void setUserName(String userName) {
         this.userID = userName;
-        setupUser(userNameLabel, userNameLabel1, userNameLabel2, userNameLabel21);
-        setupUserImage(imageLabel, imageLabel1, imageLabel2, imageLabel21);
+        setupUser(userNameLabel, userNameLabel1, userNameLabel2, userNameLabel21, userNameLabel11);
+        setupUserImage(imageLabel, imageLabel1, imageLabel2, imageLabel21, imageLabel11);
         loadTasks();
+        loadNotifications();
         loadCategories();
     }
 

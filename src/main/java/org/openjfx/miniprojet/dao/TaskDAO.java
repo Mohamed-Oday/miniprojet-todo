@@ -102,7 +102,7 @@ public class TaskDAO {
     }
 
     public ObservableList<TaskImpl> loadTasksByCategory(String categoryName, String userID){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, tasks.task_startDate "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, tasks.task_startDate, tasks.is_important "
                 + "FROM tasks JOIN categories ON tasks.category_id = categories.category_id "
                 + "WHERE tasks.user_id = ? AND categories.category_name = ? AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());

@@ -102,6 +102,18 @@
                      <String fx:value="sideBar-button" />
                   </styleClass>
                </JFXButton>
+               <JFXButton fx:id="sideBarNotificationButton" alignment="BASELINE_LEFT" onAction="#handleDisplayNotificationButton" prefHeight="36.0" prefWidth="270.0" stylesheets="@../styles/style.css" text="Notifications" textFill="WHITE">
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="notifications" />
+                     <String fx:value="sideBar-button" />
+                  </styleClass>
+                  <VBox.margin>
+                     <Insets bottom="8.0" />
+                  </VBox.margin>
+               </JFXButton>
                <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
                <HBox alignment="CENTER" prefHeight="67.0" prefWidth="270.0">
                   <VBox.margin>
@@ -249,7 +261,7 @@
                      <String fx:value="sideBar-button" />
                   </styleClass>
                </JFXButton>
-               <JFXButton alignment="BASELINE_LEFT" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Important" textFill="WHITE">
+               <JFXButton alignment="BASELINE_LEFT" onAction="#handleImportantButton" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Important" textFill="WHITE">
                   <font>
                      <Font name="Segoe UI" size="13.0" />
                   </font>
@@ -273,6 +285,18 @@
                      <String fx:value="tasks" />
                      <String fx:value="sideBar-button" />
                   </styleClass>
+               </JFXButton>
+               <JFXButton alignment="BASELINE_LEFT" onAction="#handleDisplayNotificationButton" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Notifications" textFill="WHITE">
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="notifications" />
+                     <String fx:value="sideBar-button" />
+                  </styleClass>
+                  <VBox.margin>
+                     <Insets bottom="8.0" />
+                  </VBox.margin>
                </JFXButton>
                <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
                <HBox alignment="CENTER" prefHeight="67.0" prefWidth="270.0">
@@ -452,6 +476,18 @@
                      <String fx:value="myDay-selected" />
                   </styleClass>
                </JFXButton>
+               <JFXButton alignment="BASELINE_LEFT" onAction="#handleDisplayNotificationButton" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Notifications" textFill="WHITE">
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="notifications" />
+                     <String fx:value="sideBar-button" />
+                  </styleClass>
+                  <VBox.margin>
+                     <Insets bottom="8.0" />
+                  </VBox.margin>
+               </JFXButton>
                <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
                <HBox alignment="CENTER" prefHeight="67.0" prefWidth="270.0">
                   <padding>
@@ -625,6 +661,18 @@
                      <String fx:value="tasks" />
                      <String fx:value="sideBar-button" />
                   </styleClass>
+               </JFXButton>
+               <JFXButton fx:id="sideBarNotificationButton1" alignment="BASELINE_LEFT" onAction="#handleDisplayNotificationButton" prefHeight="36.0" prefWidth="270.0" stylesheets="@../styles/style.css" text="Notifications" textFill="WHITE">
+                  <font>
+                     <Font name="Segoe UI" size="13.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="notifications" />
+                     <String fx:value="sideBar-button" />
+                  </styleClass>
+                  <VBox.margin>
+                     <Insets bottom="8.0" />
+                  </VBox.margin>
                </JFXButton>
                <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
                <HBox alignment="CENTER" prefHeight="67.0" prefWidth="270.0">
@@ -899,6 +947,205 @@
             </VBox>
          </VBox>
       </VBox>
+   </AnchorPane>
+   <AnchorPane fx:id="notificationPane" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+         <BorderPane layoutX="500.0" layoutY="355.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <left>
+               <VBox prefHeight="200.0" prefWidth="280.0" styleClass="left-sideBar" stylesheets="@../styles/style.css" BorderPane.alignment="CENTER">
+                  <padding>
+                     <Insets left="5.0" right="5.0" />
+                  </padding>
+                  <children>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <VBox.margin>
+                           <Insets bottom="10.0" left="5.0" />
+                        </VBox.margin>
+                        <children>
+                           <Label fx:id="imageLabel11" alignment="BASELINE_CENTER" prefHeight="60.0" prefWidth="60.0" styleClass="logo-background" stylesheets="@../styles/style.css" text="MO" textFill="WHITE">
+                              <font>
+                                 <Font name="Segoe UI Bold Italic" size="18.0" />
+                              </font>
+                              <padding>
+                                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                              </padding>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </Label>
+                           <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                              <HBox.margin>
+                                 <Insets left="15.0" />
+                              </HBox.margin>
+                              <children>
+                                 <Label fx:id="userNameLabel11" text="Mohamed Oday" textFill="WHITE">
+                                    <font>
+                                       <Font name="Segoe UI Bold" size="13.0" />
+                                    </font>
+                                 </Label>
+                                 <Label text="Welcome Back!" textFill="WHITE">
+                                    <font>
+                                       <Font name="Segoe UI" size="12.0" />
+                                    </font>
+                                    <VBox.margin>
+                                       <Insets top="2.0" />
+                                    </VBox.margin>
+                                 </Label>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <JFXButton alignment="BASELINE_LEFT" onAction="#handleMyDayButton" prefHeight="36.0" prefWidth="270.0" stylesheets="@../styles/style.css" text="My Day" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="13.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="8.0" />
+                        </VBox.margin>
+                        <styleClass>
+                           <String fx:value="myDay" />
+                           <String fx:value="sideBar-button" />
+                        </styleClass>
+                     </JFXButton>
+                     <JFXButton alignment="BASELINE_LEFT" onAction="#handleImportantButton" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Important" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="13.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="8.0" />
+                        </VBox.margin>
+                        <styleClass>
+                           <String fx:value="important" />
+                           <String fx:value="sideBar-button" />
+                        </styleClass>
+                     </JFXButton>
+                     <JFXButton alignment="BASELINE_LEFT" onAction="#handleDisplayTasksButton" prefHeight="36.0" prefWidth="372.0" stylesheets="@../styles/style.css" text="Display Tasks" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="13.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="8.0" />
+                        </VBox.margin>
+                        <styleClass>
+                           <String fx:value="tasks" />
+                           <String fx:value="sideBar-button" />
+                        </styleClass>
+                     </JFXButton>
+                     <JFXButton alignment="BASELINE_LEFT" prefHeight="36.0" prefWidth="332.0" stylesheets="@../styles/style.css" text="Notifications" textFill="WHITE">
+                        <font>
+                           <Font name="Segoe UI" size="13.0" />
+                        </font>
+                        <styleClass>
+                           <String fx:value="notifications" />
+                           <String fx:value="sideBar-button" />
+                           <String fx:value="myDay-selected" />
+                        </styleClass>
+                        <VBox.margin>
+                           <Insets bottom="8.0" />
+                        </VBox.margin>
+                     </JFXButton>
+                     <Line endX="164.2928924560547" endY="-0.621320366859436" startX="-100.0" />
+                     <HBox alignment="CENTER" prefHeight="67.0" prefWidth="270.0">
+                        <padding>
+                           <Insets left="5.0" right="5.0" />
+                        </padding>
+                        <VBox.margin>
+                           <Insets bottom="10.0" />
+                        </VBox.margin>
+                        <children>
+                           <Label alignment="BASELINE_LEFT" prefHeight="32.0" prefWidth="132.0" styleClass="category-label" stylesheets="@../styles/style.css" text="Categories" textFill="WHITE">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Pane prefHeight="67.0" prefWidth="69.0" />
+                           <JFXButton alignment="CENTER" onAction="#handleAddCategory" prefHeight="50.0" prefWidth="50.0" styleClass="add-category-button" stylesheets="@../styles/style.css" text="+" textFill="WHITE">
+                              <font>
+                                 <Font name="Segoe UI" size="24.0" />
+                              </font>
+                           </JFXButton>
+                        </children>
+                     </HBox>
+                     <JFXListView fx:id="categoryListView3" prefHeight="513.0" prefWidth="270.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                        <VBox.margin>
+                           <Insets bottom="10.0" />
+                        </VBox.margin>
+                     </JFXListView>
+                     <JFXButton onAction="#handleSignOutButton" prefHeight="60.0" prefWidth="287.0" styleClass="sign-out-button" stylesheets="@../styles/style.css" text="Sign out" textFill="#c7c7c7">
+                        <font>
+                           <Font name="Segoe UI" size="14.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="10.0" />
+                        </VBox.margin>
+                     </JFXButton>
+                  </children>
+               </VBox>
+            </left>
+            <center>
+               <VBox fx:id="mainVbox11" prefHeight="910.0" prefWidth="613.0" styleClass="important-tasks-background" stylesheets="@../styles/style.css" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                     <Insets />
+                  </BorderPane.margin>
+                  <children>
+                     <VBox prefHeight="974.0" prefWidth="920.0">
+                        <VBox.margin>
+                           <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
+                        </VBox.margin>
+                        <children>
+                           <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
+                              <VBox.margin>
+                                 <Insets bottom="10.0" />
+                              </VBox.margin>
+                              <children>
+                                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                    <HBox.margin>
+                                       <Insets right="10.0" />
+                                    </HBox.margin>
+                                    <image>
+                                       <Image url="@../images/notificationx32.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label prefHeight="39.0" prefWidth="300.0" text="Notifications" textFill="#ffc107">
+                                    <font>
+                                       <Font name="Segoe UI Bold" size="32.0" />
+                                    </font>
+                                 </Label>
+                                 <Pane prefHeight="47.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets />
+                                    </HBox.margin></Pane>
+                                 <Label fx:id="notificationNumber" alignment="CENTER" prefHeight="64.0" prefWidth="39.0" styleClass="notification-number" stylesheets="@../styles/style.css" text="0" textFill="WHITE">
+                                    <font>
+                                       <Font name="Segoe UI Bold" size="22.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </HBox>
+                           <Label textFill="WHITE">
+                              <font>
+                                 <Font size="16.0" />
+                              </font>
+                              <VBox.margin>
+                                 <Insets bottom="20.0" />
+                              </VBox.margin>
+                           </Label>
+                           <VBox alignment="TOP_RIGHT" prefHeight="657.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
+                              <VBox.margin>
+                                 <Insets />
+                              </VBox.margin>
+                              <children>
+                                 <JFXListView fx:id="notificationList" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS" />
+                              </children>
+                           </VBox>
+                           <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0" />
+                        </children>
+                     </VBox>
+                  </children>
+               </VBox>
+            </center>
+         </BorderPane>
+      </children>
    </AnchorPane>
 
 </AnchorPane>

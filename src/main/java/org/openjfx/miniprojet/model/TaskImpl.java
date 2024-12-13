@@ -18,6 +18,7 @@ public class TaskImpl implements Task {
     private final List<String> comments;
     private String priority;
     private String category;
+    private boolean important;
 
     /**
      * Constructs a new TaskImpl with the specified name, description, due date, and status.
@@ -27,7 +28,7 @@ public class TaskImpl implements Task {
      * @param dueDate the due date of the task
      * @param status the status of the task
      */
-    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate) {
+    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
@@ -36,6 +37,15 @@ public class TaskImpl implements Task {
         this.priority = priority;
         this.category = category;
         this.startDate = startDate;
+        this.important = important;
+    }
+
+    public void setImportant(boolean important){
+        this.important = important;
+    }
+
+    public boolean isImportant(){
+        return important;
     }
 
     public void setCategory(String category) {

@@ -268,9 +268,10 @@ public class Controller {
             refreshListViews(taskListView, taskListView1, taskListView2, categoryTasks);
             tasks.deleteTask(task);
         });
-        Button checkButton = createButton("✔", Font.font("System Bold", FontWeight.BOLD, 12), "#00FF7F", event -> {
+        Button checkButton = createButton(task.getStatus().equals(Status.Completed) ? "✔" : "", Font.font("System Bold", FontWeight.BOLD, 12), "#00FF7F", event -> {
             if (task.getStatus().equals(Status.Completed)) {
-                showNotification("Task already completed.", "Task", "has already been completed", task.getName());
+                task.changeStatus(Status.Started);
+                updateTask(task);
                 return;
             }
             task.changeStatus(Status.Completed);
@@ -291,12 +292,19 @@ public class Controller {
                 throw new RuntimeException(e);
             }
         });
+        Button importantButton = createButton(task.isImportant() ? "★" : "☆", Font.font("System Bold", FontWeight.BOLD, 16), "#FF6F61", event -> {
+            task.setImportant(!task.isImportant());
+            updateTask(task);
+            refreshListViews(taskListView, taskListView1, taskListView2, categoryTasks);
+            showNotification("Task updated successfully.", "Task", "has been updated", task.getName());
+        });
+        HBox.setMargin(importantButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(commentButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(infoButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(editButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(checkButton, new Insets(0, 5, 0, 0));
         HBox.setMargin(statusLabel, new Insets(0, 15, 0, 0));
-        container.getChildren().addAll(checkButton, nameLabel, statusLabel, priorityLabel, commentButton, infoButton, editButton, deleteButton);
+        container.getChildren().addAll(checkButton, nameLabel, statusLabel, priorityLabel, importantButton, commentButton, infoButton, editButton, deleteButton);
         container.setAlignment(Pos.CENTER_LEFT);
         return container;
     }
@@ -771,15 +779,14 @@ public class Controller {
         infoPane.setVisible(true);
         infoName.setText(task.getName());
         infoDesc.setText(task.getDescription());
-        
-        // Format multiple comments with better styling
+
         List<String> comments = task.getComments();
         if (comments != null && !comments.isEmpty()) {
             StringBuilder formattedComments = new StringBuilder();
             for (int i = 0; i < comments.size(); i++) {
                 formattedComments.append("• ").append(comments.get(i));
                 if (i < comments.size() - 1) {
-                    formattedComments.append("\n\n"); // Add double line break between comments
+                    formattedComments.append("\n\n");
                 }
             }
             infoComments.setText(formattedComments.toString());

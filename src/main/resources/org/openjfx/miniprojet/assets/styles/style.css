@@ -787,7 +787,7 @@
     -fx-background-color: #FF9800;  /* Orange */
 }
 
-.status-notstarted {
+.status-abandoned {
     -fx-background-color: #F44336;  /* Red */
 }
 

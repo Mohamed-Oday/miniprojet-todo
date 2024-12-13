@@ -23,7 +23,7 @@ public class TaskDAO {
     }
 
     public void updateTask(TaskImpl task, String userID) throws DataAccessException{
-        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ? WHERE task_id = ?";
+        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ?, is_important = ? WHERE task_id = ?";
         int categoryID = getCategoryID(task.getCategory(), userID);
         Object[] params = {
                 task.getName(),
@@ -32,6 +32,7 @@ public class TaskDAO {
                 task.getStatus().toString(),
                 task.getPriority(),
                 categoryID,
+                task.isImportant(),
                 task.getId(),
         };
         try {
@@ -74,10 +75,11 @@ public class TaskDAO {
                 Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
                 String taskPriority = resultSet.getString("task_priority");
                 String taskCategory = resultSet.getString("category_name");
+                boolean isImportant = resultSet.getBoolean("is_important");
                 if (taskCategory == null){
                     taskCategory = "General";
                 }
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory, taskStartDate);
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory, taskStartDate, isImportant);
                 task.setId(taskID);
                 loadTaskComments(task, userID);
                 tasks.addTask(task);
@@ -113,7 +115,8 @@ public class TaskDAO {
                 LocalDate taskDueDate = resultSet.getDate("task_dueDate").toLocalDate();
                 Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
                 String taskPriority = resultSet.getString("task_priority");
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName, taskStartDate);
+                boolean isImportant = resultSet.getBoolean("is_important");
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName, taskStartDate, isImportant);
                 task.setId(taskID);
                 tasks.addTask(task);
             }
@@ -151,7 +154,7 @@ public class TaskDAO {
     }
 
     private String getTasksQuery(AnchorPane visiblePane){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name, tasks.task_startDate "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name, tasks.task_startDate, tasks.is_important "
                 + "FROM tasks LEFT JOIN categories ON tasks.category_id = categories.category_id"
                 + " WHERE tasks.user_id = ?";
 

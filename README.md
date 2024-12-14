@@ -9,12 +9,14 @@ A modern and feature-rich task management application built with JavaFX. This ap
   - Secure login and user management system
   - Session persistence
   - Password encryption with Spring Security
+  - Automatic login for returning users
 
 - **Task Management**
 
   - Create, edit, and delete tasks
-  - Rich text descriptions
   - Comments system
+  - Task status tracking (Started, Pending, Completed, Abandoned)
+  - Automatic status updates based on dates
 
 - **Task Organization**
 
@@ -22,13 +24,20 @@ A modern and feature-rich task management application built with JavaFX. This ap
   - Important tasks section
   - Category-based organization
   - Custom labels and tags
+  - Start date and due date scheduling
+
+- **Smart Features**
+  - Automatic task status updates
+  - Dynamic task sorting by priority
+  - Task filtering by status and category
+  - Search functionality across task names and descriptions
 
 - **Task Details**
 
   - Task name and description
   - Due dates
   - Priority levels (High, Medium, Low)
-  - Status tracking (Started, Completed, Abandoned)
+  - Status tracking (Started, Pending, Completed, Abandoned)
   - Comment System
 
 - **User Interface**
@@ -36,6 +45,7 @@ A modern and feature-rich task management application built with JavaFX. This ap
   - Intuitive navigation
   - Quick search functionality
   - Task filtering and sorting
+  - Task details panel
 
 ## 🛠️ Technologies Used
 
@@ -43,13 +53,17 @@ A modern and feature-rich task management application built with JavaFX. This ap
   - Java 21
   - Spring Security
   - MySQL Database
+
 - **Frontend**
   - JavaFX
   - JFoenix UI Components
   - CSS3
-- **Build Tools**
+  - FXML for layout design
+
+- **Build & Development**
   - Maven
   - Git
+  - Scene Builder for UI design
 
 ## ⚙️ Prerequisites
 
@@ -87,57 +101,60 @@ Before you begin, ensure you have the following installed:
 
 ## 📁 Project Structure
 
+## 📁 Project Structure
+
+```bash
 miniprojet-todo/
-├── .mvn/
-│ └── wrapper/
-│ ├── maven-wrapper.jar
-│ └── maven-wrapper.properties
-├── .idea/
-│ ├── inspectionProfiles/
-│ │ └── Project_Default.xml
-│ ├── .gitignore
-│ ├── compiler.xml
-│ ├── encodings.xml
-│ ├── misc.xml
-│ ├── uiDesigner.xml
-│ └── vcs.xml
 ├── src/
-│ ├── main/
-│ │ ├── java/
-│ │ │ ├── org/openjfx/miniprojet/
-│ │ │ │ ├── controller/
-│ │ │ │ │ ├── AddCategoryController.java
-│ │ │ │ │ ├── addTaskController.java
-│ │ │ │ │ ├── Controller.java
-│ │ │ │ │ └── EntryPageController.java
-│ │ │ │ ├── model/
-│ │ │ │ │ └── App.java
-│ │ │ │ └── util/
-│ │ │ │ └── Database.java
-│ │ │ └── module-info.java
-│ │ └── resources/
-│ │ └── org/openjfx/miniprojet/
-│ │ ├── assets/
-│ │ │ ├── fxml/
-│ │ │ │ ├── Main.fxml
-│ │ │ │ ├── EntryPage.fxml
-│ │ │ │ ├── addTask.fxml
-│ │ │ │ └── addCategory.fxml
-│ │ │ ├── images/
-│ │ │ │ ├── clipboard.png
-│ │ │ │ ├── category.png
-│ │ │ │ └── AddNotes-pana-2x.png
-│ │ │ └── styles/
-│ │ │ └── style.css
-│ │ └── database/
-│ │ └── database_queries.sql
-│ └── test/
-│ └── java/
-├── .gitignore
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
-└── README.md
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── org/openjfx/miniprojet/
+│   │   │       ├── controller/
+│   │   │       │   ├── AddCategoryController.java   # Category management
+│   │   │       │   ├── AddCommentController.java    # Comment handling
+│   │   │       │   ├── addTaskController.java       # Task creation/editing
+│   │   │       │   ├── Controller.java              # Main application controller
+│   │   │       │   ├── EntryPageController.java     # Login/signup handling
+│   │   │       │   ├── loginPopUPController.java    # Login Handling
+│   │   │       │   └── signUpController.java        # Sign up handling
+│   │   │       ├── dao/
+│   │   │       │   ├── CategoryDAO.java             # Category database operations
+│   │   │       │   ├── NotificationDAO.java         # Notification handling
+│   │   │       │   ├── TaskDAO.java                 # Task database operations
+│   │   │       │   ├── UserDAO.java                 # User management
+│   │   │       │   └── DataAccessException.java     # Database access handling
+│   │   │       ├── model/
+│   │   │       │   ├── App.java                     # Main application class
+│   │   │       │   ├── Notification.java            # Notification entity
+│   │   │       │   ├── Status.java                  # Task status enum
+│   │   │       │   ├── Task.java                    # Task interface
+│   │   │       │   ├── TaskImpl.java                # Task implementation
+│   │   │       │   ├── TaskList.java                # Abstract task list
+│   │   │       │   └── TaskListImpl.java            # Task list implementation
+│   │   │       ├── util/
+│   │   │       │   └── Database.java                # Database utilities
+│   │   │       └── module-info.java
+│   │   └── resources/
+│   │       └── org/openjfx/miniprojet/
+│   │           ├── assets/
+│   │           │   ├── fxml/
+│   │           │   │   ├── Main.fxml                # Main interface layout
+│   │           │   │   ├── EntryPage.fxml           # Login screen
+│   │           │   │   ├── addTask.fxml             # Add task form
+│   │           │   │   ├── addCategory.fxml         # Add category form
+│   │           │   │   ├── addComment.fxml          # Add comment form
+│   │           │   │   ├── loginPopUP.fxml          # Login form
+│   │           │   │   └── signUp.fxml              # Sign up form
+│   │           │   ├── images/                      # Application icons/images
+│   │           │   └── styles/
+│   │           │       ├── style.css                # Application styling
+│   │           │       └── alert.css                # Alert styling
+│   │           └── database/
+│   │               └── database_queries.sql         # Database schema
+│   └── test/                                        # Test files
+├── pom.xml                                          # Maven configuration
+└── README.md                                        # Project documentation
+```
 
 ## Usage
 
@@ -162,8 +179,8 @@ miniprojet-todo/
 
 ## Languages
 
-- Java (81.9%)
-- CSS (18.1%)
+- Java (84.7%)
+- CSS (15.3%)
 
 ## Contributing
 

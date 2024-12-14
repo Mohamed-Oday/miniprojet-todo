@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,6 +20,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Controller class for handling sign-up functionality.
@@ -80,17 +84,27 @@ public class signUpController {
         String username = userName.getText();
         String pass = password.getText();
 
-        if (!isValidPassword(pass)){
-            System.out.println("Password is not valid");
+        if (username.isEmpty() || pass.isEmpty()) {
+            showErrorAlert("Validation Error", "Username and password cannot be empty!");
             return;
         }
-        // hashing the password
+
+        if (!isValidPassword(pass)){
+            showErrorAlert("Invalid Password", 
+                "Password must contain:\n" +
+                "- At least 8 characters\n" +
+                "- At least one uppercase letter\n" +
+                "- At least one number");
+            return;
+        }
+
         String hashedPassword = hashPassword(pass);
 
-        // Inserting the user into the database
         if (insertUser(username, hashedPassword)){
-            System.out.println("User added successfully");
+            showSuccessAlert("Success", "Account created successfully!");
             returnToSignIn();
+        } else {
+            showErrorAlert("Registration Error", "Username already exists!");
         }
     }
 
@@ -113,25 +127,28 @@ public class signUpController {
      */
     @FXML
     private static boolean insertUser(String username, String pass){
+        String checkUser = "SELECT username FROM userinforamtion WHERE username = ?";
         String insertQueue = "INSERT INTO userinforamtion (username, password) VALUES (?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQueue)) {
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, pass);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            // First check if username already exists
+            try (PreparedStatement checkStmt = connection.prepareStatement(checkUser)) {
+                checkStmt.setString(1, username);
+                if (checkStmt.executeQuery().next()) {
+                    return false; // Username already exists
+                }
+            }
 
-            int rowAffected = preparedStatement.executeUpdate();
-            if (rowAffected > 0){
-                System.out.println("User added successfully");
-                return true;
-            }else{
-                System.out.println("Failed to add user");
-                return false;
+            // If username doesn't exist, proceed with insertion
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQueue)) {
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, pass);
+                return preparedStatement.executeUpdate() > 0;
             }
         } catch (SQLException e){
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     /**
@@ -171,5 +188,40 @@ public class signUpController {
         // Setting the login stage and signUp stage
         signInStage.show();
         signUpStage.close();
+    }
+
+    private void showErrorAlert(String title, String content) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+            Objects.requireNonNull(getClass().getResource("/org/openjfx/miniprojet/assets/styles/alert.css")).toExternalForm()
+        );
+        
+        Stage stage = (Stage) dialogPane.getScene().getWindow();
+        stage.setResizable(false);
+        
+        alert.showAndWait();
+    }
+
+    private void showSuccessAlert(String title, String content) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+            Objects.requireNonNull(getClass().getResource("/org/openjfx/miniprojet/assets/styles/alert.css")).toExternalForm()
+        );
+        dialogPane.getStyleClass().add("success");
+        
+        Stage stage = (Stage) dialogPane.getScene().getWindow();
+        stage.setResizable(false);
+        
+        alert.showAndWait();
     }
 }

@@ -23,7 +23,7 @@ public class TaskDAO {
     }
 
     public void updateTask(TaskImpl task, String userID) throws DataAccessException{
-        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ?, is_important = ? WHERE task_id = ?";
+        String updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_dueDate = ?, task_status = ?, task_priority = ?, category_id = ?, is_important = ?, task_startDate = ? WHERE task_id = ?";
         int categoryID = getCategoryID(task.getCategory(), userID);
         Object[] params = {
                 task.getName(),
@@ -33,6 +33,7 @@ public class TaskDAO {
                 task.getPriority(),
                 categoryID,
                 task.isImportant(),
+                task.getStartDate(),
                 task.getId(),
         };
         try {
@@ -58,6 +59,7 @@ public class TaskDAO {
     }
 
     public ObservableList<TaskImpl> loadTasks(String userID, AnchorPane visiblePane, String categoryName) throws DataAccessException{
+        updateTasksStatus(userID);
         String query = getTasksQuery(visiblePane);
         Object[] params = getQueryParams(userID, visiblePane, categoryName);
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
@@ -87,6 +89,19 @@ public class TaskDAO {
             return tasks.getTasks();
         } catch (SQLException e){
             throw new DataAccessException("Error loading tasks", e);
+        }
+    }
+
+    public void updateTasksStatus(String userID){
+        String updateQueryAbandoned = "UPDATE tasks SET task_status = 'Abandoned' WHERE task_dueDate < CURDATE() AND task_status = 'Started' AND user_id = ?";
+        String updateQueryStarted = "UPDATE tasks SET task_status = 'Started' WHERE task_startDate <= CURDATE() AND task_dueDate >= CURDATE() AND (task_status = 'Pending' OR task_status = 'Abandoned') AND user_id = ?";
+        String updateQueryPending = "UPDATE tasks SET task_status = 'Pending' WHERE task_startDate > CURDATE() AND task_status = 'Started' AND user_id = ?";
+        try{
+            Database.getInstance().executeUpdate(updateQueryAbandoned, userID);
+            Database.getInstance().executeUpdate(updateQueryStarted, userID);
+            Database.getInstance().executeUpdate(updateQueryPending, userID);
+        } catch (SQLException e){
+            throw new DataAccessException("Error updating tasks status", e);
         }
     }
 
@@ -126,11 +141,11 @@ public class TaskDAO {
         }
     }
 
-    public void createTasks(String taskName, String description, LocalDate dueDate, Status status, String categoryName, String priority, String userID, boolean isImportant) {
+    public void createTasks(String taskName, String description, LocalDate dueDate, LocalDate startDate, Status status, String categoryName, String priority, String userID, boolean isImportant) {
         String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, category_id, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int categoryID = getCategoryID(categoryName, userID);
         try{
-            Database.getInstance().executeUpdate(insertQuery, userID, taskName, description, Date.valueOf(dueDate), status.toString(), isImportant ? "1" : "0", Date.valueOf(LocalDate.now()), categoryID, priority);
+            Database.getInstance().executeUpdate(insertQuery, userID, taskName, description, Date.valueOf(dueDate), status.toString(), isImportant ? "1" : "0", Date.valueOf(startDate), categoryID, priority);
         } catch (SQLException e){
             throw new DataAccessException("Error creating task", e);
         }

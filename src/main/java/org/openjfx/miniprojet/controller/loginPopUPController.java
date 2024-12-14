@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -101,6 +104,15 @@ public class loginPopUPController {
         String username = userName.getText();
         String pass = password.getText();
 
+        if (username.isEmpty() || pass.isEmpty()) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter both username and password!");
+            alert.showAndWait();
+            return;
+        }
+
         if (isValidLogin(username, pass)){
             System.out.println("Login Successful");
 
@@ -138,7 +150,18 @@ public class loginPopUPController {
             entryStage.setMaximized(true);
             entryStage.show();
         }else{
-            System.out.println("Login Failed");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid username or password. Please try again.");
+            
+            // Add custom styling to the alert
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(
+                getClass().getResource("/org/openjfx/miniprojet/assets/styles/alert.css").toExternalForm()
+            );
+            
+            alert.showAndWait();
         }
     }
 

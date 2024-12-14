@@ -59,7 +59,7 @@ public class Controller {
     @FXML private Label notificationTaskName;
     @FXML private AnchorPane notificationForm;
     @FXML private DatePicker TaskDueDateField;
-    @FXML private ComboBox<Status> TaskStatusField;
+    @FXML private DatePicker taskStartDateField;
     @FXML private TextField taskDescriptionField;
     @FXML private TextField taskNameField;
     @FXML private AnchorPane myDayPane;
@@ -126,7 +126,6 @@ public class Controller {
     @FXML
     public void initialize() {
         mainPane = myDayPane;
-        setupStatusComboBox();
         setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
@@ -142,11 +141,6 @@ public class Controller {
     private void closeInfoPane() {
         infoPane.setVisible(false);
         mainPane.setDisable(false);
-    }
-
-    private void setupStatusComboBox() {
-        ObservableList<Status> statusList = FXCollections.observableArrayList(Status.values());
-        TaskStatusField.setItems(statusList);
     }
 
     @SafeVarargs
@@ -524,7 +518,6 @@ public class Controller {
     }
 
     public void handleEditTask(TaskImpl task) {
-        TaskStatusField.setValue(task.getStatus());
         TranslateTransition slider = new TranslateTransition(Duration.seconds(0), editForm);
         slider.setToX(0);
         slider.setOnFinished(event -> {
@@ -539,8 +532,8 @@ public class Controller {
     private void populateEditForm(TaskImpl task) {
         taskNameField.setText(task.getName());
         taskDescriptionField.setText(task.getDescription());
+        taskStartDateField.setValue(task.getStartDate());
         TaskDueDateField.setValue(task.getDueDate());
-        TaskStatusField.setValue(task.getStatus());
         priorityGroup.selectToggle(getPriorityToggle(task.getPriority()));
         categoryComboBox.setValue(task.getCategory());
         showEditFormSearchField(false, searchField, searchField1, searchField2, searchField3);
@@ -580,11 +573,11 @@ public class Controller {
     private void updateTaskFields(TaskImpl task) {
         String taskName = taskNameField.getText();
         String taskDescription = taskDescriptionField.getText();
+        LocalDate taskStartDate = taskStartDateField.getValue();
         LocalDate taskDueDate = TaskDueDateField.getValue();
-        Status taskStatus = TaskStatusField.getValue();
         String categoryName = categoryComboBox.getValue();
         String taskPriority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
-        task.editTask(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName);
+        task.editTask(taskName, taskDescription, taskDueDate, taskPriority, categoryName, taskStartDate);
     }
 
     @FXML

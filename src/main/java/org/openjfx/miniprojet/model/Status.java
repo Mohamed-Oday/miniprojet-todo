@@ -2,5 +2,5 @@ package org.openjfx.miniprojet.model;
 
 
 public enum Status{
-    Started, Completed, Abandoned
+    Started, Completed, Abandoned, Pending
 }

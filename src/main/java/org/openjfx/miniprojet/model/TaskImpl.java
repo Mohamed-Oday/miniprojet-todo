@@ -151,16 +151,15 @@ public class TaskImpl implements Task {
      * @param name the new name of the task
      * @param description the new description of the task
      * @param dueDate the new due date of the task
-     * @param status the new status of the task
      */
-    public void editTask(String name, String description, LocalDate dueDate, Status status, String priority, String category) {
+    public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate) {
         setId(id);
         setName(name);
         setDescription(description);
         setDueDate(dueDate);
-        changeStatus(status);
         setPriority(priority);
         setCategory(category);
+        setStartDate(startDate);
     }
 
     public String getPriority() {

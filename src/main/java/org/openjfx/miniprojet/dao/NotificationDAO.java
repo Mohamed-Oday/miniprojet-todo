@@ -10,15 +10,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object (DAO) class for managing notifications in the database.
+ */
 public class NotificationDAO {
     public static final String INSERT_NOTIFICATION = "INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)";
     public static final String GET_NOTIFICATIONS = "SELECT * FROM notifications WHERE user_id= ? AND is_read = 0 ORDER BY time DESC";
     public static final String MARK_AS_READ = "UPDATE notifications SET is_read = 1 WHERE id = ?";
 
+    /**
+     * Gets a connection to the database.
+     *
+     * @return a Connection object to the database.
+     * @throws SQLException if a database access error occurs.
+     */
     private Connection getConnection() throws SQLException {
         return Database.getInstance().getConnection();
     }
 
+    /**
+     * Inserts a new notification into the database.
+     *
+     * @param userID the ID of the user to whom the notification belongs.
+     * @param title the title of the notification.
+     * @param message the message content of the notification.
+     */
     public void insertNotification(String userID, String title, String message) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_NOTIFICATION)) {
@@ -32,6 +48,12 @@ public class NotificationDAO {
         }
     }
 
+    /**
+     * Retrieves unread notifications for a specific user from the database.
+     *
+     * @param userID the ID of the user whose notifications are to be retrieved.
+     * @return a list of Notification objects representing the unread notifications.
+     */
     public List<Notification> getNotificationsByUser(String userID) {
         List<Notification> notifications = new ArrayList<>();
         try (Connection connection = getConnection();
@@ -55,6 +77,11 @@ public class NotificationDAO {
         return notifications;
     }
 
+    /**
+     * Marks a notification as read in the database.
+     *
+     * @param id the ID of the notification to be marked as read.
+     */
     public void markAsRead(int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(MARK_AS_READ)) {

@@ -7,6 +7,7 @@ module org.openjfx.miniprojet {
     requires spring.security.crypto;
     requires org.slf4j;
     requires java.desktop;
+    requires javafx.graphics;
 
 
     opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;

@@ -1,0 +1,80 @@
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 2);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 16px 24px 0 24px;
+}
+
+.dialog-pane .content {
+    -fx-font-size: 14px;
+    -fx-padding: 24px;
+    -fx-font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.dialog-pane > .content.label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .button-bar .container {
+    -fx-padding: 16px 24px 24px 24px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.2), 4, 0, 0, 2);
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #1976D2;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.4), 8, 0, 0, 4);
+    -fx-translate-y: -1px;
+}
+
+.dialog-pane .button:pressed {
+    -fx-background-color: #1565C0;
+    -fx-translate-y: 0px;
+}
+
+/* Style for error icon */
+.dialog-pane .graphic {
+    -fx-background-color: #ff5252;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+}
+
+/* Success alert styling */
+.dialog-pane.success {
+    -fx-background-color: #f8fff8;
+}
+
+.dialog-pane.success .graphic {
+    -fx-background-color: #4CAF50;
+}
+
+.dialog-pane.success .button {
+    -fx-background-color: #4CAF50;
+}
+
+.dialog-pane.success .button:hover {
+    -fx-background-color: #45a049;
+}
+
+.dialog-pane.success .button:pressed {
+    -fx-background-color: #3d8b40;
+}

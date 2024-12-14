@@ -101,8 +101,6 @@ Before you begin, ensure you have the following installed:
 
 ## 📁 Project Structure
 
-## 📁 Project Structure
-
 ```bash
 miniprojet-todo/
 ├── src/

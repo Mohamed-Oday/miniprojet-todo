@@ -51,4 +51,16 @@ CREATE TABLE comments (
   creation_date DATE NOT NULL,
   FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES userinforamtion(username)
-)
+);
+
+CREATE TABLE notifications (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    time TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    is_read TINYINT(1) DEFAULT '0',
+    PRIMARY KEY (id),
+    KEY user_id (user_id),
+    FOREIGN KEY (user_id) REFERENCES userinformation (username)
+);

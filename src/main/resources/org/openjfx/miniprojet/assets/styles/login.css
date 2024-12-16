@@ -1,0 +1,40 @@
+
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #F9F7FF, #EFF6FF);
+    -fx-padding: 20;
+}
+
+.container{
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #E5E7EB;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+    -fx-padding: 32;
+    -fx-max-width: 400;
+}
+
+.title {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.subTitle {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 14;
+    -fx-text-alignment: center;
+}
+
+.input-field {
+    -fx-pref-height: 44;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #E5E7EB;
+    -fx-padding: 8 12;
+}
+
+.label {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}

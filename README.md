@@ -159,7 +159,7 @@ miniprojet-todo/
 │   │   └── resources/
 │   │       └── org/openjfx/miniprojet/
 │   │           ├── assets/
-│   │           │   ├── sounds/                             # Notification sounds
+│   │           │   ├── audio/                              # Notification sounds
 │   │           │   ├── fxml/
 │   │           │   │   ├── AddCategoryForm.fxml            # Add category form
 │   │           │   │   ├── AddCollaborationForm.fxml       # Add collaboration form
@@ -169,13 +169,13 @@ miniprojet-todo/
 │   │           │   │   ├── LandingPage.fxml                # Landing page interface
 │   │           │   │   ├── LoginForm.fxml                  # Login form
 │   │           │   │   └── RegisterForm.fxml               # Sign up form
-│   │           │   ├── images/                      # Application icons/images
-│   │           │   └── styles/                      # CSS stylesheets
+│   │           │   ├── images/                             # Application icons/images
+│   │           │   └── styles/                             # CSS stylesheets
 │   │           └── database/
-│   │               └── database_queries.sql         # Database schema
-│   └── test/                                        # Test files
-├── pom.xml                                          # Maven configuration
-└── README.md                                        # Project documentation
+│   │               └── database_queries.sql                # Database schema
+│   └── test/                                               # Test files
+├── pom.xml                                                 # Maven configuration
+└── README.md                                                # Project documentation
 ```
 
 ## Usage

@@ -15,6 +15,7 @@ import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.TaskDAO;
 import org.openjfx.miniprojet.model.Status;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -70,7 +71,7 @@ public class AddTaskController{
     }
 
     @FXML
-    public void handleAddTaskButton() {
+    public void handleAddTaskButton() throws SQLException {
         String name = taskName.getText();
         String description = taskDescription.getText();
         LocalDate startDate = taskStartDate.getValue();
@@ -156,7 +157,7 @@ public class AddTaskController{
         return errorMessage;
     }
 
-    private void insertTask(String name, String description, LocalDate dueDate, LocalDate startDate, String category, String priority) {
+    private void insertTask(String name, String description, LocalDate dueDate, LocalDate startDate, String category, String priority) throws SQLException {
         taskDAO.createTasks(name, description, dueDate, startDate, startDate.equals(LocalDate.now()) ? Status.Started : Status.Pending, category, priority, userID, isImportantSelected);
     }
 

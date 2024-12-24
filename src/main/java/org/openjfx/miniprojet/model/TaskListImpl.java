@@ -1,4 +1,5 @@
 package org.openjfx.miniprojet.model;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -197,14 +198,14 @@ public class TaskListImpl extends TaskList{
     /**
      * Exports the list of tasks to a specified file in JSON format.
      *
-     * @param filePath the path of the file where the tasks will be exported
+     * @param file the path of the file where the tasks will be exported
      */
-    public void exportTasks(String filePath) {
+    public void exportTasks(File file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try(FileWriter writer = new FileWriter(filePath)){
+        try(FileWriter writer = new FileWriter(file)){
             gson.toJson(tasks, writer);
-            System.out.println("Tasks exported to: " +filePath);
-        } catch (IOException e) {
+            System.out.println("Tasks exported to: "+file.getAbsolutePath());
+        } catch(IOException e) {
             System.err.println("An error occurred while exporting tasks: " + e.getMessage());
         }
     }
@@ -229,6 +230,5 @@ public class TaskListImpl extends TaskList{
             System.err.println("An error occurred while importing tasks: " + e.getMessage());
         }
     }
-
 }
 

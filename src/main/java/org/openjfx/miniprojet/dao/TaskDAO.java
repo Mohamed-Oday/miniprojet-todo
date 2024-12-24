@@ -2,11 +2,17 @@ package org.openjfx.miniprojet.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
 import org.openjfx.miniprojet.model.TaskListImpl;
 import org.openjfx.miniprojet.util.Database;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +29,52 @@ public class TaskDAO {
             Database.getInstance().executeUpdate(deleteQuery, task.getId());
         }catch (SQLException e){
             throw new DataAccessException("Error deleting task", e);
+        }
+    }
+
+    public void exportTasks(File file, String userID){
+        String exportQuery =
+                "SELECT task_name, task_description, task_startDate, task_dueDate, task_status, task_priority, categories.category_name, is_important " +
+                "FROM tasks " +
+                "LEFT JOIN categories ON tasks.task_categoryID = categories.category_id " +
+                "WHERE tasks.user_id = ?";
+        try (ResultSet resultSet = Database.getInstance().executeQuery(exportQuery, userID)){
+            userDAO.exportTasks(resultSet, file);
+        } catch (SQLException e){
+            throw new DataAccessException("Error exporting tasks", e);
+        }
+    }
+
+    public void importTasks(File file, String userID) {
+        try (FileReader reader = new FileReader(file)){
+            JSONObject root = new JSONObject(new JSONTokener(reader));
+            JSONArray tasks = root.getJSONArray("tasks");
+
+            for (int i = 0 ; i < tasks.length() ; i++){
+                JSONObject task = tasks.getJSONObject(i);
+                String category = task.getString("category");
+
+                Integer categoryID = getCategoryID(category, userID);
+
+                String insertQuery = "INSERT INTO tasks (task_name, task_description, task_startDate, task_dueDate, " +
+                                "task_status, task_priority, task_categoryID, is_important, user_id) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                Database.getInstance().executeUpdate(insertQuery,
+                        task.getString("taskName"),
+                        task.getString("description"),
+                        task.getString("startDate"),
+                        task.getString("dueDate"),
+                        task.getString("status"),
+                        task.getString("priority"),
+                        categoryID,
+                        task.getString("important"),
+                        userID
+                );
+            }
+
+        } catch (IOException | SQLException e) {
+            throw new DataAccessException("Error importing tasks", e);
         }
     }
 
@@ -73,7 +125,7 @@ public class TaskDAO {
         }
     }
 
-    public void updateTask(TaskImpl task, String userID, boolean isOverRidden) throws DataAccessException{
+    public void updateTask(TaskImpl task, String userID, boolean isOverRidden) throws DataAccessException, SQLException {
         String updateQuery = getString(isOverRidden);
         int categoryID = getCategoryID(task.getCategory(), userID);
         Object[] params = {
@@ -104,19 +156,18 @@ public class TaskDAO {
         return updateQuery;
     }
 
-    public int getCategoryID(String categoryName, String userID){
-        String query = "SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?";
-        try (PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(query)){
-            preparedStatement.setString(1, categoryName);
-            preparedStatement.setString(2, userID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+    public Integer getCategoryID(String categoryName, String userID) throws SQLException {
+        String selectQuery = "SELECT category_id FROM categories WHERE category_name = ? AND user_id = ?";
+        try (ResultSet resultSet = Database.getInstance().executeQuery(selectQuery, categoryName, userID)) {
+            if (resultSet.next()) {
                 return resultSet.getInt("category_id");
             }
-        } catch (SQLException e){
-            System.out.println("Category not found");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return -1;
+
+        String insertQuery = "INSERT INTO categories (category_name, user_id) VALUES (?, ?)";
+        return Database.getInstance().executeInsert(insertQuery, categoryName, userID);
     }
 
     public ObservableList<TaskImpl> loadTasks(String userID, String currentPage, String pageTitle) throws DataAccessException{
@@ -215,7 +266,7 @@ public class TaskDAO {
         }
     }
 
-    public void createTasks(String taskName, String description, LocalDate dueDate, LocalDate startDate, Status status, String categoryName, String priority, String userID, boolean isImportant) {
+    public void createTasks(String taskName, String description, LocalDate dueDate, LocalDate startDate, Status status, String categoryName, String priority, String userID, boolean isImportant) throws SQLException {
         String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, task_categoryID, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int categoryID = getCategoryID(categoryName, userID);
         try{

@@ -11,6 +11,8 @@ module org.openjfx.miniprojet {
     requires spring.security.web;
     requires javafx.media;
     requires spring.context;
+    requires com.opencsv;
+    requires org.json;
 
 
     opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;

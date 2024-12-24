@@ -137,3 +137,7 @@
 .menu-item .accelerator-text {
     -fx-text-fill: #808080;
 }
+
+.image-view {
+    -fx-cursor: hand;
+}

@@ -79,16 +79,6 @@ public class Database {
     }
 
     /**
-     * Deletes all records from the saveduser table.
-     *
-     * @throws SQLException if a database access error occurs
-     */
-    public void deleteSavedUser() throws SQLException {
-        String sql = "DELETE FROM saveduser";
-        executeUpdate(sql);
-    }
-
-    /**
      * Sets the parameters for a prepared statement.
      *
      * @param statement the prepared statement
@@ -98,6 +88,22 @@ public class Database {
     private void setParameters(PreparedStatement statement, Object... params) throws SQLException {
         for (int i = 0; i < params.length; i++) {
             statement.setObject(i + 1, params[i]);
+        }
+    }
+
+    public Integer executeInsert(String sql, Object... params) throws SQLException {
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
+            preparedStatement.executeUpdate();
+
+            try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                throw new SQLException("Failed to get generated key");
+            }
         }
     }
 }

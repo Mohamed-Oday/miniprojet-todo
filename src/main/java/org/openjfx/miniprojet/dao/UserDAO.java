@@ -1,8 +1,15 @@
 package org.openjfx.miniprojet.dao;
 
+import com.opencsv.CSVWriter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.openjfx.miniprojet.util.Database;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,6 +22,33 @@ public class UserDAO {
     public void saveUser(String username) throws SQLException {
         String query = "INSERT INTO SavedUser (username) VALUES (?)";
         Database.getInstance().executeUpdate(query, username);
+    }
+
+    public void exportTasks(ResultSet resultSet, File file) {
+        try (FileWriter fw = new FileWriter(file)) {
+            JSONArray tasksArray = new JSONArray();
+
+            while (resultSet.next()) {
+                JSONObject task = new JSONObject();
+                task.put("taskName", resultSet.getString("task_name"));
+                task.put("description", resultSet.getString("task_description"));
+                task.put("startDate", resultSet.getString("task_startDate"));
+                task.put("dueDate", resultSet.getString("task_dueDate"));
+                task.put("status", resultSet.getString("task_status"));
+                task.put("priority", resultSet.getString("task_priority"));
+                task.put("category", resultSet.getString("category_name"));
+                task.put("important", resultSet.getString("is_important"));
+
+                tasksArray.put(task);
+            }
+
+            JSONObject root = new JSONObject();
+            root.put("tasks", tasksArray);
+
+            fw.write(root.toString(2)); // Pretty print with 2-space indentation
+        } catch (IOException | SQLException e) {
+            throw new DataAccessException("Error writing tasks to file", e);
+        }
     }
 
     public void deleteUser() throws SQLException {

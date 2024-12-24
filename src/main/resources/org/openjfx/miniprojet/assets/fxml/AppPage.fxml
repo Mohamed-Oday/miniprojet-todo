@@ -51,7 +51,7 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                  <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="121.0">
                      <HBox.margin>
                         <Insets left="15.0" />
                      </HBox.margin>
@@ -68,6 +68,23 @@
                            <Insets top="2.0" />
                         </VBox.margin>
                      </Label>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="68.0">
+                     <children>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#handleExportButton" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/export.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#handleImportButton" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/import.png" />
+                           </image>
+                        </ImageView>
+                     </children>
                   </VBox>
                </HBox>
                <JFXButton fx:id="myDayButton" alignment="BASELINE_LEFT" onAction="#handleMyDayButton" prefHeight="36.0" prefWidth="270.0" stylesheets="@../styles/sidebar.css" text="My Day" textFill="WHITE">
@@ -156,88 +173,78 @@
          </left>
          <center>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <VBox fx:id="page" prefHeight="939.0" prefWidth="1001.0" styleClass="myDay-background"
-                     stylesheets="@../styles/page.css" HBox.hgrow="ALWAYS">
+               <VBox fx:id="page" prefHeight="939.0" prefWidth="1001.0" styleClass="myDay-background" stylesheets="@../styles/page.css" HBox.hgrow="ALWAYS">
                   <VBox prefHeight="974.0" prefWidth="920.0">
                      <VBox.margin>
-                        <Insets bottom="48.0" left="48.0" right="48.0" top="48.0"/>
+                        <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
                      </VBox.margin>
                      <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                         <VBox.margin>
-                           <Insets bottom="10.0"/>
+                           <Insets bottom="10.0" />
                         </VBox.margin>
-                        <ImageView fx:id="pageIcon" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                   preserveRatio="true">
+                        <ImageView fx:id="pageIcon" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
-                              <Insets right="10.0"/>
+                              <Insets right="10.0" />
                            </HBox.margin>
-                           <Image url="@../images/sun32.png"/>
+                           <Image url="@../images/sun32.png" />
                         </ImageView>
                         <Label fx:id="pageTitle" prefHeight="39.0" prefWidth="200.0" text="My Day" textFill="WHITE">
                            <font>
-                              <Font name="Segoe UI Bold" size="32.0"/>
+                              <Font name="Segoe UI Bold" size="32.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                        <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search"
-                                   styleClass="search-bar" stylesheets="@../styles/page.css">
+                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchField" prefHeight="36.0" prefWidth="284.0" promptText="Search" styleClass="search-bar" stylesheets="@../styles/page.css">
                            <font>
-                              <Font name="Segoe UI" size="13.0"/>
+                              <Font name="Segoe UI" size="13.0" />
                            </font>
                         </TextField>
                      </HBox>
                      <Label textFill="WHITE">
                         <font>
-                           <Font size="16.0"/>
+                           <Font size="16.0" />
                         </font>
                         <VBox.margin>
-                           <Insets bottom="20.0"/>
+                           <Insets bottom="20.0" />
                         </VBox.margin>
                      </Label>
                      <VBox alignment="TOP_RIGHT" prefHeight="617.0" prefWidth="824.0" VBox.vgrow="ALWAYS">
-                        <HBox alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="824.0">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="824.0">
                            <VBox.margin>
-                              <Insets bottom="20.0"/>
+                              <Insets bottom="20.0" />
                            </VBox.margin>
-                           <MenuButton fx:id="categoryMenu" mnemonicParsing="false" prefHeight="40.0"
-                                       prefWidth="132.0" text="Category" textFill="WHITE">
+                           <MenuButton fx:id="categoryMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="132.0" text="Category" textFill="WHITE">
                               <font>
-                                 <Font name="Segoe UI" size="14.0"/>
+                                 <Font name="Segoe UI" size="14.0" />
                               </font>
                               <HBox.margin>
-                                 <Insets right="20.0"/>
+                                 <Insets right="20.0" />
                               </HBox.margin>
                            </MenuButton>
-                           <MenuButton fx:id="priorityMenu" mnemonicParsing="false" prefHeight="40.0"
-                                       prefWidth="132.0" text="Priority" textFill="WHITE">
+                           <MenuButton fx:id="priorityMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="132.0" text="Priority" textFill="WHITE">
                               <font>
-                                 <Font name="Segoe UI" size="14.0"/>
+                                 <Font name="Segoe UI" size="14.0" />
                               </font>
                               <HBox.margin>
-                                 <Insets right="20.0"/>
+                                 <Insets right="20.0" />
                               </HBox.margin>
                            </MenuButton>
-                           <MenuButton fx:id="statusMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="132.0"
-                                       text="Status" textFill="WHITE">
+                           <MenuButton fx:id="statusMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="132.0" text="Status" textFill="WHITE">
                               <font>
-                                 <Font name="Segoe UI" size="14.0"/>
+                                 <Font name="Segoe UI" size="14.0" />
                               </font>
                            </MenuButton>
                         </HBox>
-                        <JFXListView fx:id="taskListView" prefHeight="635.0" prefWidth="824.0"
-                                     styleClass="list-transparent" stylesheets="@../styles/page.css"
-                                     VBox.vgrow="ALWAYS">
+                        <JFXListView fx:id="taskListView" prefHeight="635.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/page.css" VBox.vgrow="ALWAYS">
                            <VBox.margin>
-                              <Insets/>
+                              <Insets />
                            </VBox.margin>
                         </JFXListView>
                      </VBox>
                      <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="824.0">
-                        <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton"
-                                   prefHeight="62.0" prefWidth="62.0" styleClass="addButton"
-                                   stylesheets="@../styles/page.css" text="+" textFill="WHITE">
+                        <JFXButton alignment="TOP_CENTER" contentDisplay="CENTER" onAction="#handleAddButton" prefHeight="62.0" prefWidth="62.0" styleClass="addButton" stylesheets="@../styles/page.css" text="+" textFill="WHITE">
                            <font>
-                              <Font name="Segoe UI Bold" size="30.0"/>
+                              <Font name="Segoe UI Bold" size="30.0" />
                            </font>
                         </JFXButton>
                      </HBox>
@@ -246,42 +253,38 @@
             </HBox>
          </center>
       </BorderPane>
-      <VBox fx:id="notificationPage" prefHeight="200.0" prefWidth="100.0" styleClass="page-background"
-            stylesheets="@../styles/page.css" visible="false" AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="notificationPage" prefHeight="200.0" prefWidth="100.0" styleClass="page-background" stylesheets="@../styles/page.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <VBox prefHeight="898.0" prefWidth="824.0">
             <VBox.margin>
-               <Insets bottom="48.0" left="48.0" right="48.0" top="48.0"/>
+               <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
             </VBox.margin>
             <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="824.0">
                <VBox.margin>
-                  <Insets bottom="10.0"/>
+                  <Insets bottom="10.0" />
                </VBox.margin>
                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                   <HBox.margin>
-                     <Insets right="10.0"/>
+                     <Insets right="10.0" />
                   </HBox.margin>
-                  <Image url="@../images/notificationx32.png"/>
+                  <Image url="@../images/notificationx32.png" />
                </ImageView>
                <Label prefHeight="39.0" prefWidth="200.0" text="Notifications" textFill="WHITE">
                   <font>
-                     <Font name="Segoe UI Bold" size="32.0"/>
+                     <Font name="Segoe UI Bold" size="32.0" />
                   </font>
                </Label>
-               <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+               <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             </HBox>
             <Label textFill="WHITE">
                <font>
-                  <Font size="16.0"/>
+                  <Font size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0"/>
+                  <Insets bottom="20.0" />
                </VBox.margin>
             </Label>
             <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
-               <JFXListView fx:id="notificationListView" prefHeight="0.0" prefWidth="824.0"
-                            styleClass="list-transparent" stylesheets="@../styles/notification.css"
-                            VBox.vgrow="ALWAYS"/>
+               <JFXListView fx:id="notificationListView" prefHeight="0.0" prefWidth="824.0" styleClass="list-transparent" stylesheets="@../styles/notification.css" VBox.vgrow="ALWAYS" />
             </VBox>
          </VBox>
       </VBox>
@@ -439,7 +442,7 @@
             <VBox styleClass="comments-section, glass-panel" VBox.vgrow="ALWAYS">
                <Label styleClass="section-label" text="Comments" />
                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
-                  <Label fx:id="infoComments" styleClass="info-comments" text="Comments" wrapText="true"/>
+                  <Label fx:id="infoComments" styleClass="info-comments" text="Comments" wrapText="true" />
                </ScrollPane>
             </VBox>
 

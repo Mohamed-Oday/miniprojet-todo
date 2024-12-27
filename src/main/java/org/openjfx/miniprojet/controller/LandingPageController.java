@@ -12,27 +12,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-/**
- * Controller class for the entry page.
- * Handles the sign-in button action to display the login pop-up.
- *
- * @author Sellami Mohamed Oday
- * @version 1.0
- * @since 1.0
- * @see FXMLLoader#load()
- * @see Stage#show()
- */
-public class EntryPageController {
-
-    /**
-     * Handles the sign-in button action event.
-     * Loads the login FXML, sets up the login controller, and displays the login pop-up stage.
-     *
-     * @param event the action event triggered by the sign-in button
-     * @throws IOException if the FXML file cannot be loaded
-     * @see FXMLLoader#load()
-     * @see Stage#show()
-     */
+public class LandingPageController {
     @FXML
     public void handleSignInButton(ActionEvent event) throws IOException {
         // Loading the login fxml
@@ -40,26 +20,27 @@ public class EntryPageController {
         Parent root = loader.load();
 
         // Getting login Controller
-        loginPopUPController loginController = loader.getController();
+        LoginFormController loginFormController = loader.getController();
 
         // Getting the entry stage
-        Stage entryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage landingPageStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Creating new stage for the login pop-up
-        Stage loginStage = new Stage();
-        loginStage.setTitle("Sign In");
-        loginStage.setScene(new Scene(root));
-        loginStage.initStyle(StageStyle.UTILITY);
-        loginStage.initModality(Modality.APPLICATION_MODAL);
+        Stage loginFormStage = new Stage();
+        loginFormStage.setTitle("Sign In");
+        loginFormStage.setScene(new Scene(root));
+        loginFormStage.initStyle(StageStyle.UTILITY);
+        loginFormStage.initModality(Modality.APPLICATION_MODAL);
 
         // Setting the entry stage and login stage
-        if (entryStage != null){
-            loginController.setLoginStage(loginStage);
-            loginController.setEntryStage(entryStage);
+        if (landingPageStage != null){
+            loginFormController.setLoginFormStage(loginFormStage);
+            loginFormController.setLandingPageStage(landingPageStage);
             // Show the login
-            loginStage.show();
+            loginFormStage.show();
         }else{
             System.out.println("Error: Stage is null");
         }
     }
+
 }

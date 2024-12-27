@@ -5,71 +5,44 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.openjfx.miniprojet.dao.UserDAO;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.SQLException;
 
-/**
- * Controller class for handling login pop-up functionality.
- * @version 1.0
- * @since 1.0
- * @author Sellami Mohamed Oday
- * @see BCrypt
- */
-public class loginPopUPController {
+public class LoginFormController {
+    @FXML private JFXCheckBox stayLoggedIn;
+    @FXML private PasswordField password;
+    @FXML private TextField userName;
+    @FXML private Button createButton;
 
-    @FXML
-    private JFXCheckBox stayLoggedIn;
+    private Stage landingPageStage;
+    private Stage loginFormStage;
+    private final UserDAO userDAO = new UserDAO();
 
-    @FXML
-    private PasswordField password;
-
-    @FXML
-    private TextField userName;
-
-    @FXML
-    private Button createButton;
-
-    private Stage entryStage;
-    private Stage loginStage;
-
-    /**
-     * Sets the login stage.
-     *
-     * @param loginStage the login stage to set
-     */
-    public void setLoginStage(Stage loginStage) {
-        this.loginStage = loginStage;
+    public void setLoginFormStage(Stage stage) {
+        this.loginFormStage = stage;
     }
 
-    /**
-     * Sets the entry stage.
-     *
-     * @param entryStage the entry stage to set
-     */
-    public void setEntryStage(Stage entryStage) {
-        this.entryStage = entryStage;
+    public void setLandingPageStage(Stage stage) {
+        this.landingPageStage = stage;
     }
 
-    /**
-     * Handles the creation of a new account by loading the sign-up FXML and displaying it in a new stage.
-     *
-     * @throws IOException if the FXML file cannot be loaded
-     */
     @FXML
-    public void handleCreateAccount() throws IOException {
+    public void handleCreateAccount() throws IOException{
         // Loading the signUp fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/signUp.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/RegisterForm.fxml"));
         Parent root = loader.load();
 
         // Getting the signUp Controller
-        signUpController signUpController = loader.getController();
+        RegisterFormController registerFormController = loader.getController();
 
         // Getting the login stage
         Stage loginStage = (Stage) createButton.getScene().getWindow();
@@ -82,26 +55,21 @@ public class loginPopUPController {
         signUpStage.initModality(Modality.APPLICATION_MODAL);
 
         // Setting the signUp stage and passing entryStage
-        signUpController.setEntryStage(entryStage);
-        signUpController.setSignInStage(loginStage);
+        registerFormController.setLandingPageStage(landingPageStage);
+        registerFormController.setSignInStage(loginStage);
 
         // Setting the login stage and signUp stage
         signUpStage.show();
         loginStage.close();
     }
 
-    /**
-     * Handles the sign-in button action by validating the login credentials and loading the main application scene if successful.
-     *
-     * @throws IOException if the FXML file cannot be loaded
-     */
     @FXML
-    public void handleSignInButton() throws IOException {
+    public void handleSignInButton() throws IOException, SQLException {
         String username = userName.getText();
         String pass = password.getText();
 
         if (username.isEmpty() || pass.isEmpty()) {
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");
             alert.setHeaderText(null);
             alert.setContentText("Please enter both username and password!");
@@ -109,86 +77,29 @@ public class loginPopUPController {
             return;
         }
 
-        if (isValidLogin(username, pass)){
-            System.out.println("Login Successful");
-
+        if (userDAO.isValidLogin(username, pass)) {
             if (stayLoggedIn.isSelected()){
-                String insertQuery = "INSERT INTO saveduser (username) VALUES (?)";
-                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-                     PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)){
-
-                    preparedStatement.setString(1, username);
-                    int rows = preparedStatement.executeUpdate();
-
-                    if (rows > 0){
-                        System.out.println("User saved successfully.");
-                    }else{
-                        System.out.println("User not saved.");
-                    }
-
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
+                userDAO.saveUser(username);
             }
-
             // Loading Main fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/Main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/AppPage.fxml"));
             Parent root = loader.load();
 
             AppController controller = loader.getController();
-            controller.setUserName(userName.getText());
+            controller.setUser(userName.getText());
 
             // Creating the scene for our app
             Scene scene = new Scene(root);
-            entryStage.setScene(scene);
-            entryStage.setTitle("ToDo App");
-            loginStage.close();
-            entryStage.setMaximized(true);
-            entryStage.show();
+            Stage appStage = new Stage();
+            appStage.setScene(scene);
+            appStage.setTitle("ToDo App");
+            loginFormStage.close();
+            landingPageStage.close();
+            appStage.setMaximized(true);
+            appStage.show();
         }else{
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Login Failed");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid username or password. Please try again.");
-            
-            // Add custom styling to the alert
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(
-                getClass().getResource("/org/openjfx/miniprojet/assets/styles/alert.css").toExternalForm()
-            );
-            
-            alert.showAndWait();
+            System.out.println("Invalid Login");
         }
-    }
 
-    /**
-     * Validates the login credentials by checking the username and password against the database.
-     *
-     * @param username the username to validate
-     * @param password the password to validate
-     * @return true if the login is valid, false otherwise
-     * @apiNote This method uses the BCrypt library to compare the hashed password from the database with the password entered by the user.
-     */
-    public boolean isValidLogin(String username, String password){
-        String selectQuery = "SELECT password FROM userinforamtion WHERE username = ?";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/accounts", "root", "admin");
-             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
-
-            preparedStatement.setString(1, username);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()){
-                if (resultSet.next()){
-                    String hashedPassword = resultSet.getString("password");
-                    return BCrypt.checkpw(password, hashedPassword);
-                }
-
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
-
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
     }
 }

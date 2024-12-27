@@ -8,6 +8,9 @@ module org.openjfx.miniprojet {
     requires org.slf4j;
     requires java.desktop;
     requires javafx.graphics;
+    requires spring.security.web;
+    requires javafx.media;
+    requires spring.context;
 
 
     opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;

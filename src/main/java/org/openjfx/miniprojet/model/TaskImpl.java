@@ -19,6 +19,7 @@ public class TaskImpl implements Task {
     private String priority;
     private String category;
     private boolean important;
+    private String owner;
 
     /**
      * Constructs a new TaskImpl with the specified name, description, due date, and status.
@@ -28,7 +29,7 @@ public class TaskImpl implements Task {
      * @param dueDate the due date of the task
      * @param status the status of the task
      */
-    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important) {
+    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important, String owner) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
@@ -38,6 +39,11 @@ public class TaskImpl implements Task {
         this.category = category;
         this.startDate = startDate;
         this.important = important;
+        this.owner = owner;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public void setImportant(boolean important){
@@ -152,7 +158,7 @@ public class TaskImpl implements Task {
      * @param description the new description of the task
      * @param dueDate the new due date of the task
      */
-    public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate) {
+    public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate, Status status) {
         setId(id);
         setName(name);
         setDescription(description);
@@ -160,6 +166,7 @@ public class TaskImpl implements Task {
         setPriority(priority);
         setCategory(category);
         setStartDate(startDate);
+        changeStatus(status);
     }
 
     public String getPriority() {

@@ -1,7 +1,7 @@
 package org.openjfx.miniprojet.dao;
 
 import org.openjfx.miniprojet.model.Notification;
-import org.openjfx.miniprojet.utiil.Database;
+import org.openjfx.miniprojet.util.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

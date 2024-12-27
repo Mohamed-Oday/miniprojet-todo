@@ -6,24 +6,23 @@ import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CategoryDAO;
 import org.openjfx.miniprojet.dao.DataAccessException;
 
+
 public class AddCategoryController {
-
-    private Stage addCategoryStage;
-    private Controller mainController;
-    private String userID;
-
-    @FXML
-    private TextField categoryName;
 
     private final CategoryDAO categoryDAO = new CategoryDAO();
 
+    @FXML private TextField categoryName;
+
+    private Stage addCategoryStage;
+    private AppController appController;
+    private String userID;
 
     public void setAddCategoryStage(Stage addCategoryStage) {
         this.addCategoryStage = addCategoryStage;
     }
 
-    public void setMainController(Controller mainController) {
-        this.mainController = mainController;
+    public void setAppController(AppController appController) {
+        this.appController = appController;
     }
 
     public void setUserID(String userID) {
@@ -31,22 +30,28 @@ public class AddCategoryController {
     }
 
     @FXML
-    public void handleAddCategory(){
+    public void handleAddCategory() {
         String name = categoryName.getText();
-        if (name != null && !name.isEmpty()){
+        if (name != null && !name.isEmpty()) {
             insertCategory(name);
             categoryName.clear();
         }
+    }
+
+    @FXML
+    public void handleCancel() {
+        categoryName.clear();
+        addCategoryStage.close();
     }
 
     public void insertCategory(String name) {
         try{
             categoryDAO.addCategory(name, userID);
         } catch (DataAccessException e){
-            System.err.println(e.getMessage());
+            System.err.println("Error inserting category: " + e.getMessage());
         }
         categoryName.clear();
         addCategoryStage.close();
-        mainController.loadCategories();
+        appController.loadCategories();
     }
 }

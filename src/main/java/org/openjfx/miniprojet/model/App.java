@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.openjfx.miniprojet.controller.Controller;
+import org.openjfx.miniprojet.controller.AppController;
 import org.openjfx.miniprojet.dao.UserDAO;
 
 import java.io.IOException;
@@ -28,20 +28,22 @@ public class App extends Application {
      */
     @Override
     public void start(Stage stage) {
+        System.setProperty("prism.lcdtext", "true");
+        System.setProperty("prism.text", "t2k");
         UserDAO userDAO = new UserDAO();
         try {
             ResultSet resultSet = userDAO.getSavedUser();
 
-            // If no saved user is found, load the EntryPage.fxml scene
+            // If no saved user is found, load the LandingPage.fxml scene
             if (!resultSet.next()) {
-                loadAndShowScene(stage, "/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml");
+                loadAndShowScene(stage, "/org/openjfx/miniprojet/assets/fxml/LandingPage.fxml");
                 return;
             }
 
-            // Load the main scene from Main.fxml
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/Main.fxml"));
+            // Load the main scene from AppPage.fxml
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/org/openjfx/miniprojet/assets/fxml/AppPage.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-            Controller controller = fxmlLoader.getController();
+            AppController controller = fxmlLoader.getController();
 
             // Check if the controller is null
             if (controller == null) {
@@ -50,11 +52,7 @@ public class App extends Application {
             }
 
             // Set the username in the controller
-            controller.setUserName(resultSet.getString("username"));
-
-            // Load and apply the stylesheet
-            String css = Objects.requireNonNull(this.getClass().getResource("/org/openjfx/miniprojet/assets/styles/style.css")).toExternalForm();
-            scene.getStylesheets().add(css);
+            controller.setUser(resultSet.getString("username"));
 
             // Set the application title and icon
             stage.setTitle("ToDo List");

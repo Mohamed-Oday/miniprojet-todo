@@ -73,7 +73,7 @@ public class TaskListImpl extends TaskList{
      */
     @Override
     public void editTask(TaskImpl task) {
-        task.editTask(task.getName(), task.getDescription(), task.getDueDate(), task.getPriority(), task.getCategory(), task.getStartDate());
+        task.editTask(task.getName(), task.getDescription(), task.getDueDate(), task.getPriority(), task.getCategory(), task.getStartDate(), task.getStatus());
     }
 
     /**
@@ -132,36 +132,64 @@ public class TaskListImpl extends TaskList{
      * 	Sort tasks by their due date and display them
      * 	@return returning a task list sorted by due date
      */
-    public List<TaskImpl> sortTaskByDueDate() {
-        List<TaskImpl> sortedTasks = new ArrayList<>();
+    public ObservableList<TaskImpl> sortTaskByDueDate(ObservableList<TaskImpl> currentTasks) {
+        // Create a copy of the currentTasks list
+        ObservableList<TaskImpl> sortedTasks = FXCollections.observableArrayList(currentTasks);
+        // Sort the copied list
         sortedTasks.sort(Comparator.comparing(TaskImpl::getDueDate));
         return sortedTasks;
     }
 
-    public ObservableList<TaskImpl> sortTasksByPriority() {
-        ObservableList<TaskImpl> sortedTasks = FXCollections.observableArrayList();
+    public ObservableList<TaskImpl> categoryTasks(ObservableList<TaskImpl> currentTasks, String category) {
+        ObservableList<TaskImpl> categoryTasks = FXCollections.observableArrayList();
+        for (TaskImpl task : currentTasks) {
+            if (task.getCategory().equals(category)) {
+                categoryTasks.add(task);
+            }
+        }
+        return categoryTasks;
+    }
 
+    public ObservableList<TaskImpl> priorityTasks(ObservableList<TaskImpl> currentTasks, String priority) {
+        ObservableList<TaskImpl> priorityTasks = FXCollections.observableArrayList();
+        for (TaskImpl task : currentTasks) {
+            if (task.getPriority().equals(priority)) {
+                priorityTasks.add(task);
+            }
+        }
+        return priorityTasks;
+    }
+
+    public ObservableList<TaskImpl> statusTasks(ObservableList<TaskImpl> currentTasks, Status status) {
+        ObservableList<TaskImpl> statusTasks = FXCollections.observableArrayList();
+        for (TaskImpl task : currentTasks) {
+            if (task.getStatus().equals(status)) {
+                statusTasks.add(task);
+            }
+        }
+        return statusTasks;
+    }
+
+    public ObservableList<TaskImpl> sortTasksByPriority(ObservableList<TaskImpl> currentTasks) {
+        ObservableList<TaskImpl> sortedTasks = FXCollections.observableArrayList();
         // Add High priority tasks
-        for (TaskImpl task : tasks) {
+        for (TaskImpl task : currentTasks) {
             if ("High".equals(task.getPriority())) {
                 sortedTasks.add(task);
             }
         }
-
         // Add Medium priority tasks
-        for (TaskImpl task : tasks) {
+        for (TaskImpl task : currentTasks) {
             if ("Medium".equals(task.getPriority())) {
                 sortedTasks.add(task);
             }
         }
-
         // Add Low priority tasks
-        for (TaskImpl task : tasks) {
+        for (TaskImpl task : currentTasks) {
             if ("Low".equals(task.getPriority())) {
                 sortedTasks.add(task);
             }
         }
-
         return sortedTasks;
     }
 

@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="650.0" prefWidth="480.0" styleClass="login-background" stylesheets="@../styles/style.css"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.openjfx.miniprojet.controller.signUpController">
+            fx:controller="org.openjfx.miniprojet.controller.RegisterFormController">
    <VBox alignment="CENTER_LEFT" layoutX="48.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0"
          AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="0.0">
       <padding>

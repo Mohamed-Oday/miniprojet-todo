@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="272.0" prefWidth="383.0" styleClass="addTask-background" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.AddCategoryController">
+   <VBox layoutX="190.0" layoutY="225.0" prefHeight="293.0" prefWidth="383.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets left="20.0" right="20.0" top="30.0" />
+      </padding>
+      <Pane prefHeight="25.0" prefWidth="283.0" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="480.0">
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+         <Label prefHeight="51.0" prefWidth="249.0" text="Add a Category" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="32.0" />
+            </font>
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+         </Label>
+         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/category.png" />
+         </ImageView>
+      </HBox>
+      <VBox prefHeight="100.0" prefWidth="283.0">
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+         <Label text="Name:" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="16.0" />
+            </font>
+            <VBox.margin>
+               <Insets bottom="5.0" />
+            </VBox.margin>
+         </Label>
+         <TextField fx:id="categoryName" prefHeight="32.0" prefWidth="283.0" styleClass="addTask-textField" stylesheets="@../styles/style.css">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+         </TextField>
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="384.0">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+         <JFXButton minHeight="40.0" minWidth="87.0" onAction="#handleAddCategory" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-addButton" stylesheets="@../styles/style.css" text="Add" textFill="WHITE">
+            <HBox.margin>
+               <Insets right="20.0" />
+            </HBox.margin>
+            <font>
+               <Font name="Segoe UI Bold" size="12.0" />
+            </font>
+         </JFXButton>
+         <JFXButton onAction="#handleAddInviteCode" prefHeight="57.0" prefWidth="121.0" styleClass="addTask-addButton" text="Add Invite Code" textFill="WHITE">
+            <HBox.margin>
+               <Insets right="20.0" />
+            </HBox.margin>
+            <font>
+               <Font name="Segoe UI Bold" size="12.0" />
+            </font>
+         </JFXButton>
+         <JFXButton minHeight="40.0" minWidth="87.0" prefHeight="40.0" prefWidth="87.0" styleClass="addTask-cancelButton" stylesheets="@../styles/style.css" text="Cancel" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="12.0" />
+            </font>
+         </JFXButton>
+      </HBox>
+   </VBox>
+</AnchorPane>

@@ -18,7 +18,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="665.0" prefWidth="400.0" styleClass="addTask-background" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.addTaskController">
+<AnchorPane prefHeight="665.0" prefWidth="400.0" styleClass="addTask-background" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.AddTaskController">
 
       <VBox layoutX="190.0" layoutY="-23.0" prefHeight="636.0" prefWidth="400.0" styleClass="editTask-background" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <Pane prefHeight="25.0" prefWidth="283.0" />

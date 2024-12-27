@@ -1,0 +1,165 @@
+/* Root styles for the form container */
+.form-container {
+    -fx-background-color: #111827; /* bg-gray-900 equivalent */
+    -fx-font-smoothing-type: gray;
+    -fx-lcd-text: true;
+}
+
+/* Card styles */
+.card {
+    -fx-background-color: #1f2937; /* bg-gray-800 equivalent */
+    -fx-padding: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 4);
+}
+
+/* Header styles */
+.card-header {
+    -fx-padding: 0 0 16px 0;
+}
+
+.card-title {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Roboto';
+    -fx-font-weight: bold;
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+    -fx-graphic-text-gap: 8px;
+    -fx-graphic: url("../images/task.png");
+    -fx-font-smoothing-type: lcd;
+}
+
+.card-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9ca3af; /* text-gray-400 equivalent */
+}
+
+/* Form control styles */
+.form-label {
+    -fx-text-fill: #e5e7eb; /* text-gray-200 equivalent */
+    -fx-font-size: 14px;
+    -fx-padding: 0 0 4px 0;
+}
+
+.text-field, .text-area {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.text-field:hover, .text-area:hover {
+    -fx-border-color: #6b7280; /* border-gray-500 equivalent */
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #2563eb; /* blue-600 equivalent */
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.2), 4, 0, 0, 0);
+}
+
+/* Description text area specific styles */
+.description-area {
+    -fx-pref-height: 100px;
+    -fx-wrap-text: true;
+}
+
+/* Date picker styles */
+.date-picker {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #4b5563; /* border-gray-600 equivalent */
+}
+
+/* Combo box (Select) styles */
+.combo-box {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+}
+
+.combo-box .list-view {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+}
+
+/* Button styles */
+.button {
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.primary-button {
+    -fx-background-color: #2563eb; /* blue-600 equivalent */
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1d4ed8; /* blue-700 equivalent */
+}
+
+.secondary-button {
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+    -fx-border-radius: 4px;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #4b5563; /* bg-gray-600 equivalent */
+    -fx-border-color: #6b7280; /* border-gray-500 equivalent */
+}
+
+/* Priority buttons */
+.priority-button {
+    -fx-min-width: 100px;
+    -fx-background-color: #374151; /* bg-gray-700 equivalent */
+    -fx-border-color: #4b5563; /* border-gray-600 equivalent */
+    -fx-text-fill: #f3f4f6; /* text-gray-100 equivalent */
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.priority-button:selected {
+    -fx-background-color: #2563eb; /* blue-600 equivalent */
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.priority-button:selected:hover {
+    -fx-background-color: #1d4ed8; /* blue-700 equivalent */
+}
+
+.priority-button:hover {
+    -fx-background-color: #4b5563; /* bg-gray-600 equivalent */
+    -fx-border-color: #6b7280; /* border-gray-500 equivalent */
+}
+
+/* Important toggle button */
+.important-button {
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.important-button-selected {
+    -fx-background-color: #2563eb; /* blue-600 equivalent */
+    -fx-text-fill: white;
+}
+
+.important-button-selected:hover {
+    -fx-background-color: #1d4ed8; /* blue-700 equivalent */
+}

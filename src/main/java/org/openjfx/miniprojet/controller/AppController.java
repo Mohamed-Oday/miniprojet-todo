@@ -48,6 +48,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Controller {
 
@@ -111,6 +112,7 @@ public class Controller {
     @FXML private JFXListView<String> categoryListView3;
     @FXML private JFXListView<Notification> notificationList;
     @FXML private Label notificationNumber;
+    @FXML private ComboBox<Status> statusComboBox;
 
     private final TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
     private final TaskDAO taskDAO = new TaskDAO();
@@ -121,11 +123,13 @@ public class Controller {
     private String latestTaskName;
     private TaskImpl selectedTask;
     private String comment;
+    private Status latestStatus;
 
 
     @FXML
     public void initialize() {
         mainPane = myDayPane;
+        setupStatusComboBox();
         setupCategoryListViews(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
         setupTaskListViews(taskListView, taskListView1, taskListView2, categoryTasks);
         setupCategoryContextMenu(categoryListView, categoryListView1, categoryListView2, categoryListView21, categoryListView3);
@@ -141,6 +145,11 @@ public class Controller {
     private void closeInfoPane() {
         infoPane.setVisible(false);
         mainPane.setDisable(false);
+    }
+
+    private void setupStatusComboBox() {
+        ObservableList<Status> statusList = FXCollections.observableArrayList(Status.values());
+        statusComboBox.setItems(statusList);
     }
 
     @SafeVarargs
@@ -181,9 +190,17 @@ public class Controller {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem deleteCategoryItem = createMenuItem("Delete Category", event -> deleteSelectedCategory());
             MenuItem deleteCategoryWithTasksItem = createMenuItem("Delete Category and Tasks", event -> deleteCategoryWithTasks());
-            contextMenu.getItems().addAll(deleteCategoryItem, deleteCategoryWithTasksItem);
+            MenuItem generateInviteCode = createMenuItem("Generate Invite Code", event -> generateCode());
+            contextMenu.getItems().addAll(deleteCategoryItem, deleteCategoryWithTasksItem, generateInviteCode);
             listView.setContextMenu(contextMenu);
         }
+    }
+
+    private void generateCode() {
+        String selectedCategory = getCurrentCategory();
+        String inviteCode = UUID.randomUUID().toString();
+        categoryDAO.generateInviteCode(userID, selectedCategory, inviteCode);
+        showNotification("Invite code generated successfully.", "Invite Code", "has been copied to your clipboard", inviteCode);
     }
 
     private void setupSearchField(TextField... searchFields) {
@@ -536,6 +553,8 @@ public class Controller {
         TaskDueDateField.setValue(task.getDueDate());
         priorityGroup.selectToggle(getPriorityToggle(task.getPriority()));
         categoryComboBox.setValue(task.getCategory());
+        statusComboBox.setValue(task.getStatus());
+        latestStatus = task.getStatus();
         showEditFormSearchField(false, searchField, searchField1, searchField2, searchField3);
         mainVbox.setPadding(new Insets(0, 320, 0, 0));
         mainVbox1.setPadding(new Insets(0, 320, 0, 0));
@@ -577,7 +596,8 @@ public class Controller {
         LocalDate taskDueDate = TaskDueDateField.getValue();
         String categoryName = categoryComboBox.getValue();
         String taskPriority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
-        task.editTask(taskName, taskDescription, taskDueDate, taskPriority, categoryName, taskStartDate);
+        Status taskStatus = statusComboBox.getValue();
+        task.editTask(taskName, taskDescription, taskDueDate, taskPriority, categoryName, taskStartDate, taskStatus);
     }
 
     @FXML
@@ -626,6 +646,14 @@ public class Controller {
     }
 
     @FXML
+    public void handleResetToAutoStatus(){
+        taskDAO.resetToAutoStatus(selectedTask);
+        loadTasks();
+        handleCancelButton();
+        showNotification("Task status reset successfully.", "Task", "status has been reset", selectedTask.getName());
+    }
+
+    @FXML
     public void handleSignOutButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/EntryPage.fxml"));
         Parent root = loader.load();
@@ -649,7 +677,14 @@ public class Controller {
     }
 
     public void updateTask(TaskImpl task) {
-        taskDAO.updateTask(task, userID);
+        boolean isOverRidden = latestStatus != task.getStatus();
+        taskDAO.updateTask(task, userID, isOverRidden);
+        
+        // Add this line to sync shared tasks
+        if (categoryDAO.isSharedCategory(task.getCategory(), userID)) {
+            categoryDAO.updateSharedTasks(task, userID);
+        }
+        
         loadTasks();
     }
 

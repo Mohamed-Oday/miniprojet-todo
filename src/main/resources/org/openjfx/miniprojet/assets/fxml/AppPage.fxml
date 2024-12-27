@@ -24,7 +24,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1200.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.AppController">
    <AnchorPane fx:id="myDayPane" styleClass="myDay-background" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <BorderPane prefHeight="910.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -810,6 +810,11 @@
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin></ComboBox>
+         <ComboBox fx:id="statusComboBox" prefHeight="58.0" prefWidth="350.0" promptText="Update Status">
+            <VBox.margin>
+               <Insets bottom="20.0" />
+            </VBox.margin>
+         </ComboBox>
          <HBox alignment="CENTER" prefHeight="0.0" prefWidth="324.0">
             <JFXRadioButton fx:id="high" text="High" textFill="WHITE">
                <HBox.margin>
@@ -845,7 +850,15 @@
                </selectedColor>
             </JFXRadioButton>
          </HBox>
-         <Pane prefHeight="335.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
+         <Pane prefHeight="163.0" prefWidth="324.0" VBox.vgrow="ALWAYS" />
+         <JFXButton onAction="#handleResetToAutoStatus" prefHeight="47.0" prefWidth="367.0" styleClass="editTask-button-background" text="Reset Status Changes to Automatic" textFill="#c7c7c7">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+            <font>
+               <Font name="Segoe UI" size="16.0" />
+            </font>
+         </JFXButton>
          <JFXButton onAction="#handleDeleteButton" prefHeight="47.0" prefWidth="324.0" styleClass="editTask-button-background" stylesheets="@../styles/style.css" text="Delete Task" textFill="#c7c7c7">
             <font>
                <Font name="Segoe UI" size="16.0" />

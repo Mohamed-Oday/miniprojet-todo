@@ -5,12 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -38,7 +34,7 @@ public class loginPopUPController {
     private TextField userName;
 
     @FXML
-    private Label createLabel;
+    private Button createButton;
 
     private Stage entryStage;
     private Stage loginStage;
@@ -76,7 +72,7 @@ public class loginPopUPController {
         signUpController signUpController = loader.getController();
 
         // Getting the login stage
-        Stage loginStage = (Stage) createLabel.getScene().getWindow();
+        Stage loginStage = (Stage) createButton.getScene().getWindow();
 
         // Creating new stage for the signUp page
         Stage signUpStage = new Stage();
@@ -139,7 +135,7 @@ public class loginPopUPController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/Main.fxml"));
             Parent root = loader.load();
 
-            Controller controller = loader.getController();
+            AppController controller = loader.getController();
             controller.setUserName(userName.getText());
 
             // Creating the scene for our app

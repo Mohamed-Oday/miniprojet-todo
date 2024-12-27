@@ -1,0 +1,39 @@
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.label {
+    -fx-text-fill: #333333;
+}
+
+.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 1, 0, 1);
+}
+
+.subtitle {
+    -fx-font-size: 18px;
+    -fx-text-fill: #666666;
+}
+
+.button {
+    -fx-background-color: #4339F2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+.button:hover {
+    -fx-background-color: #3730E3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 5);
+}
+
+.footer {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999999;
+}

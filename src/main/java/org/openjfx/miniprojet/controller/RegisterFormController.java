@@ -168,10 +168,10 @@ public class signUpController {
      */
     public void returnToSignIn() throws IOException {
         // Loading the signUp fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/loginPopUP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/LoginForm.fxml"));
         Parent root = loader.load();
 
-        loginPopUPController loginPopUPController = loader.getController();
+        LoginFormController LoginFormController = loader.getController();
 
         Stage signUpStage = (Stage) signLabel.getScene().getWindow();
 
@@ -182,8 +182,8 @@ public class signUpController {
         signInStage.initStyle(StageStyle.UTILITY);
         signInStage.initModality(Modality.APPLICATION_MODAL);
 
-        loginPopUPController.setEntryStage(entryStage);
-        loginPopUPController.setLoginStage(signInStage);
+        LoginFormController.setEntryStage(entryStage);
+        LoginFormController.setLoginStage(signInStage);
 
         // Setting the login stage and signUp stage
         signInStage.show();

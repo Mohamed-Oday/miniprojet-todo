@@ -99,3 +99,32 @@
     -fx-font-weight: bold;
     -fx-padding: 10px;
 }
+
+.import-button{
+    -fx-background-color: "#3b3b3b";
+    -fx-background-radius: 10;
+}
+
+.import-button:hover{
+    -fx-background-color: "#4b423a";
+}
+
+.list-collaborated{
+    -fx-background-color: transparent;
+}
+
+.list-collaborated-cell{
+    -fx-background-color: "#6b2fbc" !important;
+    -fx-text-fill: #fff;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 20px;
+    -fx-background-insets: 0 0 5 0;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-transition: 0.3s ease-in-out;
+}
+
+.list-collaborated-cell:hover{
+    -fx-background-color: "#7c3aed";
+}

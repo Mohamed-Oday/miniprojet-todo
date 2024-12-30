@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.openjfx.miniprojet.controller.AppController;
 import org.openjfx.miniprojet.model.Status;
 import org.openjfx.miniprojet.model.TaskImpl;
 import org.openjfx.miniprojet.model.TaskListImpl;
@@ -16,12 +17,15 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TaskDAO {
 
     private final UserDAO userDAO = new UserDAO();
+    private AppController appController;
 
     public void deleteTask(TaskImpl task){
         String deleteQuery = "DELETE FROM tasks WHERE task_id = ?";
@@ -137,6 +141,7 @@ public class TaskDAO {
                 task.getPriority(),
                 categoryID,
                 task.isImportant(),
+                task.getReminder(),
                 task.getId(),
         };
         try {
@@ -149,9 +154,9 @@ public class TaskDAO {
     private static String getString(boolean isOverRidden) {
         String updateQuery;
         if (isOverRidden){
-            updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_startDate = ?, task_dueDate = ?, task_status = ?, task_priority = ?, task_categoryID = ?, is_important = ?, status_overriden = 1 WHERE task_id = ?";
+            updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_startDate = ?, task_dueDate = ?, task_status = ?, task_priority = ?, task_categoryID = ?, is_important = ?, reminder = ?, status_overriden = 1 WHERE task_id = ?";
         }else{
-            updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_startDate = ?, task_dueDate = ?, task_status = ?, task_priority = ?, task_categoryID = ?, is_important = ? WHERE task_id = ?";
+            updateQuery = "UPDATE tasks SET task_name = ?, task_description = ?, task_startDate = ?, task_dueDate = ?, task_status = ?, task_priority = ?, task_categoryID = ?, is_important = ?, reminder = ? WHERE task_id = ?";
         }
         return updateQuery;
     }
@@ -192,10 +197,11 @@ public class TaskDAO {
                 String taskPriority = resultSet.getString("task_priority");
                 String taskCategory = resultSet.getString("category_name");
                 boolean isImportant = resultSet.getBoolean("is_important");
+                int reminder = resultSet.getInt("reminder");
                 if (taskCategory == null){
                     taskCategory = "General";
                 }
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory, taskStartDate, isImportant, userID);
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, taskCategory, taskStartDate, isImportant, userID, reminder);
                 task.setId(taskID);
                 loadTaskComments(task);
                 tasks.addTask(task);
@@ -241,7 +247,7 @@ public class TaskDAO {
     }
 
     public ObservableList<TaskImpl> loadTasksByCategory(String categoryName, String userID){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, tasks.task_startDate, tasks.is_important "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, tasks.task_startDate, tasks.is_important, tasks.reminder "
                 + "FROM tasks JOIN categories ON tasks.task_categoryID = categories.category_id "
                 + "WHERE tasks.user_id = ? AND categories.category_name = ? AND tasks.task_status NOT IN ('Completed', 'Abandoned')";
         TaskListImpl tasks = new TaskListImpl(FXCollections.observableArrayList());
@@ -255,7 +261,8 @@ public class TaskDAO {
                 Status taskStatus = Status.valueOf(resultSet.getString("task_status"));
                 String taskPriority = resultSet.getString("task_priority");
                 boolean isImportant = resultSet.getBoolean("is_important");
-                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName, taskStartDate, isImportant, userID);
+                int reminder = resultSet.getInt("reminder");
+                TaskImpl task = new TaskImpl(taskName, taskDescription, taskDueDate, taskStatus, taskPriority, categoryName, taskStartDate, isImportant, userID, reminder);
                 task.setId(taskID);
                 loadTaskComments(task);
                 tasks.addTask(task);
@@ -266,8 +273,8 @@ public class TaskDAO {
         }
     }
 
-    public void createTasks(String taskName, String description, LocalDate dueDate, LocalDate startDate, Status status, String categoryName, String priority, String userID, boolean isImportant) throws SQLException {
-        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, task_categoryID, task_priority) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void createTasks(String taskName, String description, LocalDate dueDate, LocalDate startDate, Status status, String categoryName, String priority, String userID, boolean isImportant, int reminder) throws SQLException {
+        String insertQuery = "INSERT INTO tasks (user_id, task_name, task_description, task_dueDate, task_status, is_important, task_startDate, task_categoryID, task_priority, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int categoryID = getCategoryID(categoryName, userID);
         try{
             Database.getInstance().executeUpdate(
@@ -280,7 +287,8 @@ public class TaskDAO {
                     isImportant ? "1" : "0",
                     Date.valueOf(startDate),
                     categoryID,
-                    priority
+                    priority,
+                    reminder
             );
             userDAO.updateTotalTasks(userID);
         } catch (SQLException e){
@@ -361,7 +369,7 @@ public class TaskDAO {
     }
 
     private String getTasksQuery(String currentPage){
-        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name, tasks.task_startDate, tasks.is_important "
+        String loadTasksQuery = "SELECT tasks.task_id, tasks.task_name, tasks.task_description, tasks.task_dueDate, tasks.task_status, tasks.task_priority, categories.category_name, tasks.task_startDate, tasks.is_important, tasks.reminder "
                 + "FROM tasks LEFT JOIN categories ON tasks.task_categoryID = categories.category_id"
                 + " WHERE tasks.user_id = ?";
 
@@ -376,5 +384,50 @@ public class TaskDAO {
         return loadTasksQuery;
     }
 
+    public void checkUpcomingTasks(String userID, AppController controller) {
+        System.out.println("Checking upcoming tasks");
+        String query = "SELECT * FROM tasks WHERE user_id = ? AND task_status = 'Pending' AND task_startDate > CURDATE()";
+        appController = controller;
+        try (ResultSet resultSet = Database.getInstance().executeQuery(query, userID)) {
+            while (resultSet.next()) {
+                LocalDate startDate = resultSet.getDate("task_startDate").toLocalDate();
+                // Checking for 1 day, 3 days, 1 week
+                long days = ChronoUnit.DAYS.between(LocalDate.now(), startDate);
+                System.out.println("Task: " + resultSet.getString("task_name") + " is starting in " + days + " days");
 
+                if (days == 1) {
+                    appController.alertUpComingTasks(resultSet.getString("task_name"), "Task is starting tomorrow");
+                } else if (days == 3) {
+                    appController.alertUpComingTasks(resultSet.getString("task_name"), "Task is starting in 3 days");
+                } else if (days == 7) {
+                    appController.alertUpComingTasks(resultSet.getString("task_name"), "Task is starting in a week");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error checking upcoming tasks", e);
+        }
+    }
+
+    public void checkOverdueTasks(String userID, AppController controller) {
+        System.out.println("Checking overdue tasks");
+        String query = "SELECT * FROM tasks WHERE user_id = ? AND task_status = 'Started' AND task_dueDate > CURDATE()";
+        appController = controller;
+        try (ResultSet resultSet = Database.getInstance().executeQuery(query, userID)) {
+            while (resultSet.next()) {
+                LocalDate dueDate = resultSet.getDate("task_dueDate").toLocalDate();
+                long days = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
+                System.out.println("Task: " + resultSet.getString("task_name") + " is overdue by " + days + " days");
+                if (days == 1) {
+                    appController.alertOverdueTasks(resultSet.getString("task_name"), "Task is due tomorrow");
+                } else if (days == 3) {
+                    appController.alertOverdueTasks(resultSet.getString("task_name"), "Task is due in 3 days");
+                } else if (days == 7) {
+                    appController.alertOverdueTasks(resultSet.getString("task_name"), "Task is due in a week");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error checking overdue tasks", e);
+        }
+    }
 }

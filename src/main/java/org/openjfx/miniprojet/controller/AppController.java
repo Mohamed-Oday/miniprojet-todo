@@ -108,6 +108,7 @@
         @FXML private Text completionRate;
         @FXML private LineChart<String, Number> weeklyActivityChart;
         @FXML private JFXListView<String> profileCategories;
+        @FXML private ComboBox<String> taskReminder;
 
         private boolean isTaskCompleted;
         private boolean isTaskAbandoned;
@@ -121,6 +122,7 @@
         private String selectedCategory = "All";
         private String selectedPriority = "All";
         private Status selectedStatus = null;
+        private TaskReminderService reminderService;
 
         public void initialize() {
             selectedPage = myDayButton;
@@ -128,6 +130,7 @@
             selectedPriority = "All";
             selectedStatus = null;
             setupStatusComboBox();
+            setupReminderComboBox();
             setupCategoryListView();
             setupTaskListView();
             setupCategoryContextMenu();
@@ -138,12 +141,19 @@
             setupProfileCategories();
             setupSortingMenu();
             loadNotifications();
+            Platform.runLater(this::checkUpcomingTasks);
+            Platform.runLater(this::checkOverdueTasks);
             Platform.runLater(() -> {
                 if (collaborationDAO.hasInvites(userID)) {
                     ObservableList<String> pendingInvites = collaborationDAO.getPendingInvites(userID);
                     pendingInvitesAlert(pendingInvites);
                 }
             });
+        }
+
+        private void setupReminderComboBox() {
+            ObservableList<String> reminders = FXCollections.observableArrayList("1 time per week", "3 times per week", "7 times per week");
+            taskReminder.setItems(reminders);
         }
 
         private void setupWeeklyActivityChart() {
@@ -466,14 +476,69 @@
             boolean isCollaboratedCategory = category.contains("(") && category.contains(")") &&
                     !category.substring(category.lastIndexOf("(") + 1, category.lastIndexOf(")")).equals(String.valueOf(userID));
             Button addCollaboration;
+            Button removeCollaboration = null;
             if (!isCollaboratedCategory) {
+                // Owner View
                 addCollaboration = createButton("/org/openjfx/miniprojet/assets/images/plus.png", "#FF6F61", event -> handleAddCollaborationButton(category));
+                if (collaborationDAO.isCollabCategory(category, userID)){
+                    removeCollaboration = createButton("/org/openjfx/miniprojet/assets/images/minus.png", "#FF6F61", event -> handleRemoveCollaborationButton(category));
+                }
                 container.getChildren().addAll(nameLabel, addCollaboration);
+                if (removeCollaboration != null){
+                    container.getChildren().add(removeCollaboration);
+                }
             } else {
-                container.getChildren().add(nameLabel);
+                // Collaborated user view
+                removeCollaboration = createButton("/org/openjfx/miniprojet/assets/images/minus.png", "#FF6F61", event -> handleLeaveCollaborationButton(category));
+                container.getChildren().addAll(nameLabel, removeCollaboration);
             }
             container.setAlignment(Pos.CENTER_LEFT);
             return container;
+        }
+
+        private void handleLeaveCollaborationButton(String category) {
+            String categoryName = category.substring(0, category.indexOf("(")).trim();
+            String owner = category.substring(category.indexOf("(") + 1, category.indexOf(")")).trim();
+            if (confirmLeaving(categoryName)){
+                collaborationDAO.removeCollaboration(categoryName, owner, userID);
+            }
+            latestTaskName = categoryName;
+            showNotification("You have left the collaboration", "Collaboration", "You have left the collaboration", categoryName);
+            loadCategories();
+        }
+
+        private boolean confirmLeaving(String category) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Leave Collaboration");
+            alert.setHeaderText("Are you sure you want to leave this collaboration?");
+            Optional<ButtonType> result = alert.showAndWait();
+            return result.isPresent() && result.get() == ButtonType.OK;
+        }
+
+        private void handleRemoveCollaborationButton(String category) {
+            handleRemoveCollaborationDialog(category);
+            loadCategories();
+        }
+
+        private void handleRemoveCollaborationDialog(String category) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/RemoveCollaborationForm.fxml"));
+            Parent root;
+            try {
+                root = loader.load();
+                RemoveCollaborationController removeCollaborationController = loader.getController();
+                Stage addCollaborationStage = new Stage();
+                addCollaborationStage.setTitle("Remove Collaboration");
+                addCollaborationStage.setScene(new Scene(root));
+                addCollaborationStage.initStyle(StageStyle.UTILITY);
+                addCollaborationStage.initModality(Modality.APPLICATION_MODAL);
+                removeCollaborationController.setOwner(userID);
+                removeCollaborationController.setCategory(category);
+                removeCollaborationController.setRemoveCollaborationStage(addCollaborationStage);
+                removeCollaborationController.setAppController(this);
+                addCollaborationStage.showAndWait();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         private void handleAddCollaborationButton(String category) {
@@ -784,6 +849,7 @@
             taskDescriptionField.setText(task.getDescription());
             taskStartDateField.setValue(task.getStartDate());
             TaskDueDateField.setValue(task.getDueDate());
+            getTaskReminder(task);
             priorityGroup.selectToggle(getPriorityToggle(task.getPriority()));
             categoryComboBox.setValue(task.getCategory());
             isTaskCompleted = task.getStatus().equals(Status.Completed);
@@ -793,12 +859,22 @@
             categoryComboBox.setDisable(taskDAO.isCollaborativeTask(task, task.getOwner()));
         }
 
+        private void getTaskReminder(TaskImpl task){
+            System.out.println(task.getReminder());
+            switch (task.getReminder()){
+                case 1 -> taskReminder.setValue("1 time per week");
+                case 3 -> taskReminder.setValue("3 times per week");
+                case 7 -> taskReminder.setValue("7 times per week");
+            }
+        }
+
         @FXML
         public void handleSaveButton() throws SQLException {
             if (saveChangesAlert()){
                 if (selectedTask != null) {
                     updateTaskFields(selectedTask);
                     updateTask(selectedTask);
+                    latestTaskName = selectedTask.getName();
                     showNotification("Task updated successfully.", "Task", "has been updated", selectedTask.getName());
                     handleCancelButton();
                 }
@@ -813,6 +889,7 @@
             String categoryName = categoryComboBox.getValue();
             String taskPriority = ((JFXRadioButton) priorityGroup.getSelectedToggle()).getText();
             Status taskStatus = statusComboBox.getValue();
+            int reminder = getTaskReminderNumber(taskReminder.getValue());
             if (isTaskCompleted && !taskStatus.equals(Status.Completed)) {
                 userDAO.decrementCompletedTasks(userID);
                 userDAO.updateCompletionRate(userID);
@@ -826,7 +903,16 @@
             } else if (!isTaskAbandoned && taskStatus.equals(Status.Abandoned)) {
                 userDAO.incrementAbandonedTasks(userID);
             }
-            task.editTask(taskName, taskDescription, taskDueDate, taskPriority, categoryName, taskStartDate, taskStatus);
+            task.editTask(taskName, taskDescription, taskDueDate, taskPriority, categoryName, taskStartDate, taskStatus, reminder);
+        }
+
+        private int getTaskReminderNumber(String reminder){
+            switch (reminder) {
+                case "1 time per week" -> { return 1; }
+                case "3 times per week" -> { return 3; }
+                case "7 times per week" -> { return 7; }
+                default -> { return 0; }
+            }
         }
 
         public void updateTask(TaskImpl task) throws SQLException {
@@ -836,6 +922,7 @@
             }else{
                 taskDAO.updateTask(task, userID, isOverRidden);
             }
+            reminderService.resetReminder(task.getId());
             loadTasks();
         }
 
@@ -862,16 +949,18 @@
         }
 
         public void showNotification(String message, String part1, String part2, String taskName) {
-            notificationDAO.insertNotification(userID, part1 + " " + taskName + " " + part2, message);
-            notificationMessage.setText(message);
-            notificationTaskName.setText(part1 + " \"" + taskName + "\" " + part2);
-            notificationForm.setVisible(true);
-            notificationForm.setTranslateX(300);
-            notificationForm.setTranslateY(0);
-            TranslateTransition sliderIn = getTranslateTransition();
-            sliderIn.play();
-            latestTaskName = null;
-            loadNotifications();
+            if (latestTaskName != null){
+                notificationDAO.insertNotification(userID, part1 + " " + taskName + " " + part2, message);
+                notificationMessage.setText(message);
+                notificationTaskName.setText(part1 + " \"" + taskName + "\" " + part2);
+                notificationForm.setVisible(true);
+                notificationForm.setTranslateX(300);
+                notificationForm.setTranslateY(0);
+                TranslateTransition sliderIn = getTranslateTransition();
+                sliderIn.play();
+                latestTaskName = null;
+                loadNotifications();
+            }
         }
 
         @FXML
@@ -1023,6 +1112,7 @@
         @FXML
         public void handleAddCategory() throws IOException {
             showAddCategoryDialog();
+            showNotification("Category added successfully.", "Category", "has been added", latestTaskName);
         }
 
         private void showAddTaskDialog() throws IOException {
@@ -1079,7 +1169,13 @@
             loadNotifications();
             loadCategories();
             setupWeeklyActivityChart();
+            reminderService = new TaskReminderService(taskDAO, this);
+            reminderService.startReminderService();
             taskListView.getItems().addListener((ListChangeListener<TaskImpl>) c -> setupWeeklyActivityChart());
+        }
+
+        public String getUser() {
+            return userID;
         }
 
         private void setupUserImage() {
@@ -1209,9 +1305,12 @@
             collaborationDAO.declineInvite(categoryName, owner, userID);
         }
 
-        public void handleResetAutoStatus(){
+        public void handleResetAutoStatus() throws SQLException {
             taskDAO.resetToAutoStatus(selectedTask);
+            handleCancelButton();
+            latestTaskName = selectedTask.getName();
             showNotification("Task status reset successfully.", "Task", "status has been reset", selectedTask.getName());
+            loadTasks();
             taskListView.refresh();
         }
 
@@ -1222,6 +1321,7 @@
             File file = fileChooser.showSaveDialog(new Stage());
             if (file != null) {
                 taskDAO.exportTasks(file, userID);
+                latestTaskName = "Tasks";
                 showNotification("Tasks exported successfully.", "Tasks", "have been exported", "");
             }
         }
@@ -1233,9 +1333,38 @@
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
                 taskDAO.importTasks(file, userID);
+                latestTaskName = "Tasks";
                 showNotification("Tasks imported successfully.", "Tasks", "have been imported", "");
                 loadTasks();
                 loadCategories();
             }
+        }
+
+        private void checkUpcomingTasks() {
+            taskDAO.checkUpcomingTasks(userID, this);
+        }
+
+        private void checkOverdueTasks() {
+            taskDAO.checkOverdueTasks(userID, this);
+        }
+
+        public void alertUpComingTasks(String taskName, String message) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Task");
+            alert.setHeaderText("Upcoming Task: " + taskName);
+            alert.setContentText(message);
+            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            alert.getButtonTypes().setAll(okButton);
+            alert.showAndWait();
+        }
+
+        public void alertOverdueTasks(String taskName, String message) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Overdue Task");
+            alert.setHeaderText("Overdue Task: " + taskName);
+            alert.setContentText(message);
+            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            alert.getButtonTypes().setAll(okButton);
+            alert.showAndWait();
         }
     }

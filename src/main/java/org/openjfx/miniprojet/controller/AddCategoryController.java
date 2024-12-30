@@ -50,6 +50,7 @@ public class AddCategoryController {
         } catch (DataAccessException e){
             System.err.println("Error inserting category: " + e.getMessage());
         }
+        appController.setLatestTaskName(name);
         categoryName.clear();
         addCategoryStage.close();
         appController.loadCategories();

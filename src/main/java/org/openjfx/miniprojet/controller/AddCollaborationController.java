@@ -2,6 +2,7 @@ package org.openjfx.miniprojet.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.openjfx.miniprojet.dao.CollaborationDAO;
 import org.openjfx.miniprojet.model.Permission;
@@ -13,6 +14,10 @@ public class AddCollaborationController {
     @FXML private TextField userField;
     @FXML private ToggleButton read;
     @FXML private ToggleButton write;
+    @FXML private Label title;
+    @FXML private Label permissionLabel;
+    @FXML private HBox permissionHbox;
+    @FXML private Label subTitle;
 
     private String userID;
     private String category;

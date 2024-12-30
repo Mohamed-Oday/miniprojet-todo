@@ -13,120 +13,120 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="600.0" styleClass="form-container" stylesheets="@../styles/addtask.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.openjfx.miniprojet.controller.AddTaskController">
-    <VBox layoutX="232.0" layoutY="200.0" prefHeight="200.0" prefWidth="100.0" styleClass="card"
-          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0">
+<AnchorPane prefHeight="800.0" prefWidth="600.0" styleClass="form-container" stylesheets="@../styles/addtask.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.miniprojet.controller.AddTaskController">
+    <VBox layoutX="232.0" layoutY="200.0" prefHeight="200.0" prefWidth="100.0" styleClass="card" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <padding>
-            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
+            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
         </padding>
         <Label prefHeight="4.0" prefWidth="520.0" styleClass="card-title" text="Create New Task">
             <VBox.margin>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </VBox.margin>
         </Label>
         <Label styleClass="card-description" text="Add a new task to your todo list">
             <VBox.margin>
-                <Insets bottom="24.0"/>
+                <Insets bottom="24.0" />
             </VBox.margin>
         </Label>
         <Label styleClass="form-label" text="Task Name">
             <VBox.margin>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </VBox.margin>
         </Label>
         <TextField fx:id="taskName" promptText="Enter task name">
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
         </TextField>
         <Label styleClass="form-label" text="Description">
             <VBox.margin>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </VBox.margin>
         </Label>
         <TextField fx:id="taskDescription" alignment="TOP_LEFT" prefHeight="120.0" promptText="Add task details">
             <VBox.margin>
-                <Insets bottom="24.0"/>
+                <Insets bottom="24.0" />
             </VBox.margin>
         </TextField>
         <HBox prefHeight="57.0" prefWidth="520.0">
             <VBox.margin>
-                <Insets bottom="24.0"/>
+                <Insets bottom="24.0" />
             </VBox.margin>
             <VBox prefHeight="57.0" prefWidth="260.0">
                 <Label styleClass="form-label" text="Start Date">
                     <VBox.margin>
-                        <Insets bottom="8.0"/>
+                        <Insets bottom="8.0" />
                     </VBox.margin>
                 </Label>
-                <DatePicker fx:id="taskStartDate" prefHeight="37.0" prefWidth="260.0"/>
+                <DatePicker fx:id="taskStartDate" prefHeight="37.0" prefWidth="260.0" />
             </VBox>
-            <Pane prefHeight="57.0" prefWidth="25.0"/>
+            <Pane prefHeight="57.0" prefWidth="25.0" />
             <VBox prefHeight="57.0" prefWidth="260.0">
                 <Label styleClass="form-label" text="Due Date">
                     <VBox.margin>
-                        <Insets bottom="8.0"/>
+                        <Insets bottom="8.0" />
                     </VBox.margin>
                 </Label>
-                <DatePicker fx:id="taskDueDate" prefHeight="37.0" prefWidth="260.0"/>
+                <DatePicker fx:id="taskDueDate" prefHeight="37.0" prefWidth="260.0" />
             </VBox>
         </HBox>
+      <Label styleClass="form-label" text="Reminders">
+         <VBox.margin>
+            <Insets bottom="8.0" />
+         </VBox.margin>
+      </Label>
+      <ComboBox fx:id="taskReminder" prefHeight="37.0" prefWidth="545.0" promptText="Select a reminder">
+         <VBox.margin>
+            <Insets bottom="24.0" />
+         </VBox.margin>
+      </ComboBox>
         <Label styleClass="form-label" text="Category">
             <VBox.margin>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </VBox.margin>
         </Label>
         <ComboBox fx:id="taskCategory" prefHeight="37.0" prefWidth="545.0">
             <VBox.margin>
-                <Insets bottom="24.0"/>
+                <Insets bottom="24.0" />
             </VBox.margin>
         </ComboBox>
         <Label styleClass="form-label" text="Priority Level">
             <VBox.margin>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </VBox.margin>
         </Label>
         <HBox prefHeight="37.0" prefWidth="520.0">
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-            <ToggleButton fx:id="lowPriorityButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="170.0"
-                          selected="true" styleClass="priority-button" text="Low">
+            <ToggleButton fx:id="lowPriorityButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="170.0" selected="true" styleClass="priority-button" text="Low">
                 <HBox.margin>
-                    <Insets right="8.0"/>
+                    <Insets right="8.0" />
                 </HBox.margin>
             </ToggleButton>
-            <ToggleButton fx:id="mediumPriorityButton" mnemonicParsing="false" prefHeight="37.0"
-                          prefWidth="170.0" styleClass="priority-button" text="Medium">
+            <ToggleButton fx:id="mediumPriorityButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="170.0" styleClass="priority-button" text="Medium">
                 <HBox.margin>
-                    <Insets right="8.0"/>
+                    <Insets right="8.0" />
                 </HBox.margin>
             </ToggleButton>
-            <ToggleButton fx:id="highPriorityButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="170.0"
-                          styleClass="priority-button" text="High"/>
+            <ToggleButton fx:id="highPriorityButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="170.0" styleClass="priority-button" text="High" />
         </HBox>
-        <Button fx:id="importantButton" mnemonicParsing="false" onAction="#handleImportantButton" prefHeight="37.0"
-                prefWidth="627.0" stylesheets="@../styles/addtask.css" text="Mark as Important">
+        <Button fx:id="importantButton" mnemonicParsing="false" onAction="#handleImportantButton" prefHeight="37.0" prefWidth="627.0" stylesheets="@../styles/addtask.css" text="Mark as Important">
             <styleClass>
-                <String fx:value="important-button"/>
-                <String fx:value="priority-button"/>
+                <String fx:value="important-button" />
+                <String fx:value="priority-button" />
             </styleClass>
             <VBox.margin>
-                <Insets bottom="24.0"/>
+                <Insets bottom="24.0" />
             </VBox.margin>
         </Button>
         <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="520.0">
-            <Button mnemonicParsing="false" onAction="#handleCancelButton" styleClass="secondary-button"
-                    text="Cancel">
+            <Button mnemonicParsing="false" onAction="#handleCancelButton" styleClass="secondary-button" text="Cancel">
                 <HBox.margin>
-                    <Insets right="8.0"/>
+                    <Insets right="8.0" />
                 </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleAddTaskButton" styleClass="primary-button"
-                    text="Create Task"/>
+            <Button mnemonicParsing="false" onAction="#handleAddTaskButton" styleClass="primary-button" text="Create Task" />
         </HBox>
     </VBox>
 </AnchorPane>

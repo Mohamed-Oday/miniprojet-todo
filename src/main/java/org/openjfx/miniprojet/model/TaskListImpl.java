@@ -74,7 +74,7 @@ public class TaskListImpl extends TaskList{
      */
     @Override
     public void editTask(TaskImpl task) {
-        task.editTask(task.getName(), task.getDescription(), task.getDueDate(), task.getPriority(), task.getCategory(), task.getStartDate(), task.getStatus());
+        task.editTask(task.getName(), task.getDescription(), task.getDueDate(), task.getPriority(), task.getCategory(), task.getStartDate(), task.getStatus(), task.getReminder());
     }
 
     /**

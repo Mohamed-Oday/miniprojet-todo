@@ -20,6 +20,7 @@ public class TaskImpl implements Task {
     private String category;
     private boolean important;
     private String owner;
+    private int reminder;
 
     /**
      * Constructs a new TaskImpl with the specified name, description, due date, and status.
@@ -29,7 +30,7 @@ public class TaskImpl implements Task {
      * @param dueDate the due date of the task
      * @param status the status of the task
      */
-    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important, String owner) {
+    public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important, String owner, int reminder) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
@@ -40,6 +41,15 @@ public class TaskImpl implements Task {
         this.startDate = startDate;
         this.important = important;
         this.owner = owner;
+        this.reminder = reminder;
+    }
+
+    public int getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(int reminder) {
+        this.reminder = reminder;
     }
 
     public String getOwner() {
@@ -158,7 +168,7 @@ public class TaskImpl implements Task {
      * @param description the new description of the task
      * @param dueDate the new due date of the task
      */
-    public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate, Status status) {
+    public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate, Status status, int reminder) {
         setId(id);
         setName(name);
         setDescription(description);
@@ -166,6 +176,7 @@ public class TaskImpl implements Task {
         setPriority(priority);
         setCategory(category);
         setStartDate(startDate);
+        setReminder(reminder);
         changeStatus(status);
     }
 

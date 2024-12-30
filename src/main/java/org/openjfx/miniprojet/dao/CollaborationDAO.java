@@ -7,6 +7,7 @@ import org.openjfx.miniprojet.util.Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class CollaborationDAO {
 
@@ -106,6 +107,47 @@ public class CollaborationDAO {
             return false;
         } catch (SQLException e) {
             throw new DataAccessException("Error checking for invites", e);
+        }
+    }
+
+    public void removeCollaboration(String category, String owner, String Collaborated) {
+        try {
+            Database.getInstance().executeUpdate(
+                    "DELETE FROM category_collaboration WHERE category_name = ? AND owner_name = ? AND collaborated_user = ?",
+                    category, owner, Collaborated
+            );
+        } catch (SQLException e) {
+            throw new DataAccessException("Error removing collaboration", e);
+        }
+
+    }
+
+    public ObservableList<String> getCollaborators(String owner, String category) {
+        ObservableList<String> collaborators = FXCollections.observableArrayList();
+        System.out.println(owner + " " + category);
+        try {
+            ResultSet resultSet = Database.getInstance().executeQuery(
+                    "SELECT collaborated_user FROM category_collaboration WHERE owner_name = ? AND category_name = ?",
+                    owner, category
+            );
+            while (resultSet.next()) {
+                collaborators.add(resultSet.getString("collaborated_user"));
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error getting collaborators", e);
+        }
+        return collaborators;
+    }
+
+    public boolean isCollabCategory(String category, String owner){
+        try{
+            ResultSet resultSet = Database.getInstance().executeQuery(
+                    "SELECT category_name FROM category_collaboration WHERE category_name = ? AND owner_name = ?",
+                    category, owner
+            );
+            return resultSet.next();
+        } catch (SQLException e){
+            throw new DataAccessException("Error checking if category is a collaboration category", e);
         }
     }
 }

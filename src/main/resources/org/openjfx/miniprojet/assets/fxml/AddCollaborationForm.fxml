@@ -42,23 +42,21 @@
         </Label>
         <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="520.0">
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-            <ToggleButton fx:id="read" mnemonicParsing="false" prefHeight="61.0" prefWidth="117.0"
-                          stylesheets="@../styles/addtask.css" text="Read">
+            <ToggleButton fx:id="read" mnemonicParsing="false" prefHeight="61.0" prefWidth="117.0" stylesheets="@../styles/addtask.css" text="Read">
                 <styleClass>
-                    <String fx:value="priority-button"/>
-                    <String fx:value="button"/>
+                    <String fx:value="priority-button" />
+                    <String fx:value="button" />
                 </styleClass>
                 <HBox.margin>
-                    <Insets right="10.0"/>
+                    <Insets right="10.0" />
                 </HBox.margin>
             </ToggleButton>
-            <ToggleButton fx:id="write" mnemonicParsing="false" prefHeight="35.0" prefWidth="117.0"
-                          stylesheets="@../styles/addtask.css" text="Read and Write">
+            <ToggleButton fx:id="write" mnemonicParsing="false" prefHeight="35.0" prefWidth="117.0" stylesheets="@../styles/addtask.css" text="Read and Write">
                 <styleClass>
-                    <String fx:value="priority-button"/>
-                    <String fx:value="button"/>
+                    <String fx:value="priority-button" />
+                    <String fx:value="button" />
                 </styleClass>
             </ToggleButton>
         </HBox>

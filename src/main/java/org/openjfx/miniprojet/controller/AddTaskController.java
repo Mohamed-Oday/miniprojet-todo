@@ -34,6 +34,7 @@ public class AddTaskController{
     @FXML private DatePicker taskStartDate;
     @FXML private DatePicker taskDueDate;
     @FXML private ComboBox<String> taskCategory;
+    @FXML private ComboBox<String> taskReminder;
 
     private boolean isImportantSelected = false;
     private ToggleGroup priorityGroup;
@@ -60,8 +61,15 @@ public class AddTaskController{
         mediumPriorityButton.setToggleGroup(priorityGroup);
         highPriorityButton.setToggleGroup(priorityGroup);
         lowPriorityButton.setSelected(true);
+        setupReminderComboBox();
+        taskReminder.setValue("1 time per week");
         taskCategory.setValue("General");
         setupDatePicker();
+    }
+
+    private void setupReminderComboBox() {
+        ObservableList<String> reminders = FXCollections.observableArrayList("1 time per week", "3 times per week", "7 times per week");
+        taskReminder.setItems(reminders);
     }
 
     private void loadCategories() {
@@ -78,6 +86,8 @@ public class AddTaskController{
         LocalDate dueDate = taskDueDate.getValue();
         String category = taskCategory.getValue();
         String priority = getSelectedPriority();
+        String reminderNumber = taskReminder.getValue().split(" ")[0];
+        int reminder = Integer.parseInt(reminderNumber);
 
         StringBuilder errorMessage = getStringBuilder(name, startDate, dueDate);
 
@@ -135,7 +145,7 @@ public class AddTaskController{
 
             alert.showAndWait();
         } else {
-            insertTask(name, description, dueDate, startDate, category, priority);
+            insertTask(name, description, dueDate, startDate, category, priority, reminder);
             appController.setLatestTaskName(name);
             addTaskStage.close();
         }
@@ -157,8 +167,8 @@ public class AddTaskController{
         return errorMessage;
     }
 
-    private void insertTask(String name, String description, LocalDate dueDate, LocalDate startDate, String category, String priority) throws SQLException {
-        taskDAO.createTasks(name, description, dueDate, startDate, startDate.equals(LocalDate.now()) ? Status.Started : Status.Pending, category, priority, userID, isImportantSelected);
+    private void insertTask(String name, String description, LocalDate dueDate, LocalDate startDate, String category, String priority, int reminder) throws SQLException {
+        taskDAO.createTasks(name, description, dueDate, startDate, startDate.equals(LocalDate.now()) ? Status.Started : Status.Pending, category, priority, userID, isImportantSelected, reminder);
     }
 
     @FXML

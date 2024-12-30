@@ -109,6 +109,7 @@
         @FXML private LineChart<String, Number> weeklyActivityChart;
         @FXML private JFXListView<String> profileCategories;
         @FXML private ComboBox<String> taskReminder;
+        @FXML private MenuButton dateMenu;
 
         private boolean isTaskCompleted;
         private boolean isTaskAbandoned;
@@ -121,6 +122,7 @@
         private ObservableList<TaskImpl> currentTasks;
         private String selectedCategory = "All";
         private String selectedPriority = "All";
+        private String selectedDate = "All";
         private Status selectedStatus = null;
         private TaskReminderService reminderService;
 
@@ -214,6 +216,28 @@
             getCategoryMenu();
             getPriorityMenu();
             getStatusMenu();
+            getDateMenu();
+        }
+
+        private void getDateMenu(){
+            MenuItem allDates = createMenuItem("All", event -> {
+                selectedDate = "All";
+                applyFilters();
+                statusMenu.setText("Dates");
+            });
+
+            MenuItem dueDate = createMenuItem("Due Date", event -> {
+                selectedDate = "Due Date";
+                applyFilters();
+                statusMenu.setText("Dates");
+            });
+
+            MenuItem startDate = createMenuItem("Start Date", event -> {
+                selectedDate = "Start Date";
+                applyFilters();
+                statusMenu.setText("Dates");
+            });
+            dateMenu.getItems().addAll(allDates, dueDate, startDate);
         }
 
         private void getStatusMenu() {
@@ -274,21 +298,42 @@
             ObservableList<TaskImpl> filteredTasks = FXCollections.observableArrayList();
             // Start with all tasks
             filteredTasks.addAll(tasks.getTasks());
+            // Backup of the original order
+            ObservableList<TaskImpl> originalOrder = FXCollections.observableArrayList(filteredTasks);
+
             // Apply category filter
             if (!selectedCategory.equals("All")) {
                 filteredTasks.removeIf(task -> !task.getCategory().equals(selectedCategory));
+                originalOrder.removeIf(task -> !task.getCategory().equals(selectedCategory));
             }
             // Apply priority filter
             if (!selectedPriority.equals("All")) {
                 filteredTasks.removeIf(task -> !task.getPriority().equals(selectedPriority));
+                originalOrder.removeIf(task -> !task.getPriority().equals(selectedPriority));
             }
             // Apply status filter
             if (selectedStatus != null) {
                 filteredTasks.removeIf(task -> !task.getStatus().equals(selectedStatus));
+                originalOrder.removeIf(task -> !task.getStatus().equals(selectedStatus));
             }
+            // Apply date filter
+            // Sort by due date
+            if (selectedDate.equals("Due Date")) {
+                filteredTasks.sort(Comparator.comparing(TaskImpl::getDueDate));
+            }
+            // Sort by start date
+            if (selectedDate.equals("Start Date")) {
+                filteredTasks.sort(Comparator.comparing(TaskImpl::getStartDate));
+            }
+            // If no date filter is selected, restore the original order
+            if (selectedDate.equals("All")) {
+                filteredTasks.setAll(originalOrder);
+            }
+
             // Update currentTasks with the filtered list
             currentTasks.setAll(filteredTasks);
         }
+
 
 
         private MenuItem createMenuItem(String text, EventHandler<ActionEvent> action) {

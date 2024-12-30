@@ -25,6 +25,7 @@ public class App extends Application {
      * This method is called after the init method has returned, and after the system is ready for the application to begin running.
      *
      * @param stage the primary stage for this application, onto which the application scene can be set.
+     * @author Sellami Mohamed Odai
      */
     @Override
     public void start(Stage stage) {

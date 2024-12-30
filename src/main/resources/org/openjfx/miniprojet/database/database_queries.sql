@@ -105,3 +105,17 @@ DELIMITER ;
 
 -- Add a column to store task completion date
 ALTER TABLE tasks ADD COLUMN completion_date DATE;
+
+-- Add a column for reminders
+ALTER TABLE tasks ADD COLUMN reminder int DEFAULT 1;
+
+-- Create a table to store task completion history
+CREATE TABLE `task_completionhistory` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` VARCHAR(255) DEFAULT NULL,
+  `completion_date` DATE DEFAULT NULL,
+  `task_id` INT DEFAULT NULL,
+  `task_name` VARCHAR(255) DEFAULT NULL,
+  `completed_timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);

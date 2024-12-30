@@ -13,7 +13,8 @@ module org.openjfx.miniprojet {
     requires spring.context;
     requires com.opencsv;
     requires org.json;
-
+    requires ch.qos.logback.classic;
+    requires ch.qos.logback.core;
 
     opens org.openjfx.miniprojet.assets.fxml to javafx.fxml;
     exports org.openjfx.miniprojet.controller;

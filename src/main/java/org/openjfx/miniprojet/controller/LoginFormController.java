@@ -17,6 +17,13 @@ import org.openjfx.miniprojet.dao.UserDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Controller class for the login form.
+ * This class handles the UI logic for user login, including validation and interaction with the database.
+ * It interacts with the UserDAO to validate user credentials and manage user sessions.
+ * It also handles navigation to the registration form and the main application page.
+ *
+ */
 public class LoginFormController {
     @FXML private JFXCheckBox stayLoggedIn;
     @FXML private PasswordField password;
@@ -27,14 +34,30 @@ public class LoginFormController {
     private Stage loginFormStage;
     private final UserDAO userDAO = new UserDAO();
 
+    /**
+     * Sets the login form stage.
+     *
+     * @param stage the stage to set
+     */
     public void setLoginFormStage(Stage stage) {
         this.loginFormStage = stage;
     }
 
+    /**
+     * Sets the landing page stage.
+     *
+     * @param stage the stage to set
+     */
     public void setLandingPageStage(Stage stage) {
         this.landingPageStage = stage;
     }
 
+    /**
+     * Handles the action of the create account button.
+     * Loads the registration form FXML, sets up the registration form controller, and displays the registration form in a new stage.
+     *
+     * @throws IOException if an I/O error occurs during loading the FXML
+     */
     @FXML
     public void handleCreateAccount() throws IOException{
         // Loading the signUp fxml
@@ -63,6 +86,14 @@ public class LoginFormController {
         loginStage.close();
     }
 
+    /**
+     * Handles the action of the sign-in button.
+     * Validates the user credentials and navigates to the main application page if valid.
+     * Displays an error alert if the credentials are invalid.
+     *
+     * @throws IOException if an I/O error occurs during loading the FXML
+     * @throws SQLException if a database access error occurs
+     */
     @FXML
     public void handleSignInButton() throws IOException, SQLException {
         String username = userName.getText();

@@ -1,8 +1,18 @@
 package org.openjfx.miniprojet.dao;
 
-public class DataAccessException extends RuntimeException{
+/**
+ * Custom exception class for data access errors.
+ * This class extends RuntimeException and is used to handle exceptions related to database operations.
+ */
+public class DataAccessException extends RuntimeException {
 
-    public DataAccessException(String message, Throwable cause){
+    /**
+     * Constructs a new DataAccessException with the specified detail message and cause.
+     *
+     * @param message the detail message
+     * @param cause the cause of the exception
+     */
+    public DataAccessException(String message, Throwable cause) {
         super(message, cause);
     }
 }

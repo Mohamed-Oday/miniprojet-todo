@@ -13,6 +13,14 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class LandingPageController {
+
+    /**
+     * Handles the action of the sign-in button.
+     * Loads the login form FXML, sets up the login form controller, and displays the login form in a new stage.
+     *
+     * @param event the action event triggered by clicking the sign-in button
+     * @throws IOException if an I/O error occurs during loading the FXML
+     */
     @FXML
     public void handleSignInButton(ActionEvent event) throws IOException {
         // Loading the login fxml

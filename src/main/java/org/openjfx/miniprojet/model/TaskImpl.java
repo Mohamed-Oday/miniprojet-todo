@@ -29,6 +29,12 @@ public class TaskImpl implements Task {
      * @param description the description of the task
      * @param dueDate the due date of the task
      * @param status the status of the task
+     * @param priority the priority of the task
+     * @param category the category of the task
+     * @param startDate the start date of the task
+     * @param important whether the task is important
+     * @param owner the owner of the task
+     * @param reminder the reminder times for the task
      */
     public TaskImpl(String name, String description, LocalDate dueDate, Status status, String priority, String category, LocalDate startDate, boolean important, String owner, int reminder) {
         this.name = name;
@@ -44,30 +50,65 @@ public class TaskImpl implements Task {
         this.reminder = reminder;
     }
 
+    /**
+     * Gets the reminder time for the task.
+     *
+     * @return the reminder time
+     */
     public int getReminder() {
         return reminder;
     }
 
+    /**
+     * Sets the reminder time for the task.
+     *
+     * @param reminder the new reminder time
+     */
     public void setReminder(int reminder) {
         this.reminder = reminder;
     }
 
+    /**
+     * Gets the owner of the task.
+     *
+     * @return the owner
+     */
     public String getOwner() {
         return owner;
     }
 
+    /**
+     * Sets whether the task is important.
+     *
+     * @param important the new importance status
+     */
     public void setImportant(boolean important){
         this.important = important;
     }
 
+    /**
+     * Checks if the task is important.
+     *
+     * @return true if the task is important, false otherwise
+     */
     public boolean isImportant(){
         return important;
     }
 
+    /**
+     * Sets the category of the task.
+     *
+     * @param category the new category
+     */
     public void setCategory(String category) {
         this.category = category;
     }
 
+    /**
+     * Gets the category of the task.
+     *
+     * @return the category
+     */
     public String getCategory() {
         return category;
     }
@@ -126,10 +167,20 @@ public class TaskImpl implements Task {
         this.description = description;
     }
 
+    /**
+     * Sets the start date of the task.
+     *
+     * @param startDate the new start date
+     */
     private void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
+    /**
+     * Gets the start date of the task.
+     *
+     * @return the start date
+     */
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -167,6 +218,11 @@ public class TaskImpl implements Task {
      * @param name the new name of the task
      * @param description the new description of the task
      * @param dueDate the new due date of the task
+     * @param priority the new priority of the task
+     * @param category the new category of the task
+     * @param startDate the new start date of the task
+     * @param status the new status of the task
+     * @param reminder the new reminder time of the task
      */
     public void editTask(String name, String description, LocalDate dueDate, String priority, String category, LocalDate startDate, Status status, int reminder) {
         setId(id);
@@ -180,10 +236,20 @@ public class TaskImpl implements Task {
         changeStatus(status);
     }
 
+    /**
+     * Gets the priority of the task.
+     *
+     * @return the priority
+     */
     public String getPriority() {
         return priority;
     }
 
+    /**
+     * Sets the priority of the task.
+     *
+     * @param priority the new priority
+     */
     public void setPriority(String priority) {
         this.priority = priority;
     }
@@ -197,10 +263,20 @@ public class TaskImpl implements Task {
         this.status = status;
     }
 
+    /**
+     * Gets the ID of the task.
+     *
+     * @return the ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the task.
+     *
+     * @param id the new ID
+     */
     public void setId(int id) {
         this.id = id;
     }

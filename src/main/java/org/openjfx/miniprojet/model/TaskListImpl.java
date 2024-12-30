@@ -1,4 +1,5 @@
 package org.openjfx.miniprojet.model;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -24,24 +25,42 @@ import javafx.collections.ObservableList;
  * @see Status
  *
  * @version 1.0
- * @author Sellami Mohamed Odai
+ * author Sellami Mohamed Odai
  */
 public class TaskListImpl extends TaskList{
 
     private final ObservableList<TaskImpl> tasks;
 
+    /**
+     * Constructs a new TaskListImpl with an empty task list.
+     */
     public TaskListImpl() {
         this.tasks = FXCollections.observableArrayList();
     }
 
+    /**
+     * Constructs a new TaskListImpl with the specified task list.
+     *
+     * @param tasks the initial list of tasks
+     */
     public TaskListImpl(ObservableList<TaskImpl> tasks){
         this.tasks = tasks;
     }
 
+    /**
+     * Gets the list of tasks.
+     *
+     * @return the list of tasks
+     */
     public ObservableList<TaskImpl> getTasks(){
         return tasks;
     }
 
+    /**
+     * Sets the list of tasks.
+     *
+     * @param tasks the new list of tasks
+     */
     public void setTasks(ObservableList<TaskImpl> tasks){
         this.tasks.setAll(tasks);
     }
@@ -62,7 +81,6 @@ public class TaskListImpl extends TaskList{
      * @param task the task to be deleted
      */
     @Override
-
     public void deleteTask(TaskImpl task) {
         tasks.remove(task);
     }
@@ -87,13 +105,11 @@ public class TaskListImpl extends TaskList{
         return tasks;
     }
 
-
     /**
-     *
-     * Searches for tasks that contain the keyword in either the name or description
+     * Searches for tasks that contain the keyword in either the name or description.
      *
      * @param keyword the keyword to search for
-     * @return returning a task list that contain the same keyword in the name or description
+     * @return a list of tasks that contain the keyword in the name or description
      */
     public List<TaskImpl> searchTasks(String keyword) {
         List<TaskImpl> matchingTasks = new ArrayList<>();
@@ -111,13 +127,11 @@ public class TaskListImpl extends TaskList{
         return matchingTasks;
     }
 
-
     /**
-     *
-     * Filter tasks by a certain status (completed/abandoned/in_progress)
+     * Filters tasks by a certain status (completed/abandoned/in\_progress).
      *
      * @param status the status to filter the tasks by
-     * @return returning a task list filtered by status
+     * @return a list of tasks filtered by status
      */
     public List<TaskImpl> filterTasks(Status status) {
         List<TaskImpl> matchingTasks = new ArrayList<>();
@@ -130,8 +144,10 @@ public class TaskListImpl extends TaskList{
     }
 
     /**
-     * 	Sort tasks by their due date and display them
-     * 	@return returning a task list sorted by due date
+     * Sorts tasks by their due date and returns them.
+     *
+     * @param currentTasks the current list of tasks
+     * @return a list of tasks sorted by due date
      */
     public ObservableList<TaskImpl> sortTaskByDueDate(ObservableList<TaskImpl> currentTasks) {
         // Create a copy of the currentTasks list
@@ -141,6 +157,13 @@ public class TaskListImpl extends TaskList{
         return sortedTasks;
     }
 
+    /**
+     * Filters tasks by a certain category.
+     *
+     * @param currentTasks the current list of tasks
+     * @param category the category to filter the tasks by
+     * @return a list of tasks filtered by category
+     */
     public ObservableList<TaskImpl> categoryTasks(ObservableList<TaskImpl> currentTasks, String category) {
         ObservableList<TaskImpl> categoryTasks = FXCollections.observableArrayList();
         for (TaskImpl task : currentTasks) {
@@ -151,6 +174,13 @@ public class TaskListImpl extends TaskList{
         return categoryTasks;
     }
 
+    /**
+     * Filters tasks by a certain priority.
+     *
+     * @param currentTasks the current list of tasks
+     * @param priority the priority to filter the tasks by
+     * @return a list of tasks filtered by priority
+     */
     public ObservableList<TaskImpl> priorityTasks(ObservableList<TaskImpl> currentTasks, String priority) {
         ObservableList<TaskImpl> priorityTasks = FXCollections.observableArrayList();
         for (TaskImpl task : currentTasks) {
@@ -161,6 +191,13 @@ public class TaskListImpl extends TaskList{
         return priorityTasks;
     }
 
+    /**
+     * Filters tasks by a certain status.
+     *
+     * @param currentTasks the current list of tasks
+     * @param status the status to filter the tasks by
+     * @return a list of tasks filtered by status
+     */
     public ObservableList<TaskImpl> statusTasks(ObservableList<TaskImpl> currentTasks, Status status) {
         ObservableList<TaskImpl> statusTasks = FXCollections.observableArrayList();
         for (TaskImpl task : currentTasks) {
@@ -171,6 +208,12 @@ public class TaskListImpl extends TaskList{
         return statusTasks;
     }
 
+    /**
+     * Sorts tasks by their priority and returns them.
+     *
+     * @param currentTasks the current list of tasks
+     * @return a list of tasks sorted by priority
+     */
     public ObservableList<TaskImpl> sortTasksByPriority(ObservableList<TaskImpl> currentTasks) {
         ObservableList<TaskImpl> sortedTasks = FXCollections.observableArrayList();
         // Add High priority tasks
@@ -193,7 +236,6 @@ public class TaskListImpl extends TaskList{
         }
         return sortedTasks;
     }
-
 
     /**
      * Exports the list of tasks to a specified file in JSON format.
@@ -231,4 +273,3 @@ public class TaskListImpl extends TaskList{
         }
     }
 }
-

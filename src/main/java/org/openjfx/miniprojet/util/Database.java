@@ -4,6 +4,7 @@ import java.sql.*;
 
 /**
  * Singleton class for managing database connections and executing SQL queries.
+ *
  * @author Sellami Mohamed Oday
  * @version 1.0
  * @since 1.0
@@ -91,6 +92,14 @@ public class Database {
         }
     }
 
+    /**
+     * Executes an insert SQL statement and returns the generated key.
+     *
+     * @param sql the SQL statement to execute
+     * @param params the parameters to set in the SQL statement
+     * @return the generated key
+     * @throws SQLException if a database access error occurs
+     */
     public Integer executeInsert(String sql, Object... params) throws SQLException {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < params.length; i++) {

@@ -14,6 +14,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Controller class for the registration form.
+ * This class handles the UI logic for user registration, including validation and interaction with the database.
+ * It interacts with the UserDAO to register new users and manage user sessions.
+ * It also handles navigation back to the login form.
+ */
 public class RegisterFormController {
     @FXML private TextField userName;
     @FXML private PasswordField password;
@@ -23,19 +29,43 @@ public class RegisterFormController {
     private Stage loginFormStage;
     private final UserDAO userDAO = new UserDAO();
 
+    /**
+     * Sets the landing page stage.
+     *
+     * @param stage the stage to set
+     */
     public void setLandingPageStage(Stage stage) {
         this.landingPageStage = stage;
     }
 
+    /**
+     * Sets the login form stage.
+     *
+     * @param stage the stage to set
+     */
     public void setSignInStage(Stage stage) {
         this.loginFormStage = stage;
     }
 
+    /**
+     * Handles the action of the sign account button.
+     * Navigates back to the sign-in form.
+     *
+     * @throws IOException if an I/O error occurs during loading the FXML
+     */
     @FXML
     public void handleSignAccount() throws IOException {
         returnToSignIn();
     }
 
+    /**
+     * Handles the action of the sign-up button.
+     * Validates the input fields and registers the user if valid.
+     * Displays an error alert if the input is invalid or the username already exists.
+     *
+     * @throws IOException if an I/O error occurs during loading the FXML
+     * @throws SQLException if a database access error occurs
+     */
     @FXML
     public void handleSignUpButton() throws IOException, SQLException {
         String username = userName.getText();
@@ -59,15 +89,26 @@ public class RegisterFormController {
         if (userDAO.registerUser(username, pass)) {
             showSuccessAlert();
             returnToSignIn();
-        }else{
+        } else {
             showErrorAlert("Registration Error", "Username already exists!");
         }
     }
 
+    /**
+     * Validates the password.
+     *
+     * @param password the password to validate
+     * @return true if the password is valid, false otherwise
+     */
     private static boolean isValidPassword(String password){
         return password.length() >= 8 && password.matches(".*\\d.*") && password.matches(".*[A-Z].*");
     }
 
+    /**
+     * Navigates back to the sign-in form.
+     *
+     * @throws IOException if an I/O error occurs during loading the FXML
+     */
     public void returnToSignIn() throws IOException {
         // Loading the signUp fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/openjfx/miniprojet/assets/fxml/LoginForm.fxml"));
@@ -92,6 +133,12 @@ public class RegisterFormController {
         signUpStage.close();
     }
 
+    /**
+     * Displays an error alert with the specified title and content.
+     *
+     * @param title the title of the alert
+     * @param content the content of the alert
+     */
     private void showErrorAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -109,6 +156,9 @@ public class RegisterFormController {
         alert.showAndWait();
     }
 
+    /**
+     * Displays a success alert indicating that the account was created successfully.
+     */
     private void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -126,7 +176,4 @@ public class RegisterFormController {
 
         alert.showAndWait();
     }
-
-
-
 }

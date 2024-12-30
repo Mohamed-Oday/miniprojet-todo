@@ -1,5 +1,26 @@
 package org.openjfx.miniprojet.model;
 
+/**
+ * Enum representing the status of a task.
+ */
 public enum Status {
-    Started, Completed, Abandoned, Pending
+    /**
+     * The task has been started.
+     */
+    Started,
+
+    /**
+     * The task has been completed.
+     */
+    Completed,
+
+    /**
+     * The task has been abandoned.
+     */
+    Abandoned,
+
+    /**
+     * The task is pending.
+     */
+    Pending
 }

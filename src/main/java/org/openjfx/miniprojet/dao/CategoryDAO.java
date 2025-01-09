@@ -47,7 +47,7 @@ public class CategoryDAO {
     public void deleteCategory(String categoryName, String userID, boolean deleteTask) throws SQLException {
         if (deleteTask) {
             int taskCount = 0;
-            ResultSet resultSet = Database.getInstance().executeQuery("SELECT COUNT(*) FROM tasks WHERE task_categoryID = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ? AND (task_status != 'Completed' OR task_status != 'Abandoned'))", "Error getting task count", categoryName, userID);
+            ResultSet resultSet = Database.getInstance().executeQuery("SELECT COUNT(*) FROM tasks WHERE task_categoryID = (SELECT category_id FROM categories WHERE category_name = ? AND user_id = ? AND (task_status != 'Completed' OR task_status != 'Abandoned'))", categoryName, userID);
             if (resultSet.next()) {
                 taskCount = resultSet.getInt(1);
             }

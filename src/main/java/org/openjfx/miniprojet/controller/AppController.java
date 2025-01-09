@@ -732,6 +732,8 @@
                     }else{
                         handleEditTask(task);
                     }
+                }else{
+                    handleEditTask(task);
                 }
             });
             Button infoButton = createButton("/org/openjfx/miniprojet/assets/images/information.png", "#00FF7F", event -> {

@@ -603,8 +603,10 @@
                 addCollaborationStage.initModality(Modality.APPLICATION_MODAL);
                 addCollaborationController.setUserID(userID);
                 addCollaborationController.setCategory(category);
+                addCollaborationController.setAppController(this);
                 addCollaborationController.setCollaborationStage(addCollaborationStage);
                 addCollaborationStage.showAndWait();
+                categoryListView.refresh();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -685,6 +687,8 @@
             Label statusLabel = createStatusLabel(task);
             Button deleteButton = createButton("/org/openjfx/miniprojet/assets/images/remove.png", "#FF6F61", event -> {
                 if (taskDAO.isCollaborativeTask(task, task.getOwner())){
+                    System.out.println("Collaborative Task");
+                    setLatestTaskName(task.getName());
                     showNotification("You do not have permission to delete this task.", "Permission Denied", "You do not have permission to delete this task", task.getName());
                     return;
                 }
@@ -728,6 +732,7 @@
             Button editButton = createButton("/org/openjfx/miniprojet/assets/images/pen.png", "#FFD700", event -> {
                 if (taskDAO.isCollaborativeTask(task, task.getOwner())){
                     if (collaborationDAO.getPermission(task.getCategory(), task.getOwner(), userID).equals(Permission.Read)){
+                        setLatestTaskName(task.getName());
                         showNotification("You do not have permission to edit this task.", "Permission Denied", "You do not have permission to edit this task", task.getName());
                     }else{
                         handleEditTask(task);
@@ -745,6 +750,7 @@
                 try {
                     if (taskDAO.isCollaborativeTask(task, task.getOwner())) {
                         if (collaborationDAO.getPermission(task.getCategory(), task.getOwner(), userID).equals(Permission.Read)) {
+                            setLatestTaskName(task.getName());
                             showNotification("You do not have permission to add comments to this task.", "Permission Denied", "You do not have permission to add comments to this task", task.getName());
                             return;
                         }
@@ -757,6 +763,7 @@
             Button importantButton = createButton(task.isImportant() ? "/org/openjfx/miniprojet/assets/images/starFill.png" : "/org/openjfx/miniprojet/assets/images/star24.png", "#FF6F61", event -> {
                 if (taskDAO.isCollaborativeTask(task, task.getOwner())){
                     if (collaborationDAO.getPermission(task.getCategory(), task.getOwner(), userID).equals(Permission.Read)){
+                        setLatestTaskName(task.getName());
                         showNotification("You do not have permission to make this task important.", "Permission Denied", "You do not have permission to view this task", task.getName());
                         return;
                     }
@@ -975,9 +982,15 @@
 
         @FXML
         public void handleDeleteButton() throws SQLException {
-            deleteTask(selectedTask);
-            tasks.deleteTask(selectedTask);
-            handleCancelButton();
+            if (!taskDAO.isCollaborativeTask(selectedTask, selectedTask.getOwner())){
+                deleteTask(selectedTask);
+                tasks.deleteTask(selectedTask);
+                handleCancelButton();
+            }else{
+                setLatestTaskName(selectedTask.getName());
+                handleCancelButton();
+                showNotification("You do not have permission to delete this task.", "Permission Denied", "You do not have permission to delete this task", latestTaskName);
+            }
         }
 
         private void deleteTask(TaskImpl task) throws SQLException {
@@ -997,6 +1010,11 @@
 
         public void showNotification(String message, String part1, String part2, String taskName) {
             if (latestTaskName != null){
+                System.out.println("message: " + message);
+                System.out.println("part1: " + part1);
+                System.out.println("part2: " + part2);
+                System.out.println("taskName: " + taskName);
+                System.out.println("userID: " + userID);
                 notificationDAO.insertNotification(userID, part1 + " " + taskName + " " + part2, message);
                 notificationMessage.setText(message);
                 notificationTaskName.setText(part1 + " \"" + taskName + "\" " + part2);

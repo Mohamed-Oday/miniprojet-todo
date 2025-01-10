@@ -27,6 +27,7 @@ public class AddCollaborationController {
     private String userID;
     private String category;
     private Stage collaborationStage;
+    private AppController controller;
 
     /**
      * Sets the user ID.
@@ -35,6 +36,10 @@ public class AddCollaborationController {
      */
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public void setAppController(AppController controller) {
+        this.controller = controller;
     }
 
     /**
@@ -72,7 +77,6 @@ public class AddCollaborationController {
      */
     public void addCollaboration() {
         String user = userField.getText();
-        AppController controller = new AppController();
         Permission permission = read.isSelected() ? Permission.Read : Permission.Write;
         System.out.println(category);
         System.out.println(userID);
@@ -84,7 +88,8 @@ public class AddCollaborationController {
         }
         if (controller.sendInviteAlert(user)){
             collaborationDAO.addCollaboration(category, userID, user, permission);
-            //controller.showNotification("Collaboration added successfully.", "Collaboration", "has been added", category);
+            controller.setLatestTaskName(category);
+            controller.showNotification("Collaboration added successfully.", "Collaboration", "has been added", category);
             collaborationStage.close();
         }
     }

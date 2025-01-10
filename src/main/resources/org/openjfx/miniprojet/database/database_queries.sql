@@ -1,3 +1,6 @@
+-- Creating the Database
+CREATE DATABASE IF NOT EXISTS todo;
+
 -- Users table - Stores user information and statistics
 CREATE TABLE users (
     username varchar(255) NOT NULL,
@@ -6,7 +9,7 @@ CREATE TABLE users (
     completed_tasks int NOT NULL DEFAULT 0,
     deleted_tasks int NOT NULL DEFAULT 0,
     abondoned_tasks int NOT NULL DEFAULT 0,
-    completion_rate decimal(5,3) NOT NULL,
+    completion_rate decimal(5,3) NOT NULL DEFAULT 00.000,
     PRIMARY KEY (`username`)
 );
 
